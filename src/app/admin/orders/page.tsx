@@ -23,7 +23,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
   await requireAdmin();
   const params = await searchParams;
   const query = (params.q ?? "").trim().slice(0, 120);
-  const phoneSearch = query.replace(/\\D/g, "").length >= 7 ? normalizePhoneNumber(query) : query;
+  const phoneSearch = query.replace(/\D/g, "").length >= 7 ? normalizePhoneNumber(query) : query;
   const status = validStatuses.includes(params.status as typeof validStatuses[number]) ? params.status : "";
   const payment = validPayments.includes(params.payment as typeof validPayments[number]) ? params.payment : "";
   const channel = params.channel === "PAYSTACK" || params.channel === "WHATSAPP" ? params.channel : "";
