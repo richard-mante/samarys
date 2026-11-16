@@ -7,7 +7,7 @@ import { CartIndicator } from "@/features/cart/cart-controls";
 import { getStoreSettings } from "@/lib/settings";
 import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
 
-export const metadata = { title: "Your order" };
+export const metadata = { title: "Your order", alternates: { canonical: "/checkout" }, robots: { index: false, follow: false } };
 
 export default async function CheckoutPage() {
   const settings = await getStoreSettings();
