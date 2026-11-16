@@ -5,7 +5,8 @@ import { db } from "@/db";
 import { auditLogs, orders } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
 import { formatGhsFromPesewas } from "@/lib/money";
-import { OrderStatusForm } from "@/features/orders/order-status-form";\nimport { RecordWhatsAppPaymentForm } from "@/features/orders/record-whatsapp-payment-form";
+import { OrderStatusForm } from "@/features/orders/order-status-form";
+import { RecordWhatsAppPaymentForm } from "@/features/orders/record-whatsapp-payment-form";
 
 const statusLabels: Record<string, string> = {
   PENDING_PAYMENT: "Awaiting payment",
@@ -23,6 +24,15 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
     with: { customer: true, items: true, payments: true },
   });
   if (!order) notFound();
+
+  const paymentAudit = await db.select().from(auditLogs)
+    .where(and(eq(auditLogs.entityId, id), eq(auditLogs.action, "MANUAL_WHATSAPP_PAYMENT_RECORDED")))
+    .orderBy(desc(auditLogs.createdAt)).limit(1);
+  const paymentMetadata = paymentAudit[0]?.metadata as {
+    method?: string;
+    paymentReference?: string | null;
+    amountReceivedMinor?: number;
+  } | null;
 
   return <div className="mx-auto max-w-5xl">
     <Link href="/admin/orders" className="text-sm text-[#66836c] transition hover:text-[#244b36]">← Back to orders</Link>
@@ -48,9 +58,9 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
             ))}
           </div>
           <div className="mt-6 space-y-2 border-t border-[#edf0ea] pt-5 text-sm">
-            <div className="flex justify-between text-[#758078]"><span>Subtotal</span><span>{formatGhsFromPesewas(order.subtotalMinor)}</span></div>
+            <div className="flex justify-between text-[#758078]"><span>Items subtotal</span><span>{formatGhsFromPesewas(order.subtotalMinor)}</span></div>
             <div className="flex justify-between text-[#758078]"><span>Delivery</span><span>{order.deliveryFeeMinor > 0 ? formatGhsFromPesewas(order.deliveryFeeMinor) : "Confirm with seller"}</span></div>
-            <div className="flex justify-between pt-2 text-base font-semibold text-[#203a2b]"><span>Items total</span><span>{formatGhsFromPesewas(order.totalMinor)}</span></div>
+            <div className="flex justify-between pt-2 text-base font-semibold text-[#203a2b]"><span>Order total</span><span>{formatGhsFromPesewas(order.totalMinor)}</span></div>
           </div>
         </section>
 
@@ -68,7 +78,16 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
         <section className="rounded-2xl border border-[#e4e8e1] bg-white p-6 sm:p-7">
           <h2 className="font-serif text-2xl text-[#203a2b]">Payment record</h2>
           <p className="mt-2 text-sm text-[#758078]">Payment status: <strong className="text-[#304236]">{order.paymentStatus}</strong>{order.channel === "WHATSAPP" && order.paymentStatus !== "PAID" ? " · Payment is arranged directly with the seller." : ""}</p>
-          {order.payments.length ? <div className="mt-4 divide-y divide-[#edf0ea]">{order.payments.map(payment => <div key={payment.id} className="py-3 first:pt-0"><p className="text-sm font-medium text-[#304236]">{payment.provider} · {payment.status}</p><p className="mt-1 break-all text-xs text-[#849087]">{payment.providerReference}</p><p className="mt-1 text-xs text-[#849087]">{formatGhsFromPesewas(payment.amountMinor)}</p></div>)}</div> : order.paymentStatus === "PAID" && paymentMetadata ? <div className="mt-4 rounded-xl bg-[#eef5ed] p-4"><p className="text-sm font-semibold text-[#315b3b]">Payment confirmed by seller</p><p className="mt-2 text-xs text-[#526b56]">Method: {paymentMetadata.method?.replaceAll("_", " ") ?? "Not recorded"}</p>{paymentMetadata.paymentReference && <p className="mt-1 break-all text-xs text-[#526b56]">Reference: {paymentMetadata.paymentReference}</p>}<p className="mt-1 text-xs text-[#526b56]">Amount: {formatGhsFromPesewas(paymentMetadata.amountReceivedMinor ?? order.totalMinor)}</p></div> : <p className="mt-4 text-sm text-[#849087]">No online payment transaction is linked to this order.</p>}
+          {order.payments.length > 0 ? (
+            <div className="mt-4 divide-y divide-[#edf0ea]">{order.payments.map(payment => <div key={payment.id} className="py-3 first:pt-0"><p className="text-sm font-medium text-[#304236]">{payment.provider} · {payment.status}</p><p className="mt-1 break-all text-xs text-[#849087]">{payment.providerReference}</p><p className="mt-1 text-xs text-[#849087]">{formatGhsFromPesewas(payment.amountMinor)}</p></div>)}</div>
+          ) : order.paymentStatus === "PAID" && paymentMetadata ? (
+            <div className="mt-4 rounded-xl bg-[#eef5ed] p-4">
+              <p className="text-sm font-semibold text-[#315b3b]">Payment confirmed by seller</p>
+              <p className="mt-2 text-xs text-[#526b56]">Method: {paymentMetadata.method?.replaceAll("_", " ") ?? "Not recorded"}</p>
+              {paymentMetadata.paymentReference && <p className="mt-1 break-all text-xs text-[#526b56]">Reference: {paymentMetadata.paymentReference}</p>}
+              <p className="mt-1 text-xs text-[#526b56]">Amount: {formatGhsFromPesewas(paymentMetadata.amountReceivedMinor ?? order.totalMinor)}</p>
+            </div>
+          ) : <p className="mt-4 text-sm text-[#849087]">No online payment transaction is linked to this order.</p>}
           {order.channel === "WHATSAPP" && order.paymentStatus !== "PAID" && order.status !== "CANCELLED" && <RecordWhatsAppPaymentForm orderId={order.id} subtotalGhs={(order.subtotalMinor / 100).toFixed(2)} />}
         </section>
       </div>
