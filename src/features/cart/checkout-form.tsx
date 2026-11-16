@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { useCart } from "@/features/cart/cart-provider";
 import { formatGhsFromPesewas } from "@/lib/money";
 import { createWhatsAppOrder } from "@/features/orders/create-whatsapp-order";
@@ -12,7 +12,7 @@ const fieldClass = "w-full rounded-xl border border-[#dfe5dc] bg-white px-4 py-3
 
 export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
   const { items, ready, setQuantity, removeItem, clearCart } = useCart();
-  const [state, action, pending] = useActionState(createWhatsAppOrder, {});
+  const [state, action, pending] = useActionState(createWhatsAppOrder, {});\n  const formRef = useRef<HTMLFormElement>(null);\n  const [paymentPending, setPaymentPending] = useState(false);\n  const [paymentError, setPaymentError] = useState<string | null>(null);\n\n  async function startPaystackPayment() {\n    if (!formRef.current) return;\n    setPaymentError(null);\n    const data = new FormData(formRef.current);\n    const email = String(data.get("email") ?? "").trim();\n    if (!email) { setPaymentError("Add your email address to continue with Paystack."); return; }\n    setPaymentPending(true);\n    try {\n      const response = await fetch("/api/payments/paystack/initialize", {\n        method: "POST", headers: { "Content-Type": "application/json" },\n        body: JSON.stringify({\n          fullName: data.get("fullName"), phone: data.get("phone"), email,\n          deliveryAddress: data.get("deliveryAddress"), deliveryCity: data.get("deliveryCity"),\n          deliveryRegion: data.get("deliveryRegion"), deliveryNotes: data.get("deliveryNotes"),\n          items: JSON.parse(String(data.get("items") ?? "[]")),\n        }),\n      });\n      const result = await response.json() as { authorizationUrl?: string; error?: string };\n      if (!response.ok || !result.authorizationUrl) throw new Error(result.error || "Could not start payment.");\n      window.location.assign(result.authorizationUrl);\n    } catch (error) {\n      setPaymentError(error instanceof Error ? error.message : "Could not start payment. Please try again.");\n      setPaymentPending(false);\n    }\n  }
   const productMap = new Map(products.map((product) => [product.id, product]));
   const cartLines = items.map((item) => ({ ...item, product: productMap.get(item.productId) })).filter((item) => item.product);
   const unavailableItems = items.filter((item) => !productMap.has(item.productId));
@@ -45,7 +45,7 @@ export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
     </section>;
   }
 
-  return <form action={action} className="grid gap-8 lg:grid-cols-[1fr_0.82fr]">
+  return <form ref={formRef} action={action} className="grid gap-8 lg:grid-cols-[1fr_0.82fr]">
     <div className="space-y-7">
       <section className="rounded-2xl border border-[#e4e8e1] bg-white p-6 sm:p-8">
         <div className="flex items-center justify-between gap-4"><div><p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#789173]">Your selection</p><h2 className="mt-2 font-serif text-2xl text-[#203a2b]">Order summary</h2></div><span className="text-xs text-[#849087]">{cartLines.length} product(s)</span></div>
@@ -80,7 +80,7 @@ export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
       <div className="mt-6 flex justify-between gap-4 text-sm text-[#68766c]"><span>Items subtotal</span><span className="font-semibold text-[#304236]">{formatGhsFromPesewas(subtotal)}</span></div>
       <div className="mt-4 flex justify-between gap-4 border-t border-[#dce5d8] pt-4 text-sm text-[#68766c]"><span>Delivery</span><span className="font-medium text-[#526b56]">Confirm with seller</span></div>
       <div className="mt-5 flex justify-between gap-4 border-t border-[#dce5d8] pt-5"><span className="text-sm font-semibold text-[#304236]">Items total</span><span className="text-xl font-semibold tracking-tight text-[#244b36]">{formatGhsFromPesewas(subtotal)}</span></div>
-      <p className="mt-5 text-xs leading-6 text-[#758078]">This is an order request, not a payment. Delivery cost and availability will be confirmed by the seller on WhatsApp. No payment is collected on this page.</p>
+      <p className="mt-5 text-xs leading-6 text-[#758078]">Choose secure online payment with Paystack, or send an order request to the seller on WhatsApp. Delivery cost and availability are confirmed separately.</p>
       <input type="hidden" name="items" value={JSON.stringify(cartLines.map(({ productId, quantity }) => ({ productId, quantity })))} />
       {state.error && <p role="alert" className="mt-5 rounded-xl bg-red-50 p-3 text-sm text-red-700">{state.error}</p>}
       <button type="submit" disabled={pending || cartLines.length !== items.length || subtotal <= 0} className="mt-6 w-full rounded-full bg-[#244b36] px-6 py-4 text-sm font-semibold text-white transition hover:bg-[#183a28] disabled:cursor-not-allowed disabled:opacity-50">{pending ? "Saving your request…" : "Continue with WhatsApp ↗"}</button>
