@@ -1,19 +1,44 @@
 # Samary's
 
-A premium, mobile-first product commerce application for the Samary's brand.
+A premium, mobile-first product commerce application with a public storefront and a protected seller dashboard.
 
-## Project status
+## Active development
 
-Initial repository bootstrap. Active implementation and project documentation will live on the `development` branch. The `main` branch is reserved for stable releases and will not be merged into `development`.
+All active implementation is on the `development` branch. `main` is reserved for stable releases; do not merge `main` into `development`.
 
-## Planned stack
+## Stack
 
-- Next.js App Router, React, TypeScript
-- Tailwind CSS and shadcn with Base UI
-- Hugeicons
+- Next.js App Router and TypeScript
+- Tailwind CSS
 - Neon PostgreSQL and Drizzle ORM
-- Paystack payments
-- WhatsApp click-to-chat ordering and seller notifications
-- Vercel deployment
+- Paystack
+- WhatsApp click-to-chat
+- Vercel
 
-See the project documentation on the `development` branch once initialized.
+## Local setup
+
+1. Install Node.js (current supported LTS) and npm.
+2. Copy `.env.example` to `.env.local`.
+3. Set `DATABASE_URL` to a Neon PostgreSQL connection string.
+4. Install dependencies with `npm install`.
+5. Run `npm run dev`.
+
+## Database
+
+- `npm run db:generate` creates Drizzle migrations from the schema.
+- `npm run db:migrate` applies migrations.
+- `npm run db:studio` opens Drizzle Studio.
+
+Never commit `.env.local`, database credentials or Paystack secret keys.
+
+## Project documentation
+
+- [Project scope](docs/PROJECT_SCOPE.md)
+- [Architecture](docs/ARCHITECTURE.md)
+- [Data model](docs/DATA_MODEL.md)
+- [Design brief](docs/DESIGN_BRIEF.md)
+- [Roadmap](docs/ROADMAP.md)
+
+## Launch safeguards
+
+Live checkout and public medical advertising remain gated until product pricing, product documentation and applicable regulatory approvals have been verified. Do not publish unsubstantiated treatment or cure claims.
