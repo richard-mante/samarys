@@ -5,6 +5,7 @@ import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
 export const metadata = {
   title: "Help & frequently asked questions",
   description: "Find answers about ordering, payment, delivery and tracking a Samary's order.",
+  alternates: { canonical: "/help" },
 };
 
 export default async function HelpPage() {
