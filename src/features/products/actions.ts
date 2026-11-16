@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { products, productImages } from "@/db/schema";
 import { db } from "@/db";
 import { requireAdmin } from "@/lib/admin";
@@ -72,7 +72,7 @@ export async function toggleProductVisibility(productId: string, isActive: boole
 }
 
 const imageInputSchema = z.object({
-  imageUrl: z.string().trim().url().max(2000).refine((value) => /^https?:\\/\\//i.test(value), "Use a public HTTPS or HTTP image URL."),
+  imageUrl: z.string().trim().url().max(2000).refine((value) => value.startsWith("https://") || value.startsWith("http://"), "Use a public HTTPS or HTTP image URL."),
   altText: z.string().trim().min(4, "Add a short description for accessibility.").max(240),
 });
 
@@ -106,7 +106,7 @@ export async function removeProductImage(imageId: string, productId: string) {
   await requireAdmin();
   const [product] = await db.select({ slug: products.slug }).from(products).where(eq(products.id, productId)).limit(1);
   if (!product) return;
-  await db.delete(productImages).where(eq(productImages.id, imageId));
+  await db.delete(productImages).where(and(eq(productImages.id, imageId), eq(productImages.productId, productId)));
   revalidatePath("/admin/products/" + productId);
   revalidatePath("/products/" + product.slug);
   revalidatePath("/");
