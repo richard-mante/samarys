@@ -15,7 +15,9 @@ This document tracks implemented application capabilities. It is not a build or 
 - Seller authentication is required for catalogue administration.
 - Sellers can create products.
 - Sellers can edit product details, price, stock quantity and storefront visibility.
-- Sellers can add and remove product gallery images using public image URLs and accessible alt text.\n- Sellers can upload image files directly to Cloudinary using server-signed uploads; the Cloudinary API secret remains server-side.
+- Sellers can add and remove product gallery images using public image URLs and accessible alt text.
+- Sellers can upload image files directly to Cloudinary using server-signed uploads; the Cloudinary API secret remains server-side.
+- Sellers can upload image files directly to Cloudinary using server-signed uploads; the Cloudinary API secret remains server-side.
 - Public product pages only expose active products and render seller-managed gallery images.
 - The home page features active catalogue products and their lead images.
 - Product deletion is intentionally not provided because historical order items must retain their product snapshots.
@@ -24,6 +26,8 @@ This document tracks implemented application capabilities. It is not a build or 
 
 - Seller dashboard includes live product/order/revenue metrics, recent orders, unpaid requests and low-stock alerts.
 - Seller workspace navigation is responsive and highlights the active section.
+- Seller can search orders by customer name, phone or reference and filter by fulfilment status, payment status and order channel.
+- Seller can review a timestamped activity log for order, payment, settings and catalogue changes.
 - Seller WhatsApp contact is editable in the dashboard, persisted in site settings and reused by storefront enquiry/order links.
 - Seller can inspect individual orders, customer contact details, delivery notes, line items, totals and linked payment records.
 - Seller can move orders through guarded fulfilment transitions.
@@ -41,7 +45,9 @@ This document tracks implemented application capabilities. It is not a build or 
 - Paystack initialization creates order and payment records with immutable item-price snapshots before redirecting to hosted checkout.
 - Callback verification checks provider transaction status, reference, amount and currency before settling the order.
 - Signed Paystack webhooks use HMAC SHA-512 validation and persisted event keys for idempotent processing.
-- Payment result pages read verified payment state from PostgreSQL; URL parameters alone cannot claim payment success.\n- Customers can look up order fulfilment/payment status using the order reference and matching checkout phone number. Lookup responses omit customer identity, contact and delivery-address details.
+- Payment result pages read verified payment state from PostgreSQL; URL parameters alone cannot claim payment success.
+- Customers can look up order fulfilment/payment status using the order reference and matching checkout phone number. Lookup responses omit customer identity, contact and delivery-address details.
+- Customers can look up order fulfilment/payment status using the order reference and matching checkout phone number. Lookup responses omit customer identity, contact and delivery-address details.
 - Customer ordering is gated by the server-only `ORDERS_ENABLED` flag and defaults to disabled until seller pricing and regulatory checks are complete.
 - Paystack deployment variables and webhook registration are documented in `docs/PAYSTACK_SETUP.md`.
 
@@ -53,16 +59,18 @@ This document tracks implemented application capabilities. It is not a build or 
 - Reduced-motion and visible keyboard-focus preferences are respected.
 - No unverified medical claims, ingredients, certifications or treatment outcomes are presented as facts.
 
-## Still to implement
+## Remaining work before launch
 
-- Direct image file uploads and managed storage (current gallery accepts image URLs).
-- Customer-facing order status views and order lookup.
-- Complete dashboard operational polish.
+- Complete the final security, accessibility, performance and SEO review.
+- Configure Neon, Cloudinary, Vercel and Paystack credentials and validate the live integrations.
+- Complete the seller's product, pricing, delivery and applicable Ghana FDA/regulatory approvals.
 
 ## Launch dependencies
 
 - Neon PostgreSQL connection string.
-- Session signing secret.\n- Cloudinary cloud name, API key and API secret for managed image uploads.
+- Session signing secret.
+- Cloudinary cloud name, API key and API secret for managed image uploads.
+- Cloudinary cloud name, API key and API secret for managed image uploads.
 - Paystack test/live credentials and webhook registration.
 - Seller-approved product information, actual product photography and ingredients.
 - Confirmed product price, delivery coverage/fees and applicable Ghana FDA registration/advertising approvals before live sales.
