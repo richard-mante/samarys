@@ -33,16 +33,15 @@ export default async function PoliciesPage() {
         </section>
         <section className="border-t border-[#dfe5dc] pt-6">
           <h2 className="font-serif text-2xl text-[#203a2b]">Delivery</h2>
-          <p className="mt-3 text-sm leading-7 text-[#758078]">Delivery coverage, availability, fees and timing are confirmed directly by the seller. The product subtotal shown during checkout does not automatically include a delivery fee. Please confirm the complete amount and delivery arrangement before proceeding.</p>
+          <p className="mt-3 text-sm leading-7 text-[#758078]">{settings.deliveryPolicy}</p>
         </section>
         <section className="border-t border-[#dfe5dc] pt-6">
           <h2 className="font-serif text-2xl text-[#203a2b]">Returns and refunds</h2>
-          <p className="mt-3 text-sm leading-7 text-[#758078]">Contact the seller before returning an item or expecting a refund so the applicable terms for your order can be confirmed. This website does not automatically initiate Paystack refunds. The seller must review and process any approved refund through the relevant payment provider.</p>
+          <p className="mt-3 text-sm leading-7 text-[#758078]">{settings.returnsPolicy}</p>
         </section>
         <section className="border-t border-[#dfe5dc] pt-6">
           <h2 className="font-serif text-2xl text-[#203a2b]">Customer information and privacy</h2>
-          <p className="mt-3 text-sm leading-7 text-[#758078]">When you place an order request, the website may collect your name, phone number, email address if supplied, delivery address and instructions, selected products and order reference. This information is used to create and manage your order, coordinate delivery and respond to support requests. Online payments are handled through Paystack; this website stores payment references and verification status rather than asking you to enter card PINs or security codes here.</p>
-          <p className="mt-3 text-sm leading-7 text-[#758078]">Order and customer details are available to the seller through the protected administration dashboard for order handling and record keeping. Contact the seller if you need to ask about your information or request a correction.</p>
+          <p className="mt-3 text-sm leading-7 text-[#758078]">{settings.privacyPolicy}</p>
         </section>
         <section className="border-t border-[#dfe5dc] pt-6">
           <h2 className="font-serif text-2xl text-[#203a2b]">Product information</h2>
