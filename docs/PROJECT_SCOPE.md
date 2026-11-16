@@ -40,7 +40,7 @@ The seller's WhatsApp number is configured as +233559448932 (display: 055 944 89
 - Order search, filtering and status updates.
 - Payment history and reconciliation.
 - Customer directory and per-customer order history.
-- Store settings and seller WhatsApp contact; delivery coverage and fees are confirmed with the seller per order until the seller supplies fixed delivery rules.
+- Store settings for seller WhatsApp contact and editable delivery, returns and privacy information; delivery coverage and fees are confirmed with the seller per order until fixed delivery rules are supplied.
 - Audit trail for sensitive administrative actions.
 
 ## Explicitly out of scope for V1
