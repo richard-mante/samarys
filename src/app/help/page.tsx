@@ -32,6 +32,10 @@ export default async function HelpPage() {
       link: true,
     },
     {
+      question: "Is stock reserved while I am arranging payment?",
+      answer: "An unpaid order request does not reserve stock. The seller confirms availability before payment; finite stock is updated when payment is verified or recorded by the seller.",
+    },
+    {
       question: "How much is delivery and where do you deliver?",
       answer: "Delivery coverage and fees are confirmed by the seller for each order. The checkout subtotal is for the products; do not assume delivery is included unless the seller confirms it.",
     },
