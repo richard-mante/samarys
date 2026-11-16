@@ -33,6 +33,7 @@
 - [x] Implement WhatsApp-assisted order path.
 - [x] Add seller order listing and payment visibility.
 - [x] Add seller order status transitions.
+- [x] Add finite-stock reservations for online checkout and payment-linked inventory updates.
 - [x] Add customer order tracking and seller order search/filtering.
 - [x] Add customer directory and per-customer order history.
 - [x] Add seller activity log and catalogue audit records.
@@ -43,6 +44,7 @@
 - [x] Validate webhook signatures and handle events idempotently.
 - [x] Add payment history view.
 - [x] Add payment reconciliation actions.
+- [x] Add full-refund reconciliation after the seller completes the refund externally.
 
 ## Phase 5 — Verification and launch
 - [ ] Final security, accessibility, performance and SEO review.
