@@ -22,7 +22,7 @@ export default async function AdminCustomerDetailPage({ params }: { params: Prom
 
   const history = await db.query.orders.findMany({
     where: eq(orders.customerId, id),
-    orderBy: [desc(orders.createdAt)],
+    orderBy: (table, { desc }) => [desc(table.createdAt)],
     with: { items: true },
     limit: 100,
   });
