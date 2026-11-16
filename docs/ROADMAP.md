@@ -22,23 +22,23 @@
 - [x] Add initial responsive storefront shell.
 - [ ] Complete design system and responsive storefront.
 - [x] Add dynamic product detail pages.
-- [ ] Build product image upload and gallery.
+- [x] Build product image upload and gallery (signed Cloudinary uploads plus external image URLs).
 - [ ] Implement dashboard product management.
 - [ ] Add configurable settings and seller contact.
 
 ## Phase 3 — Orders and WhatsApp
-- [ ] Implement customer checkout and server-side order creation.
+- [x] Implement customer checkout and server-side order creation.
 - [x] Add WhatsApp click-to-chat URL helper.
-- [ ] Implement WhatsApp-assisted order path.
+- [x] Implement WhatsApp-assisted order path.
 - [x] Add seller order listing and payment visibility.
-- [ ] Add seller order status transitions.
+- [x] Add seller order status transitions.
 
 ## Phase 4 — Paystack
-- [ ] Initialize Paystack transactions server-side.
-- [ ] Verify transactions server-side.
-- [ ] Validate webhook signatures and handle events idempotently.
+- [x] Initialize Paystack transactions server-side.
+- [x] Verify transactions server-side.
+- [x] Validate webhook signatures and handle events idempotently.
 - [x] Add payment history view.
-- [ ] Add payment reconciliation actions.
+- [x] Add payment reconciliation actions.
 
 ## Phase 5 — Verification and launch
 - [ ] Review security, accessibility, performance and SEO.
