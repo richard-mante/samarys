@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { requireAdmin } from "@/lib/admin";
 
 const links = [
   { href: "/admin", label: "Overview" },
@@ -10,8 +9,6 @@ const links = [
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  await requireAdmin();
-
   return (
     <div className="min-h-screen bg-[#f5f6f2] lg:grid lg:grid-cols-[240px_1fr]">
       <aside className="border-b border-[#e4e8e1] bg-white px-5 py-5 lg:min-h-screen lg:border-b-0 lg:border-r">
