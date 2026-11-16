@@ -9,6 +9,7 @@ import { customers, orderItems, orders, products } from "@/db/schema";
 import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
 import { formatGhsFromPesewas } from "@/lib/money";
 import { normalizePhoneNumber } from "@/lib/phone";
+import { getStoreSettings } from "@/lib/settings";
 
 export type CreateOrderState = {
   error?: string;
@@ -151,7 +152,7 @@ export async function createWhatsAppOrder(_previous: CreateOrderState, formData:
     return {
       success: "Your order request has been saved. Send the prepared message to the seller to confirm the details.",
       reference,
-      whatsappUrl: createSellerWhatsAppUrl(message),
+      whatsappUrl: createSellerWhatsAppUrl(message, (await getStoreSettings()).sellerWhatsAppNumber),
     };
   } catch (error) {
     return { error: error instanceof Error && error.message.startsWith("Only ") ? error.message : "We could not create your order request. Please try again or contact the seller." };
