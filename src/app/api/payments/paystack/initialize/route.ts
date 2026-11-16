@@ -6,6 +6,7 @@ import { db } from "@/db";
 import { customers, orderItems, orders, payments, products } from "@/db/schema";
 import { normalizePhoneNumber } from "@/lib/phone";
 import { getStoreSettings } from "@/lib/settings";
+import { consumeRateLimit, getClientAddress } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
@@ -33,6 +34,16 @@ export async function POST(request: Request) {
 
   const parsed = requestSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: parsed.error.issues[0]?.message ?? "Check your order details." }, { status: 400 });
+  const withinLimit = await consumeRateLimit({
+    action: "PAYSTACK_CHECKOUT_INITIALIZE",
+    clientAddress: getClientAddress(request.headers),
+    limit: 6,
+    windowMs: 15 * 60 * 1000,
+  });
+  if (!withinLimit) return NextResponse.json(
+    { error: "Too many checkout attempts. Please wait 15 minutes before trying again." },
+    { status: 429, headers: { "Retry-After": "900" } },
+  );
 
   try {
     const input = parsed.data;

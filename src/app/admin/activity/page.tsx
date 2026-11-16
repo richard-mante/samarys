@@ -10,6 +10,7 @@ function readable(value: string) {
 export default async function AdminActivityPage() {
   await requireAdmin();
   const entries = await db.query.auditLogs.findMany({
+    where: (table, { ne }) => ne(table.entityType, "rate_limit"),
     orderBy: (table, { desc }) => [desc(table.createdAt)],
     limit: 100,
     with: { admin: true },
