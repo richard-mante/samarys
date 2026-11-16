@@ -29,7 +29,7 @@ export default async function PoliciesPage() {
         </section>
         <section className="border-t border-[#dfe5dc] pt-6">
           <h2 className="font-serif text-2xl text-[#203a2b]">Availability and stock</h2>
-          <p className="mt-3 text-sm leading-7 text-[#758078]">An unpaid order request does not reserve stock. The seller confirms product availability before payment. Finite stock quantities are updated when payment is verified or recorded by the seller.</p>
+          <p className="mt-3 text-sm leading-7 text-[#758078]">Finite stock is temporarily reserved for 30 minutes while a Paystack checkout is pending. WhatsApp-assisted order requests do not reserve stock; the seller confirms availability before recording payment. Finite stock quantities are updated when payment is verified or recorded. If a Paystack payment completes after its reservation expires and stock is no longer available, the order may be cancelled and the seller will review the payment and any required refund.</p>
         </section>
         <section className="border-t border-[#dfe5dc] pt-6">
           <h2 className="font-serif text-2xl text-[#203a2b]">Delivery</h2>

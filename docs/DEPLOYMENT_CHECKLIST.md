@@ -114,8 +114,9 @@ Before accepting real customer orders, the seller must confirm the product ident
 
 - [ ] Confirm `https://samary.catpad.shop` loads over HTTPS.
 - [ ] Sign in to `/admin/login` and confirm product/settings/order pages work.
-- [ ] Place and reconcile a Paystack test order before enabling live mode.
+- [ ] Place and reconcile a Paystack test order before enabling live mode, including checking that finite stock is reserved during checkout, released after failed/expired checkout and decremented after verified payment.
 - [ ] Confirm WhatsApp-assisted orders are received by the seller and remain unpaid until payment is recorded by the seller.
+- [ ] If testing refunds, process a test refund in Paystack first, then record it in the order dashboard; the app records refunds but does not transfer money itself.
 - [ ] Monitor Vercel deployment/runtime logs and Paystack transactions/webhook delivery after launch.
 
 **Important:** A successful Vercel deployment does not by itself prove payments, order handling, delivery operations or regulatory compliance are ready. The project owner must run and confirm the production checks. End-to-end tests and builds are intentionally not run as part of the current implementation work.

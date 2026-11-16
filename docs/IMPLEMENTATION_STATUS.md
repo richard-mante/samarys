@@ -15,7 +15,8 @@ This document tracks implemented application capabilities. It is not a build or 
 - Seller authentication is required for catalogue administration.
 - Sellers can create products.
 - Sellers can edit product details, price, stock quantity and storefront visibility.
-- Finite product stock is decremented transactionally when a Paystack payment is verified or a WhatsApp payment is manually confirmed, and restored if a paid order is cancelled; untracked stock remains unlimited.
+- Finite product stock is reserved for 30 minutes during pending Paystack checkout, decremented transactionally after verified Paystack or seller-confirmed WhatsApp payment, and restored if a paid order is cancelled; WhatsApp requests do not reserve stock and untracked stock remains unlimited.
+- If a Paystack payment arrives after its reservation expires and stock is no longer available, the order is cancelled, the exception is audit-logged and the seller is prompted to review a refund.
 - Sellers can add and remove product gallery images using public image URLs and accessible alt text.
 - Sellers can upload image files directly to Cloudinary using server-signed uploads; the Cloudinary API secret remains server-side.
 - Public product pages only expose active products and render seller-managed gallery images.
@@ -35,6 +36,7 @@ This document tracks implemented application capabilities. It is not a build or 
 - Seller can inspect individual orders, customer contact details, delivery notes, line items, totals and linked payment records.
 - Seller can move orders through guarded fulfilment transitions.
 - Seller can record a manually received WhatsApp payment, delivery fee and payment reference; the action is audit-logged.
+- Seller can record a completed full refund after processing it externally; Paystack payment/order statuses and finance views are updated, with refund details audit-logged.
 - The finance dashboard combines Paystack transaction records with seller-confirmed WhatsApp payment audit records.
 - Fulfilled status is blocked unless payment is marked paid.
 - Order status changes are written to the audit log within the same database transaction.

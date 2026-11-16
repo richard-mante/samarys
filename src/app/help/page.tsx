@@ -33,7 +33,11 @@ export default async function HelpPage() {
     },
     {
       question: "Is stock reserved while I am arranging payment?",
-      answer: "An unpaid order request does not reserve stock. The seller confirms availability before payment; finite stock is updated when payment is verified or recorded by the seller.",
+      answer: "A Paystack checkout temporarily reserves finite stock for 30 minutes while payment is pending. A WhatsApp order request does not reserve stock; the seller confirms availability before recording payment. Finite stock is updated when payment is verified or recorded.",
+    },
+    {
+      question: "How long is stock held during Paystack checkout?",
+      answer: "The reservation lasts 30 minutes. If payment completes after the reservation expires and the product is no longer available, the order may be cancelled and the seller will review the payment and refund.",
     },
     {
       question: "How much is delivery and where do you deliver?",

@@ -7,6 +7,7 @@ import { requireAdmin } from "@/lib/admin";
 import { formatGhsFromPesewas } from "@/lib/money";
 import { normalizePhoneNumber } from "@/lib/phone";
 import { OrderStatusForm } from "@/features/orders/order-status-form";
+import { RecordRefundForm } from "@/features/orders/record-refund-form";
 import { RecordWhatsAppPaymentForm } from "@/features/orders/record-whatsapp-payment-form";
 
 const statusLabels: Record<string, string> = {
@@ -34,6 +35,15 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
     paymentReference?: string | null;
     amountReceivedMinor?: number;
   } | null;
+  const refundAudit = await db.select().from(auditLogs)
+    .where(and(eq(auditLogs.entityId, id), eq(auditLogs.action, "ORDER_REFUND_RECORDED")))
+    .orderBy(desc(auditLogs.createdAt)).limit(1);
+  const refundMetadata = refundAudit[0]?.metadata as {
+    amountMinor?: number;
+    method?: string;
+    refundReference?: string | null;
+    reason?: string;
+  } | null;
 
   return <div className="mx-auto max-w-5xl">
     <Link href="/admin/orders" className="text-sm text-[#66836c] transition hover:text-[#244b36]">← Back to orders</Link>
@@ -47,6 +57,9 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
     </div>
 
     {order.status === "CANCELLED" && order.paymentStatus === "PAID" && <div role="alert" className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900">Payment was received for this cancelled order. Review the transaction in Paystack and arrange a refund if appropriate; refunds are not processed automatically by this app.</div>}
+    {order.channel === "PAYSTACK" && order.paymentStatus === "PENDING" && order.status !== "CANCELLED" && <div className="mt-6 rounded-2xl border border-[#dce5d8] bg-[#f6f8f4] p-5 text-sm leading-6 text-[#526b56]">{new Date(order.createdAt).getTime() + 30 * 60 * 1000 > Date.now() ? "Online stock reservation is active until " + new Intl.DateTimeFormat("en-GH", { dateStyle: "medium", timeStyle: "short" }).format(new Date(new Date(order.createdAt).getTime() + 30 * 60 * 1000)) + "." : "The 30-minute online stock reservation has expired. Any late payment will be checked against current stock and may require a refund."}</div>}
+    {order.paymentStatus === "REFUNDED" && refundAudit[0] && <div className="mt-6 rounded-2xl border border-[#dce5d8] bg-[#f6f8f4] p-5 text-sm leading-6 text-[#526b56]"><p className="font-semibold text-[#304236]">Refund recorded · {formatGhsFromPesewas(refundMetadata?.amountMinor ?? order.totalMinor)}</p><p className="mt-1">Recorded {new Intl.DateTimeFormat("en-GH", { dateStyle: "medium", timeStyle: "short" }).format(refundAudit[0].createdAt)} via {refundMetadata?.method === "PAYSTACK_DASHBOARD" ? "Paystack Dashboard" : "manual refund"}.</p>{refundMetadata?.refundReference && <p className="mt-1">Reference: {refundMetadata.refundReference}</p>}{refundMetadata?.reason && <p className="mt-2">Note: {refundMetadata.reason}</p>}</div>}
+    {order.paymentStatus === "PAID" && <RecordRefundForm orderId={order.id} channel={order.channel} />}
 
     <div className="mt-8 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
       <div className="space-y-6">
