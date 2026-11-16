@@ -2,6 +2,7 @@ import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { ArrowUpRight01Icon, Logout01Icon, Store01Icon } from "@hugeicons/core-free-icons";
 import { AdminNavigation } from "@/features/administration/admin-navigation";
+import { AppIcon } from "@/components/ui/app-icon";
 
 export const metadata = { title: "Seller workspace", robots: { index: false, follow: false } };
 
@@ -29,7 +30,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </div>
           <div className="flex items-center gap-4 lg:mt-5 lg:justify-between">
             <Link href="/" className="hidden items-center gap-1.5 text-xs font-medium text-[#78847a] transition hover:text-[#244b36] lg:inline-flex">View storefront <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} /></Link>
-            <Link href="/admin/logout" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#9b665d] transition hover:text-[#8c4036]"><HugeiconsIcon icon={Logout01Icon} size={15} />Sign out</Link>
+            <Link href="/admin/logout" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#9b665d] transition hover:text-[#8c4036]"><HugeiconsIcon icon={Logout01Icon} size={15} /><AppIcon name="logout" size={15} /> Sign out</Link>
           </div>
         </div>
       </aside>
@@ -37,7 +38,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
       <div className="min-w-0">
         <header className="sticky top-0 z-20 hidden border-b border-[#e4e8e1]/80 bg-[#f8f9f6]/90 px-6 py-4 backdrop-blur-xl lg:block lg:px-10">
           <div className="mx-auto flex max-w-7xl items-center justify-between">
-            <p className="text-xs text-[#849087]">Administration <span className="mx-2 text-[#c4cdc1]">/</span> <span className="font-medium text-[#526157]">Your business, in focus.</span></p>
+            <p className="text-xs text-[#849087]"><span className="inline-flex items-center gap-2"><AppIcon name="overview" size={15} /> Seller workspace</span> <span className="mx-2 text-[#c4cdc1]">/</span> <span className="font-medium text-[#526157]">Your store, in focus.</span></p>
             <Link href="/" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#526b56] transition hover:text-[#203a2b]">View storefront <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} /></Link>
           </div>
         </header>

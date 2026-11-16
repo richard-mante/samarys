@@ -4,6 +4,7 @@ import { Settings01Icon, Store01Icon, LockKeyIcon, ShieldCheckIcon, Image01Icon 
 import { getStoreSettings } from "@/lib/settings";
 import { StoreSettingsForm } from "@/features/administration/store-settings-form";
 import { ChangeAdminPasswordForm } from "@/features/administration/change-admin-password-form";
+import { AppIcon } from "@/components/ui/app-icon";
 
 export default async function AdminSettingsPage() {
   await requireAdmin();
