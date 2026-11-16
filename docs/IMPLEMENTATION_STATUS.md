@@ -28,7 +28,7 @@ This document tracks implemented application capabilities. It is not a build or 
 - Seller dashboard includes live product/order/revenue metrics, recent orders, unpaid requests and low-stock alerts.
 - Seller workspace navigation is responsive and highlights the active section.
 - Administrator can change the account password from settings after verifying the current password; password changes are audit-logged.
-- Administrator sign-in is throttled after repeated failures, and login attempts are recorded without storing raw IP addresses.
+- Administrator sign-in, public checkout initialization and order lookup are rate-limited; rate-limit keys are hashed and raw client IP addresses are not stored.
 - Seller can search orders by customer name, phone or reference and filter by fulfilment status, payment status and order channel.
 - Seller can review a timestamped activity log for order, payment, settings and catalogue changes.
 - Seller can search the customer directory and review customer profiles, order history and lifetime verified spend.
