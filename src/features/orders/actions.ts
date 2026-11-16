@@ -213,7 +213,7 @@ export async function recordWhatsAppPayment(orderId: string, _previous: OrderAct
 const refundSchema = z.object({
   refundReference: z.string().trim().max(120).optional().default(""),
   reason: z.string().trim().min(4, "Add a short reason for the refund.").max(500),
-  confirmRefund: z.literal("on", { errorMap: () => ({ message: "Confirm that the refund has already been completed." }) }),
+  confirmRefund: z.literal("on"),
 });
 
 export async function recordOrderRefund(orderId: string, _previous: OrderActionState, formData: FormData): Promise<OrderActionState> {
@@ -238,7 +238,7 @@ export async function recordOrderRefund(orderId: string, _previous: OrderActionS
         const originalPayload = payment.providerPayload && typeof payment.providerPayload === "object" && !Array.isArray(payment.providerPayload)
           ? payment.providerPayload as Record<string, unknown>
           : {};
-        await tx.update(payments).set({
+        const [refundedPayment] = await tx.update(payments).set({
           status: "REFUNDED",
           providerPayload: {
             ...originalPayload,
@@ -251,14 +251,15 @@ export async function recordOrderRefund(orderId: string, _previous: OrderActionS
             },
           },
           updatedAt: new Date(),
-        }).where(and(eq(payments.id, payment.id), eq(payments.status, "PAID")));
+        }).where(and(eq(payments.id, payment.id), eq(payments.status, "PAID"))).returning({ id: payments.id });
+        if (!refundedPayment) return { error: "The payment record changed while you were recording the refund." } as const;
       }
 
       const [updated] = await tx.update(orders).set({
         paymentStatus: "REFUNDED",
         updatedAt: new Date(),
       }).where(and(eq(orders.id, orderId), eq(orders.paymentStatus, "PAID"))).returning({ id: orders.id });
-      if (!updated) return { error: "This order changed while you were recording the refund." } as const;
+      if (!updated) throw new Error("The order payment status changed while recording the refund.");
 
       await tx.insert(auditLogs).values({
         adminId: admin.adminId,
