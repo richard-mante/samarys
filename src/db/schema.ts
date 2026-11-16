@@ -210,3 +210,41 @@ export const auditLogs = pgTable(
     createdAtIndex: index("audit_logs_created_at_idx").on(table.createdAt),
   }),
 );
+
+import { relations } from "drizzle-orm";
+
+export const customersRelations = relations(customers, ({ many }) => ({
+  orders: many(orders),
+}));
+
+export const ordersRelations = relations(orders, ({ one, many }) => ({
+  customer: one(customers, { fields: [orders.customerId], references: [customers.id] }),
+  items: many(orderItems),
+  payments: many(payments),
+}));
+
+export const productsRelations = relations(products, ({ many }) => ({
+  images: many(productImages),
+  orderItems: many(orderItems),
+}));
+
+export const productImagesRelations = relations(productImages, ({ one }) => ({
+  product: one(products, { fields: [productImages.productId], references: [products.id] }),
+}));
+
+export const orderItemsRelations = relations(orderItems, ({ one }) => ({
+  order: one(orders, { fields: [orderItems.orderId], references: [orders.id] }),
+  product: one(products, { fields: [orderItems.productId], references: [products.id] }),
+}));
+
+export const paymentsRelations = relations(payments, ({ one }) => ({
+  order: one(orders, { fields: [payments.orderId], references: [orders.id] }),
+}));
+
+export const adminsRelations = relations(admins, ({ many }) => ({
+  auditLogs: many(auditLogs),
+}));
+
+export const auditLogsRelations = relations(auditLogs, ({ one }) => ({
+  admin: one(admins, { fields: [auditLogs.adminId], references: [admins.id] }),
+}));
