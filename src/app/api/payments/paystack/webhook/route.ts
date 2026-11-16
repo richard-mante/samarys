@@ -34,11 +34,13 @@ export async function POST(request: Request) {
       .where(eq(paymentEvents.providerEventKey, eventKey)).limit(1);
     let eventId: string;
     if (existing) {
-      if (existing.status === "PROCESSED" || existing.status === "RECEIVED") {
+      if (existing.status === "PROCESSED") {
         return NextResponse.json({ received: true, duplicate: true });
       }
-      await db.update(paymentEvents).set({ status: "RECEIVED", processedAt: null })
-        .where(eq(paymentEvents.id, existing.id));
+      if (existing.status === "FAILED") {
+        await db.update(paymentEvents).set({ status: "RECEIVED", processedAt: null })
+          .where(eq(paymentEvents.id, existing.id));
+      }
       eventId = existing.id;
     } else {
       const [created] = await db.insert(paymentEvents).values({
