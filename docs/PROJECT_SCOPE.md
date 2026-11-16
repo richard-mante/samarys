@@ -30,7 +30,7 @@ The seller's WhatsApp number is configured as +233559448932 (display: 055 944 89
 - Server-side transaction verification.
 - Signed webhook verification.
 - Idempotent payment event handling.
-- Payment and order status reconciliation.
+- Payment and order status reconciliation, manual WhatsApp payment recording and completed-refund reconciliation after external processing.
 - Never trust a browser redirect as proof of payment.
 
 ### Seller dashboard
