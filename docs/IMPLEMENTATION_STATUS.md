@@ -67,9 +67,14 @@ This document tracks implemented application capabilities. It is not a build or 
 
 ## Remaining work before launch
 
-- Complete the final security, accessibility, performance and SEO review.
-- Configure Neon, Cloudinary, Vercel and Paystack credentials and validate the live integrations.
-- Complete the seller's product, pricing, delivery and applicable Ghana FDA/regulatory approvals.
+The core V1 application workflows are implemented. The remaining steps are owner-managed setup and production verification:
+
+- Generate and apply the initial Drizzle migrations. The schema is in the repository, but the initial generated migration files are not committed yet.
+- Configure Neon, Cloudinary, Vercel and Paystack credentials, webhook and domain/DNS.
+- Create the seller admin account against the production database; the seller changes the initial password after first sign-in.
+- Complete seller-approved product information, price, stock, delivery, privacy/returns policy wording and applicable Ghana FDA/regulatory approvals.
+- After configuration, the project owner should run the build and confirm the manual production smoke checks in the deployment checklist. Builds, typechecks and end-to-end tests have not been run by the assistant, as requested; end-to-end tests remain out of scope.
+- Complete the final live accessibility, performance and SEO review after the real content, product imagery and domain are in place.
 
 ## Launch dependencies
 
