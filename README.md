@@ -15,7 +15,7 @@ All active implementation is on the `development` branch. `main` is reserved for
 - WhatsApp click-to-chat
 - Vercel
 
-## Local setup
+## Deployment\n\nThe current production domain is [samary.catpad.shop](https://samary.catpad.shop). Configure `NEXT_PUBLIC_APP_URL=https://samary.catpad.shop` in Vercel and register the matching Paystack webhook documented in `docs/PAYSTACK_SETUP.md`.\n\n## Local setup
 
 1. Install Node.js (current supported LTS) and npm.
 2. Copy `.env.example` to `.env.local`.
