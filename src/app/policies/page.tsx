@@ -28,6 +28,10 @@ export default async function PoliciesPage() {
           <p className="mt-3 text-sm leading-7 text-[#758078]">Product prices are shown in Ghana cedis. A WhatsApp-assisted checkout saves an order request; it is not considered paid or confirmed until the seller confirms availability and records receipt of payment. Paystack orders are marked paid only after the payment is verified by the app.</p>
         </section>
         <section className="border-t border-[#dfe5dc] pt-6">
+          <h2 className="font-serif text-2xl text-[#203a2b]">Availability and stock</h2>
+          <p className="mt-3 text-sm leading-7 text-[#758078]">An unpaid order request does not reserve stock. The seller confirms product availability before payment. Finite stock quantities are updated when payment is verified or recorded by the seller.</p>
+        </section>
+        <section className="border-t border-[#dfe5dc] pt-6">
           <h2 className="font-serif text-2xl text-[#203a2b]">Delivery</h2>
           <p className="mt-3 text-sm leading-7 text-[#758078]">Delivery coverage, availability, fees and timing are confirmed directly by the seller. The product subtotal shown during checkout does not automatically include a delivery fee. Please confirm the complete amount and delivery arrangement before proceeding.</p>
         </section>
