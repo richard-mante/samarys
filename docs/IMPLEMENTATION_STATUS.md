@@ -17,7 +17,6 @@ This document tracks implemented application capabilities. It is not a build or 
 - Sellers can edit product details, price, stock quantity and storefront visibility.
 - Sellers can add and remove product gallery images using public image URLs and accessible alt text.
 - Sellers can upload image files directly to Cloudinary using server-signed uploads; the Cloudinary API secret remains server-side.
-- Sellers can upload image files directly to Cloudinary using server-signed uploads; the Cloudinary API secret remains server-side.
 - Public product pages only expose active products and render seller-managed gallery images.
 - The home page features active catalogue products and their lead images.
 - Product deletion is intentionally not provided because historical order items must retain their product snapshots.
