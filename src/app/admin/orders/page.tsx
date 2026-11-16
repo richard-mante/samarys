@@ -64,7 +64,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
 
   return <div>
     <div className="flex flex-wrap items-end justify-between gap-4">
-      <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Sales</p><h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]"<span className="inline-flex items-center gap-3"><HugeiconsIcon icon={ShoppingBag01Icon} size={25} />Orders</span></h1><p className="mt-2 text-sm text-[#758078]">Search customers and references, then narrow orders by fulfilment or payment state.</p></div>
+      <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Sales</p><h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]"><span className="inline-flex items-center gap-3"><HugeiconsIcon icon={ShoppingBag01Icon} size={25} />Orders</span></h1><p className="mt-2 text-sm text-[#758078]">Search customers and references, then narrow orders by fulfilment or payment state.</p></div>
       <p className="rounded-full bg-white px-4 py-2 text-xs font-medium text-[#68766c]">{rows.length} matching {rows.length === 1 ? "order" : "orders"} · latest 100</p>
     </div>
 
