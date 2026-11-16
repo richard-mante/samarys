@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { and, eq, sql } from "drizzle-orm";
+import { and, asc, eq, gt, inArray, sql, sum } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db";
 import { auditLogs, orderItems, orders, products } from "@/db/schema";
@@ -120,6 +120,40 @@ export async function recordWhatsAppPayment(orderId: string, _previous: OrderAct
         return { error: "The amount received must match the items subtotal plus the delivery fee." } as const;
       }
 
+      const purchasedItems = await tx.select({ productId: orderItems.productId, quantity: orderItems.quantity })
+        .from(orderItems).where(eq(orderItems.orderId, orderId)).orderBy(asc(orderItems.productId));
+      const productIds = [...new Set(purchasedItems.map((item) => item.productId).filter((id): id is string => Boolean(id)))];
+      const productRows = productIds.length ? await tx.select().from(products)
+        .where(inArray(products.id, productIds)).orderBy(asc(products.id)).for("update") : [];
+      if (productRows.length !== productIds.length) {
+        return { error: "A product in this order is no longer available in the catalogue." } as const;
+      }
+      const reservationCutoff = new Date(Date.now() - 30 * 60 * 1000);
+      const reservationRows = productIds.length ? await tx.select({
+        productId: orderItems.productId,
+        reservedQuantity: sum(orderItems.quantity),
+      }).from(orderItems)
+        .innerJoin(orders, eq(orderItems.orderId, orders.id))
+        .where(and(
+          inArray(orderItems.productId, productIds),
+          eq(orders.channel, "PAYSTACK"),
+          eq(orders.status, "PENDING_PAYMENT"),
+          eq(orders.paymentStatus, "PENDING"),
+          gt(orders.createdAt, reservationCutoff),
+        ))
+        .groupBy(orderItems.productId) : [];
+      const reservedByProduct = new Map(reservationRows.map((row) => [row.productId, Number(row.reservedQuantity ?? 0)]));
+      const productById = new Map(productRows.map((product) => [product.id, product]));
+      for (const item of purchasedItems) {
+        if (!item.productId) continue;
+        const product = productById.get(item.productId);
+        if (!product) return { error: "A product in this order is no longer available." } as const;
+        const reserved = reservedByProduct.get(item.productId) ?? 0;
+        if (product.stockQuantity !== null && product.stockQuantity - reserved < item.quantity) {
+          return { error: "This quantity is currently reserved for an online checkout or is no longer available. Resolve availability before confirming this payment." } as const;
+        }
+      }
+
       const [updated] = await tx.update(orders).set({
         deliveryFeeMinor,
         totalMinor,
@@ -130,8 +164,6 @@ export async function recordWhatsAppPayment(orderId: string, _previous: OrderAct
 
       if (!updated) return { error: "This order changed while you were recording payment. Refresh and try again." } as const;
 
-      const purchasedItems = await tx.select({ productId: orderItems.productId, quantity: orderItems.quantity })
-        .from(orderItems).where(eq(orderItems.orderId, orderId));
       for (const item of purchasedItems) {
         if (!item.productId) continue;
         const [stock] = await tx.update(products).set({
