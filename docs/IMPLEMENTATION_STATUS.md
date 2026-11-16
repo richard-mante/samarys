@@ -18,6 +18,8 @@ This document tracks implemented application capabilities. It is not a build or 
 - Sellers can add and remove product gallery images using public image URLs and accessible alt text.
 - Public product pages only expose active products and render seller-managed gallery images.
 - The home page features active catalogue products and their lead images.
+- Seller dashboard includes live product/order/revenue metrics, recent orders, unpaid requests and low-stock alerts.
+- Seller workspace navigation is responsive and highlights the active section.
 - Seller WhatsApp contact is editable in the dashboard, persisted in site settings and reused by storefront enquiry/order links.
 - Product deletion is intentionally not provided because historical order items must retain their product snapshots.
 
