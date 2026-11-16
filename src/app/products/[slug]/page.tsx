@@ -58,7 +58,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <p className="mt-2 text-xs text-[#849087]">Confirm current availability and delivery details with the seller.</p>
           </div>
           {product.description && <div className="mt-8 whitespace-pre-wrap text-sm leading-8 text-[#58665c]">{product.description}</div>}
-          <div className="mt-10 flex flex-col gap-3 sm:flex-row"><AddToCartButton productId={product.id} /><a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex w-full items-center justify-center rounded-full border border-[#d9dfd5] px-8 py-4 text-sm font-semibold text-[#244b36] transition hover:bg-white sm:w-fit">Enquire on WhatsApp <span aria-hidden="true" className="ml-3">↗</span></a></div>
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row"><AddToCartButton productId={product.id} disabled={product.stockQuantity !== null && product.stockQuantity <= 0} /><a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex w-full items-center justify-center rounded-full border border-[#d9dfd5] px-8 py-4 text-sm font-semibold text-[#244b36] transition hover:bg-white sm:w-fit">Enquire on WhatsApp <span aria-hidden="true" className="ml-3">↗</span></a></div>
           <p className="mt-4 max-w-md text-xs leading-6 text-[#849087]">Product information is provided by the seller. Please confirm ingredients, directions, suitability and any safety questions directly with the seller before purchasing.</p>
         </div>
       </section>
