@@ -18,6 +18,7 @@ This document tracks implemented application capabilities. It is not a build or 
 - Sellers can add and remove product gallery images using public image URLs and accessible alt text.
 - Public product pages only expose active products and render seller-managed gallery images.
 - The home page features active catalogue products and their lead images.
+- Seller WhatsApp contact is editable in the dashboard, persisted in site settings and reused by storefront enquiry/order links.
 - Product deletion is intentionally not provided because historical order items must retain their product snapshots.
 
 ## Seller order operations
@@ -45,7 +46,7 @@ This document tracks implemented application capabilities. It is not a build or 
 - Direct image file uploads and managed storage (current gallery accepts image URLs).
 - Paystack checkout, transaction verification and signed webhook handling.
 - Customer-facing order status views and order lookup.
-- Settings persistence and editable seller contact.
+
 - Complete dashboard operational polish.
 
 ## Launch dependencies
