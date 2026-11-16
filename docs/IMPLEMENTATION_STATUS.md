@@ -26,7 +26,8 @@ This document tracks implemented application capabilities. It is not a build or 
 - Seller can move orders through guarded fulfilment transitions.
 - Customers can build a persistent basket and submit a WhatsApp-assisted order request with contact and delivery details.
 - Order totals are calculated from current server-side product prices; delivery is explicitly confirmed separately by the seller.
-- WhatsApp order requests are stored as unpaid and are not represented as completed payments.\n- Seller can record a manually received WhatsApp payment, delivery fee and payment reference; the action is audit-logged.
+- WhatsApp order requests are stored as unpaid and are not represented as completed payments.
+- Seller can record a manually received WhatsApp payment, delivery fee and payment reference; the action is audit-logged.
 - Fulfilled status is blocked unless payment is marked paid.
 - Order status changes are written to the audit log within the same database transaction.
 
@@ -41,10 +42,8 @@ This document tracks implemented application capabilities. It is not a build or 
 ## Still to implement
 
 - Direct image file uploads and managed storage (current gallery accepts image URLs).
-- Paystack checkout, payment verification and webhook handling.
-- Paystack initialization, verification and webhook handling.
-- Seller-verified payment recording for WhatsApp-assisted orders and customer order status views.
-- Customer-facing order status views and payment recording for WhatsApp-assisted orders.
+- Paystack checkout, transaction verification and signed webhook handling.
+- Customer-facing order status views and order lookup.
 - Settings persistence and editable seller contact.
 - Complete dashboard operational polish.
 
