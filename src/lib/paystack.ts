@@ -86,6 +86,14 @@ export async function verifyAndSettlePaystackPayment(reference: string, payload?
     }).where(and(eq(orders.id, order.id), eq(orders.paymentStatus, "PENDING")))
       .returning({ id: orders.id });
     if (!paidOrder) throw new Error("The order payment state changed while settling this transaction.");
+    if (order.status === "CANCELLED") {
+      await tx.insert(auditLogs).values({
+        action: "PAYMENT_VERIFIED_FOR_CANCELLED_ORDER",
+        entityType: "order",
+        entityId: order.id,
+        metadata: { orderReference: order.reference, note: "Seller review and refund may be required." },
+      });
+    }
 
     // Finite stock is reduced only once payment is verified. Null stock means untracked stock.
     if (order.status !== "CANCELLED") {
