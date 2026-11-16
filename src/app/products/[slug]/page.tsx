@@ -5,6 +5,7 @@ import { products, productImages } from "@/db/schema";
 import { formatGhsFromPesewas } from "@/lib/money";
 import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
 import { AddToCartButton, CartIndicator } from "@/features/cart/cart-controls";
+import { getStoreSettings } from "@/lib/settings";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -15,7 +16,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     .where(eq(productImages.productId, product.id))
     .orderBy(asc(productImages.sortOrder), asc(productImages.createdAt));
   const message = "Hello Samary's, I would like to enquire about " + product.name + ". Please share the ordering details.";
-  const whatsappUrl = createSellerWhatsAppUrl(message);
+  const settings = await getStoreSettings();
+  const whatsappUrl = createSellerWhatsAppUrl(message, settings.sellerWhatsAppNumber);
 
   return (
     <main className="min-h-screen bg-[#f8f7f2]">
