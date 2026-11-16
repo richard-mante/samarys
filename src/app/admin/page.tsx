@@ -6,7 +6,6 @@ import { db } from "@/db";
 import { orders, products } from "@/db/schema";
 import { formatGhsFromPesewas } from "@/lib/money";
 import { requireAdmin } from "@/lib/admin";
-import { AppIcon, type AppIconName } from "@/components/ui/app-icon";
 
 const statusLabels: Record<string, string> = {
   PENDING_PAYMENT: "Awaiting payment",
@@ -41,10 +40,10 @@ export default async function AdminOverviewPage() {
   ]);
 
   const stats = [
-    { label: "Total orders", icon: "orders" as AppIconName, value: String(orderCount[0]?.value ?? 0), note: "All order requests", href: "/admin/orders", icon: ShoppingBag01Icon },
-    { label: "Live products", icon: "product" as AppIconName, value: String(productCount[0]?.value ?? 0), note: "Visible in the collection", href: "/admin/products", icon: Package01Icon },
-    { label: "Verified revenue", icon: "wallet" as AppIconName, value: formatGhsFromPesewas(Number(paidRevenue[0]?.value ?? 0)), note: "Payments marked as received", href: "/admin/payments", icon: CreditCardIcon },
-    { label: "Awaiting payment", icon: "clock" as AppIconName, value: String(pendingCount[0]?.value ?? 0), note: "Requests needing attention", href: "/admin/orders", icon: Clock01Icon },
+    { label: "Total orders", value: String(orderCount[0]?.value ?? 0), note: "All order requests", href: "/admin/orders", icon: ShoppingBag01Icon },
+    { label: "Live products", value: String(productCount[0]?.value ?? 0), note: "Visible in the collection", href: "/admin/products", icon: Package01Icon },
+    { label: "Verified revenue", value: formatGhsFromPesewas(Number(paidRevenue[0]?.value ?? 0)), note: "Payments marked as received", href: "/admin/payments", icon: CreditCardIcon },
+    { label: "Awaiting payment", value: String(pendingCount[0]?.value ?? 0), note: "Requests needing attention", href: "/admin/orders", icon: Clock01Icon },
   ];
 
   return (

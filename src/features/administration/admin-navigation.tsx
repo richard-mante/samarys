@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { AppIcon, type AppIconName } from "@/components/ui/app-icon";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Home01Icon, Package01Icon, ShoppingBag01Icon, UserGroupIcon,
