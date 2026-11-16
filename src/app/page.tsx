@@ -1,5 +1,3 @@
-export const metadata = { title: "Thoughtful product information and personal support", description: "Explore Samarys product information, speak with the seller and manage your order.", alternates: { canonical: "/" } };
-
 import Link from "next/link";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
@@ -8,6 +6,8 @@ import { formatGhsFromPesewas } from "@/lib/money";
 import { CartIndicator } from "@/features/cart/cart-controls";
 import { getStoreSettings } from "@/lib/settings";
 import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
+
+export const metadata = { title: "Thoughtful product information and personal support", description: "Explore Samarys product information, speak with the seller and manage your order.", alternates: { canonical: "/" } };
 
 export default async function HomePage() {
   const settings = await getStoreSettings();
