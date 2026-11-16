@@ -18,7 +18,19 @@ This document tracks implemented application capabilities. It is not a build or 
 - Sellers can add and remove product gallery images using public image URLs and accessible alt text.
 - Public product pages only expose active products and render seller-managed gallery images.
 - The home page features active catalogue products and their lead images.
-- Product deletion is intentionally not provided because historical order items must retain their product snapshots.\n\n## Seller order operations\n\n- Seller can inspect an individual order, customer contact details, delivery notes, line items, totals and linked payment records.\n- Seller can move orders through guarded fulfilment transitions.\n- Fulfilled status is blocked unless payment is marked paid.\n- Order status changes are written to the audit log within the same database transaction.
+- Product deletion is intentionally not provided because historical order items must retain their product snapshots.
+
+## Seller order operations
+
+- Seller can inspect an individual order, customer contact details, delivery notes, line items, totals and linked payment records.
+- Seller can move orders through guarded fulfilment transitions.
+- Customers can build a persistent basket and submit a WhatsApp-assisted order request with contact and delivery details.
+- Order totals are calculated from current server-side product prices; delivery is explicitly confirmed separately by the seller.
+- WhatsApp order requests are stored as unpaid and are not represented as completed payments.
+- Seller can record a manually received WhatsApp payment, delivery fee and payment reference; the action is audit-logged.
+- The finance dashboard combines Paystack transaction records with seller-confirmed WhatsApp payment audit records.
+- Fulfilled status is blocked unless payment is marked paid.
+- Order status changes are written to the audit log within the same database transaction.
 
 ## Storefront experience
 
@@ -31,10 +43,8 @@ This document tracks implemented application capabilities. It is not a build or 
 ## Still to implement
 
 - Direct image file uploads and managed storage (current gallery accepts image URLs).
-- Customer checkout and order creation.
-- Paystack initialization, verification and webhook handling.
-- WhatsApp-assisted order creation and seller notification.
-- Customer-facing order status views and payment recording for WhatsApp-assisted orders.
+- Paystack checkout, transaction verification and signed webhook handling.
+- Customer-facing order status views and order lookup.
 - Settings persistence and editable seller contact.
 - Complete dashboard operational polish.
 

@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { products, productImages } from "@/db/schema";
 import { formatGhsFromPesewas } from "@/lib/money";
 import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
+import { AddToCartButton, CartIndicator } from "@/features/cart/cart-controls";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -20,7 +21,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     <main className="min-h-screen bg-[#f8f7f2]">
       <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
         <a href="/" className="font-serif text-2xl tracking-tight text-[#203a2b]">Samary&apos;s<span className="text-[#829a7b]">.</span></a>
-        <a href="/" className="rounded-full border border-[#d9dfd5] px-5 py-2.5 text-sm font-medium text-[#405447] transition hover:bg-white">Back to collection</a>
+        <div className="flex items-center gap-2"><CartIndicator /><a href="/" className="hidden rounded-full border border-[#d9dfd5] px-5 py-2.5 text-sm font-medium text-[#405447] transition hover:bg-white sm:inline-flex">Back to collection</a></div>
       </header>
 
       <section className="mx-auto grid max-w-7xl gap-12 px-6 pb-24 pt-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20 lg:px-10 lg:pt-12">
@@ -57,7 +58,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <p className="mt-2 text-xs text-[#849087]">Confirm current availability and delivery details with the seller.</p>
           </div>
           {product.description && <div className="mt-8 whitespace-pre-wrap text-sm leading-8 text-[#58665c]">{product.description}</div>}
-          <a href={whatsappUrl} target="_blank" rel="noreferrer" className="mt-10 inline-flex w-full items-center justify-center rounded-full bg-[#244b36] px-8 py-4 text-sm font-semibold text-white transition hover:bg-[#183a28] sm:w-fit">Enquire on WhatsApp <span aria-hidden="true" className="ml-3">↗</span></a>
+          <div className="mt-10 flex flex-col gap-3 sm:flex-row"><AddToCartButton productId={product.id} disabled={product.stockQuantity !== null && product.stockQuantity <= 0} /><a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex w-full items-center justify-center rounded-full border border-[#d9dfd5] px-8 py-4 text-sm font-semibold text-[#244b36] transition hover:bg-white sm:w-fit">Enquire on WhatsApp <span aria-hidden="true" className="ml-3">↗</span></a></div>
           <p className="mt-4 max-w-md text-xs leading-6 text-[#849087]">Product information is provided by the seller. Please confirm ingredients, directions, suitability and any safety questions directly with the seller before purchasing.</p>
         </div>
       </section>
