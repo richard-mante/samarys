@@ -47,7 +47,6 @@ This document tracks implemented application capabilities. It is not a build or 
 - Signed Paystack webhooks use HMAC SHA-512 validation and persisted event keys for idempotent processing.
 - Payment result pages read verified payment state from PostgreSQL; URL parameters alone cannot claim payment success.
 - Customers can look up order fulfilment/payment status using the order reference and matching checkout phone number. Lookup responses omit customer identity, contact and delivery-address details.
-- Customers can look up order fulfilment/payment status using the order reference and matching checkout phone number. Lookup responses omit customer identity, contact and delivery-address details.
 - Customer ordering is gated by the server-only `ORDERS_ENABLED` flag and defaults to disabled until seller pricing and regulatory checks are complete.
 - Paystack deployment variables and webhook registration are documented in `docs/PAYSTACK_SETUP.md`.
 
@@ -69,7 +68,6 @@ This document tracks implemented application capabilities. It is not a build or 
 
 - Neon PostgreSQL connection string.
 - Session signing secret.
-- Cloudinary cloud name, API key and API secret for managed image uploads.
 - Cloudinary cloud name, API key and API secret for managed image uploads.
 - Paystack test/live credentials and webhook registration.
 - Seller-approved product information, actual product photography and ingredients.
