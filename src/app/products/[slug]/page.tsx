@@ -69,7 +69,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <div className="mt-8 border-y border-[#e1e6dd] py-6">
             <p className="text-xs uppercase tracking-[0.16em] text-[#819083]">Price</p>
             <p className="mt-2 text-3xl font-semibold tracking-tight text-[#244b36]">{formatGhsFromPesewas(product.priceMinor)}</p>
-            <p className="mt-2 text-xs text-[#849087]">Confirm current availability and delivery details with the seller.</p>
+            <p className="mt-2 text-xs text-[#849087]">{product.stockQuantity === null ? "Confirm current availability and delivery details with the seller." : product.stockQuantity <= 0 ? "Currently unavailable. Contact the seller to ask about restocking." : product.stockQuantity <= 5 ? "Limited availability. Confirm your order with the seller." : "Available. Delivery details are confirmed with the seller."}</p>
           </div>
           {product.description && <div className="mt-8 whitespace-pre-wrap text-sm leading-8 text-[#58665c]">{product.description}</div>}
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">{settings.orderingEnabled && <AddToCartButton productId={product.id} disabled={product.stockQuantity !== null && product.stockQuantity <= 0} />}<a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex w-full items-center justify-center rounded-full border border-[#d9dfd5] px-8 py-4 text-sm font-semibold text-[#244b36] transition hover:bg-white sm:w-fit">Enquire on WhatsApp <span aria-hidden="true" className="ml-3">↗</span></a></div>
