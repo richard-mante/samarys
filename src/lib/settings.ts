@@ -19,5 +19,6 @@ export async function getStoreSettings() {
 
   return {
     sellerWhatsAppNumber: normalizePhoneNumber(configuredValue),
+    orderingEnabled: process.env.ORDERS_ENABLED === "true",
   };
 }

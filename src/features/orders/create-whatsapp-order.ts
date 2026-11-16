@@ -34,6 +34,9 @@ const cartSchema = z.array(z.object({
 })).min(1).max(30);
 
 export async function createWhatsAppOrder(_previous: CreateOrderState, formData: FormData): Promise<CreateOrderState> {
+  const storeSettings = await getStoreSettings();
+  if (!storeSettings.orderingEnabled) return { error: "Order requests are not open yet. Please contact the seller for product enquiries." };
+
   const customerInput = customerSchema.safeParse({
     fullName: formData.get("fullName"),
     phone: formData.get("phone"),
@@ -152,7 +155,7 @@ export async function createWhatsAppOrder(_previous: CreateOrderState, formData:
     return {
       success: "Your order request has been saved. Send the prepared message to the seller to confirm the details.",
       reference,
-      whatsappUrl: createSellerWhatsAppUrl(message, (await getStoreSettings()).sellerWhatsAppNumber),
+      whatsappUrl: createSellerWhatsAppUrl(message, storeSettings.sellerWhatsAppNumber),
     };
   } catch (error) {
     return { error: error instanceof Error && error.message.startsWith("Only ") ? error.message : "We could not create your order request. Please try again or contact the seller." };
