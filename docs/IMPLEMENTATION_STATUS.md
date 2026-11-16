@@ -36,6 +36,7 @@ This document tracks implemented application capabilities. It is not a build or 
 - Seller can inspect individual orders, customer contact details, delivery notes, line items, totals and linked payment records.
 - Seller can move orders through guarded fulfilment transitions.
 - Seller can record a manually received WhatsApp payment, delivery fee and payment reference; the action is audit-logged.
+- Seller can record a completed full refund after processing it externally; Paystack payment/order statuses and finance views are updated, with refund details audit-logged.
 - The finance dashboard combines Paystack transaction records with seller-confirmed WhatsApp payment audit records.
 - Fulfilled status is blocked unless payment is marked paid.
 - Order status changes are written to the audit log within the same database transaction.
