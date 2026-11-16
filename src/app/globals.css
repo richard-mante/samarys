@@ -3,13 +3,15 @@
 :root {
   color-scheme: light;
   --background: #f8f7f2;
-  --foreground: #17251d;
+  --foreground: #203a2b;
   --muted: #68766c;
   --primary: #244b36;
   --primary-foreground: #ffffff;
   --sage: #dce5d8;
-  --surface: #ffffff;
+  --surface: #fffefa;
   --border: #e6e8df;
+  --font-body: "Inter", "Avenir Next", Avenir, "Segoe UI", sans-serif;
+  --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Georgia, serif;
 }
 
 * {
@@ -20,6 +22,7 @@ html {
   min-height: 100%;
   background: var(--background);
   scroll-behavior: smooth;
+  scroll-padding-top: 1.5rem;
 }
 
 body {
@@ -27,8 +30,17 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+.font-serif {
+  font-family: var(--font-display);
+  font-weight: 400;
 }
 
 button,
@@ -44,7 +56,28 @@ a {
   text-decoration: none;
 }
 
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:focus-visible {
+  outline: 3px solid #91aa8a;
+  outline-offset: 3px;
+}
+
 ::selection {
   background: var(--sage);
   color: var(--foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
