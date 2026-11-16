@@ -147,6 +147,8 @@ export async function recordWhatsAppPayment(orderId: string, _previous: OrderAct
     revalidatePath("/admin/orders");
     revalidatePath("/admin/orders/" + orderId);
     revalidatePath("/admin");
+    revalidatePath("/admin/products");
+    revalidatePath("/");
     return result;
   } catch {
     return { error: "Could not record payment. Please try again." };
