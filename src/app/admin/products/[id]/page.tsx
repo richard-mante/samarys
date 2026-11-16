@@ -8,6 +8,7 @@ import { products, productImages } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
 import { EditProductForm } from "@/features/products/edit-product-form";
 import { ProductGalleryManager } from "@/features/products/product-gallery-manager";
+import { AppIcon } from "@/components/ui/app-icon";
 
 export default async function EditProductPage({ params }: { params: Promise<{ id: string }> }) {
   await requireAdmin();
