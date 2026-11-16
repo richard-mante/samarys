@@ -49,8 +49,8 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
           </div>
           <div className="mt-6 space-y-2 border-t border-[#edf0ea] pt-5 text-sm">
             <div className="flex justify-between text-[#758078]"><span>Subtotal</span><span>{formatGhsFromPesewas(order.subtotalMinor)}</span></div>
-            <div className="flex justify-between text-[#758078]"><span>Delivery</span><span>{formatGhsFromPesewas(order.deliveryFeeMinor)}</span></div>
-            <div className="flex justify-between pt-2 text-base font-semibold text-[#203a2b]"><span>Total</span><span>{formatGhsFromPesewas(order.totalMinor)}</span></div>
+            <div className="flex justify-between text-[#758078]"><span>Delivery</span><span>{order.deliveryFeeMinor > 0 ? formatGhsFromPesewas(order.deliveryFeeMinor) : "Confirm with seller"}</span></div>
+            <div className="flex justify-between pt-2 text-base font-semibold text-[#203a2b]"><span>Items total</span><span>{formatGhsFromPesewas(order.totalMinor)}</span></div>
           </div>
         </section>
 
@@ -67,7 +67,7 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
 
         <section className="rounded-2xl border border-[#e4e8e1] bg-white p-6 sm:p-7">
           <h2 className="font-serif text-2xl text-[#203a2b]">Payment record</h2>
-          <p className="mt-2 text-sm text-[#758078]">Payment status: <strong className="text-[#304236]">{order.paymentStatus}</strong></p>
+          <p className="mt-2 text-sm text-[#758078]">Payment status: <strong className="text-[#304236]">{order.paymentStatus}</strong>{order.channel === "WHATSAPP" && order.paymentStatus !== "PAID" ? " · Payment is arranged directly with the seller." : ""}</p>
           {order.payments.length ? <div className="mt-4 divide-y divide-[#edf0ea]">{order.payments.map(payment => <div key={payment.id} className="py-3 first:pt-0"><p className="text-sm font-medium text-[#304236]">{payment.provider} · {payment.status}</p><p className="mt-1 break-all text-xs text-[#849087]">{payment.providerReference}</p><p className="mt-1 text-xs text-[#849087]">{formatGhsFromPesewas(payment.amountMinor)}</p></div>)}</div> : <p className="mt-4 text-sm text-[#849087]">No online payment transaction is linked to this order.</p>}
         </section>
       </div>
