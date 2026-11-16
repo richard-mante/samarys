@@ -21,7 +21,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     <main className="min-h-screen bg-[#f8f7f2]">
       <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
         <a href="/" className="font-serif text-2xl tracking-tight text-[#203a2b]">Samary&apos;s<span className="text-[#829a7b]">.</span></a>
-        <a href="/" className="rounded-full border border-[#d9dfd5] px-5 py-2.5 text-sm font-medium text-[#405447] transition hover:bg-white">Back to collection</a>
+        <div className="flex items-center gap-2"><CartIndicator /><a href="/" className="hidden rounded-full border border-[#d9dfd5] px-5 py-2.5 text-sm font-medium text-[#405447] transition hover:bg-white sm:inline-flex">Back to collection</a></div>
       </header>
 
       <section className="mx-auto grid max-w-7xl gap-12 px-6 pb-24 pt-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20 lg:px-10 lg:pt-12">
