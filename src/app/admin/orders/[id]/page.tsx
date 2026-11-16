@@ -47,6 +47,7 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
     </div>
 
     {order.status === "CANCELLED" && order.paymentStatus === "PAID" && <div role="alert" className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900">Payment was received for this cancelled order. Review the transaction in Paystack and arrange a refund if appropriate; refunds are not processed automatically by this app.</div>}
+    {order.channel === "PAYSTACK" && order.paymentStatus === "PENDING" && order.status !== "CANCELLED" && <div className="mt-6 rounded-2xl border border-[#dce5d8] bg-[#f6f8f4] p-5 text-sm leading-6 text-[#526b56]">{new Date(order.createdAt).getTime() + 30 * 60 * 1000 > Date.now() ? "Online stock reservation is active until " + new Intl.DateTimeFormat("en-GH", { dateStyle: "medium", timeStyle: "short" }).format(new Date(new Date(order.createdAt).getTime() + 30 * 60 * 1000)) + "." : "The 30-minute online stock reservation has expired. Any late payment will be checked against current stock and may require a refund."}</div>}
 
     <div className="mt-8 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
       <div className="space-y-6">
