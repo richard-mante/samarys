@@ -57,6 +57,8 @@ Use a strong password of at least 12 characters. This command creates the admin 
 
 `https://samary.catpad.shop/admin/login`
 
+After her first sign-in, open **Settings → Change administrator password** and replace the initial password with a private one.
+
 ## 5. Configure Paystack
 
 In the Paystack Dashboard:
