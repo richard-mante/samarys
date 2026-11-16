@@ -24,7 +24,7 @@
 - [x] Add dynamic product detail pages.
 - [x] Build product image upload and gallery (signed Cloudinary uploads plus external image URLs).
 - [x] Implement dashboard product management.
-- [x] Add configurable settings and seller contact.
+- [x] Add configurable settings, seller contact and administrator password management.
 - [x] Add customer help, FAQ and policy information pages.
 
 ## Phase 3 — Orders and WhatsApp
