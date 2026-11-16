@@ -104,7 +104,7 @@ export async function recordWhatsAppPayment(orderId: string, _previous: OrderAct
         paymentStatus: "PAID",
         status: current.status === "PENDING_PAYMENT" ? "CONFIRMED" : current.status,
         updatedAt: new Date(),
-      }).where(and(eq(orders.id, orderId), eq(orders.paymentStatus, current.paymentStatus))).returning({ id: orders.id });
+      }).where(and(eq(orders.id, orderId), eq(orders.paymentStatus, current.paymentStatus), eq(orders.status, current.status))).returning({ id: orders.id });
 
       if (!updated) return { error: "This order changed while you were recording payment. Refresh and try again." } as const;
 
