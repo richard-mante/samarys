@@ -1,6 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CheckmarkCircle02Icon } from "@hugeicons/core-free-icons";
 import { updateOrderStatus } from "./actions";
 
 type OrderStatus = "PENDING_PAYMENT" | "CONFIRMED" | "PROCESSING" | "FULFILLED" | "CANCELLED";
@@ -41,7 +43,7 @@ export function OrderStatusForm({ orderId, status, paymentStatus }: { orderId: s
     </div>
     {state.error && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{state.error}</p>}
     {state.success && <p role="status" className="rounded-xl bg-[#eef5ed] p-3 text-sm text-[#315b3b]">{state.success}</p>}
-    <button disabled={pending} className="w-full rounded-full bg-[#244b36] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#183a28] disabled:opacity-60">{pending ? "Updating…" : "Update order status"}</button>
+    <button disabled={pending} className="w-full rounded-full bg-[#244b36] px-5 py-3 text-sm font-semibold text-white transition hover:bg-[#183a28] disabled:opacity-60">{pending ? "Updating…" : <><HugeiconsIcon icon={CheckmarkCircle02Icon} size={17} className="mr-2 inline" />Update order status</>}</button>
     {paymentStatus !== "PAID" && <p className="text-xs leading-5 text-[#849087]">Fulfilment is locked until payment has been recorded as paid.</p>}
   </form>;
 }

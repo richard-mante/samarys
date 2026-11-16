@@ -1,6 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Add01Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,7 +22,7 @@ export function NewProductForm() {
       <label className="flex items-center gap-3 text-sm text-[#405447]"><input type="checkbox" name="isActive" className="h-4 w-4 accent-[#244b36]" /> Show this product in the storefront</label>
       {state.error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">{state.error}</p>}
       {state.success && <p role="status" className="rounded-xl border border-[#d6e4d2] bg-[#f1f6ef] p-3 text-sm text-[#315b3b]">{state.success}</p>}
-      <Button type="submit" disabled={pending} className="w-full">{pending ? "Saving product…" : "Save product"}</Button>
+      <Button type="submit" disabled={pending} className="w-full">{pending ? "Saving product…" : <><HugeiconsIcon icon={Add01Icon} size={17} className="mr-2 inline" />Save product</>}</Button>
     </form>
   );
 }

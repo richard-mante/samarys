@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ShoppingBag01Icon, Package01Icon, CreditCardIcon, Clock01Icon, Add01Icon, ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { and, count, desc, eq, isNotNull, lte, sum } from "drizzle-orm";
 import { db } from "@/db";
 import { orders, products } from "@/db/schema";
@@ -38,10 +40,10 @@ export default async function AdminOverviewPage() {
   ]);
 
   const stats = [
-    { label: "Total orders", value: String(orderCount[0]?.value ?? 0), note: "All order requests", href: "/admin/orders" },
-    { label: "Live products", value: String(productCount[0]?.value ?? 0), note: "Visible in the collection", href: "/admin/products" },
-    { label: "Verified revenue", value: formatGhsFromPesewas(Number(paidRevenue[0]?.value ?? 0)), note: "Payments marked as received", href: "/admin/payments" },
-    { label: "Awaiting payment", value: String(pendingCount[0]?.value ?? 0), note: "Requests needing attention", href: "/admin/orders" },
+    { label: "Total orders", value: String(orderCount[0]?.value ?? 0), note: "All order requests", href: "/admin/orders", icon: ShoppingBag01Icon },
+    { label: "Live products", value: String(productCount[0]?.value ?? 0), note: "Visible in the collection", href: "/admin/products", icon: Package01Icon },
+    { label: "Verified revenue", value: formatGhsFromPesewas(Number(paidRevenue[0]?.value ?? 0)), note: "Payments marked as received", href: "/admin/payments", icon: CreditCardIcon },
+    { label: "Awaiting payment", value: String(pendingCount[0]?.value ?? 0), note: "Requests needing attention", href: "/admin/orders", icon: Clock01Icon },
   ];
 
   return (
@@ -55,7 +57,7 @@ export default async function AdminOverviewPage() {
             <h1 className="mt-4 font-serif text-4xl tracking-[-0.04em] sm:text-5xl">A clearer view of your store.</h1>
             <p className="mt-3 max-w-lg text-sm leading-7 text-[#c2cec0]">Your orders, products and customer activity, gathered in one place.</p>
           </div>
-          <Link href="/admin/products/new" className="inline-flex items-center gap-3 rounded-full bg-[#f8f7f2] px-6 py-3.5 text-sm font-semibold text-[#244b36] transition hover:-translate-y-0.5 hover:bg-white">Add a product <span aria-hidden="true">↗</span></Link>
+          <Link href="/admin/products/new" className="inline-flex items-center gap-3 rounded-full bg-[#f8f7f2] px-6 py-3.5 text-sm font-semibold text-[#244b36] transition hover:-translate-y-0.5 hover:bg-white"><HugeiconsIcon icon={Add01Icon} size={17} />Add a product</Link>
         </div>
       </section>
 
@@ -64,7 +66,7 @@ export default async function AdminOverviewPage() {
           <Link key={stat.label} href={stat.href} className="group rounded-2xl border border-[#e4e8e1] bg-white p-6 transition hover:-translate-y-0.5 hover:border-[#cbd8c7] hover:shadow-[0_12px_30px_rgba(37,65,45,0.05)]">
             <div className="flex items-center justify-between gap-3">
               <p className="text-sm text-[#758078]">{stat.label}</p>
-              <span className="text-xs text-[#9aac94]">0{index + 1}</span>
+              <HugeiconsIcon icon={stat.icon} size={20} className="text-[#86a082]" />
             </div>
             <p className="mt-5 break-words text-3xl font-semibold tracking-[-0.04em] text-[#203a2b]">{stat.value}</p>
             <p className="mt-2 text-xs text-[#9aa49a]">{stat.note}</p>
@@ -76,7 +78,7 @@ export default async function AdminOverviewPage() {
         <section className="overflow-hidden rounded-2xl border border-[#e4e8e1] bg-white">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#edf0ea] px-6 py-5 sm:px-7">
             <div><p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#789173]">Customer activity</p><h2 className="mt-1 font-serif text-2xl text-[#203a2b]">Recent orders</h2></div>
-            <Link href="/admin/orders" className="text-xs font-semibold text-[#41684d] transition hover:text-[#203a2b]">All orders ↗</Link>
+            <Link href="/admin/orders" className="text-xs font-semibold text-[#41684d] transition hover:text-[#203a2b]">All orders <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} className="inline" /></Link>
           </div>
           {recentOrders.length === 0 ? (
             <div className="px-6 py-14 text-center"><p className="font-serif text-2xl text-[#405447]">Your first order is on its way.</p><p className="mt-2 text-sm text-[#849087]">Customer requests will appear here once ordering is enabled.</p></div>
@@ -110,13 +112,13 @@ export default async function AdminOverviewPage() {
               ))}
             </div>
           )}
-          <div className="border-t border-[#edf0ea] px-6 py-4"><Link href="/admin/products" className="text-xs font-semibold text-[#41684d] hover:underline">Manage catalogue ↗</Link></div>
+          <div className="border-t border-[#edf0ea] px-6 py-4"><Link href="/admin/products" className="text-xs font-semibold text-[#41684d] hover:underline">Manage catalogue <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} className="inline" /></Link></div>
         </section>
       </div>
 
       <section className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#dce5d8] bg-[#f0f4ed] px-6 py-5 sm:px-7">
         <div><p className="text-sm font-semibold text-[#304236]">Keep your store information current</p><p className="mt-1 text-xs leading-5 text-[#758078]">Review seller contact details and launch readiness before accepting orders.</p></div>
-        <Link href="/admin/settings" className="rounded-full border border-[#cbd8c7] bg-white px-5 py-2.5 text-xs font-semibold text-[#41684d] transition hover:bg-[#f8faf6]">Review settings ↗</Link>
+        <Link href="/admin/settings" className="rounded-full border border-[#cbd8c7] bg-white px-5 py-2.5 text-xs font-semibold text-[#41684d] transition hover:bg-[#f8faf6]">Review settings <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} className="inline" /></Link>
       </section>
     </div>
   );

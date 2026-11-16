@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { Activity01Icon, ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { db } from "@/db";
 import { auditLogs } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
@@ -18,7 +20,7 @@ export default async function AdminActivityPage() {
 
   return <div>
     <div className="flex flex-wrap items-end justify-between gap-4">
-      <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Workspace history</p><h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]">Activity log</h1><p className="mt-2 text-sm text-[#758078]">A record of important changes made in the seller workspace.</p></div>
+      <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Workspace history</p><h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]"><span className="inline-flex items-center gap-3"><HugeiconsIcon icon={Activity01Icon} size={25} />Activity log</span></h1><p className="mt-2 text-sm text-[#758078]">A record of important changes made in the seller workspace.</p></div>
       <span className="rounded-full bg-white px-4 py-2 text-xs font-medium text-[#68766c]">Latest {entries.length} activities</span>
     </div>
     <section className="mt-8 overflow-hidden rounded-2xl border border-[#e4e8e1] bg-white">
@@ -31,7 +33,7 @@ export default async function AdminActivityPage() {
               <p className="text-sm font-semibold text-[#304236]">{readable(entry.action)}</p>
               <p className="mt-1 text-xs text-[#849087]">{readable(entry.entityType)}{entry.entityId ? " · " + entry.entityId : ""} · {entry.admin?.email ?? "System"}</p>
               {metadata && <p className="mt-3 break-words rounded-lg bg-[#f7f8f5] px-3 py-2 text-xs leading-5 text-[#68766c]">{metadata}</p>}
-              {target && <Link href={target} className="mt-3 inline-flex text-xs font-semibold text-[#41684d] hover:underline">Open related record ↗</Link>}
+              {target && <Link href={target} className="mt-3 inline-flex text-xs font-semibold text-[#41684d] hover:underline">Open related record <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} className="ml-1 inline" /></Link>}
             </div>
             <time dateTime={entry.createdAt.toISOString()} className="text-[11px] text-[#9aa49a] sm:text-right">{new Intl.DateTimeFormat("en-GH", { dateStyle: "medium", timeStyle: "short" }).format(entry.createdAt)}</time>
           </article>;

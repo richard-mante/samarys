@@ -1,4 +1,6 @@
 import { desc, eq, inArray } from "drizzle-orm";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { CreditCardIcon } from "@hugeicons/core-free-icons";
 import { db } from "@/db";
 import { auditLogs, orders } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
@@ -49,7 +51,7 @@ export default async function AdminPaymentsPage() {
 
   return <div>
     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Finance</p>
-    <h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]">Payments</h1>
+    <h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]"><span className="inline-flex items-center gap-3"><HugeiconsIcon icon={CreditCardIcon} size={25} />Payments</span></h1>
     <p className="mt-2 text-sm text-[#758078]">Online Paystack transactions and seller-confirmed WhatsApp payments.</p>
     <div className="mt-8 overflow-hidden rounded-2xl border border-[#e4e8e1] bg-white">
       {entries.length === 0 ? <p className="px-6 py-16 text-center text-sm text-[#758078]">No payment records have been recorded.</p> :

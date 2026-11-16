@@ -36,7 +36,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     <main className="min-h-screen bg-[#f8f7f2]">
       <header className="mx-auto flex max-w-7xl items-center justify-between px-5 py-5 sm:px-8">
         <Link href="/" className="font-serif text-2xl tracking-tight text-[#203a2b]">Samary&apos;s<span className="text-[#829a7b]">.</span></Link>
-        <div className="flex items-center gap-3">{settings.orderingEnabled && <CartIndicator />}<Link href="/" className="text-xs font-medium text-[#68766c] hover:text-[#244b36]">All products</Link></div>
+        <div className="flex items-center gap-3">{settings.orderingEnabled && <CartIndicator />}<Link href="/" className="inline-flex items-center gap-1.5 text-xs font-medium text-[#68766c] hover:text-[#244b36]"><HugeiconsIcon icon={ArrowLeft01Icon} size={15} />All products</Link></div>
       </header>
 
       <section className="mx-auto grid max-w-7xl gap-9 px-5 pb-20 pt-5 sm:px-8 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16 lg:pb-28 lg:pt-10">
@@ -57,7 +57,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         <div className="flex flex-col justify-center lg:py-10">
           <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]">Product details</p>
           <h1 className="mt-5 font-serif text-5xl leading-[1.06] tracking-[-0.04em] text-[#203a2b] sm:text-6xl">{product.name}</h1>
-          {product.shortDescription && <p className="mt-6 text-lg leading-8 text-[#68766c]">{product.shortDescription}</p>}
+          <p className="mt-6 text-lg leading-8 text-[#68766c]">{product.shortDescription || "Explore the available product information, imagery and ordering details below."}</p>
           <div className="mt-8 border-y border-[#e1e6dd] py-6">
             <p className="text-xs uppercase tracking-[0.16em] text-[#819083]">Price</p>
             <p className="mt-2 text-3xl font-semibold tracking-tight text-[#244b36]">{formatGhsFromPesewas(product.priceMinor)}</p>

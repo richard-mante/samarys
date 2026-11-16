@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowLeft01Icon, Package01Icon } from "@hugeicons/core-free-icons";
 import { notFound } from "next/navigation";
 import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
@@ -17,9 +19,9 @@ export default async function EditProductPage({ params }: { params: Promise<{ id
     .orderBy(asc(productImages.sortOrder), asc(productImages.createdAt));
 
   return <div className="mx-auto max-w-3xl">
-    <Link href="/admin/products" className="text-sm text-[#66836c] transition hover:text-[#244b36]">← Back to products</Link>
+    <Link href="/admin/products" className="text-sm text-[#66836c] transition hover:text-[#244b36]"><HugeiconsIcon icon={ArrowLeft01Icon} size={15} className="mr-1.5 inline" />Back to products</Link>
     <p className="mt-6 text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Catalogue</p>
-    <h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]">Edit product</h1>
+    <h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]"><span className="inline-flex items-center gap-3"><HugeiconsIcon icon={Package01Icon} size={25} />Edit product</span></h1>
     <p className="mt-2 text-sm text-[#758078]">Keep product details, pricing, imagery and storefront availability up to date.</p>
     <div className="mt-8 rounded-2xl border border-[#e4e8e1] bg-white p-6 sm:p-8"><EditProductForm product={product} /></div>
     <ProductGalleryManager productId={product.id} images={images} />
