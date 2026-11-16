@@ -1,3 +1,8 @@
+import { eq } from "drizzle-orm";
+import { db } from "@/db";
+import { products } from "@/db/schema";
+import { formatGhsFromPesewas } from "@/lib/money";
+
 const highlights = [
   {
     title: "Clear product information",
@@ -16,7 +21,8 @@ const highlights = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const catalogue = await db.select().from(products).where(eq(products.isActive, true)).limit(8);
   return (
     <main className="min-h-screen">
       <header className="mx-auto flex w-full max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
@@ -86,6 +92,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {catalogue.length > 0 && <section className="border-t border-[#e6e8df] bg-white py-20"><div className="mx-auto max-w-7xl px-6 lg:px-10"><p className="text-xs font-semibold uppercase tracking-[0.22em] text-[#66836c]">Available now</p><h2 className="mt-4 font-serif text-4xl tracking-tight">Explore the collection.</h2><div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">{catalogue.map(product => <article key={product.id} className="rounded-2xl border border-[#e6e8df] p-6"><p className="text-xs uppercase tracking-[0.16em] text-[#819083]">Samary&apos;s collection</p><h3 className="mt-4 text-xl font-semibold">{product.name}</h3><p className="mt-2 min-h-12 text-sm leading-6 text-[#68766c]">{product.shortDescription}</p><p className="mt-5 font-semibold">{formatGhsFromPesewas(product.priceMinor)}</p><a href={'/products/' + product.slug} className="mt-5 inline-flex rounded-full bg-[#244b36] px-5 py-3 text-sm font-semibold text-white">View product</a></article>)}</div></div></section>}
 
       <section id="product" className="border-t border-[#e6e8df] bg-white/70">
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10">
