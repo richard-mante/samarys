@@ -54,7 +54,7 @@ export async function updateOrderStatus(orderId: string, _previous: OrderActionS
       return { success: "Order status updated." } as const;
     });
 
-    if (result.error) return result;
+    if ("error" in result) return result;
     revalidatePath("/admin/orders");
     revalidatePath("/admin/orders/" + orderId);
     return result;
