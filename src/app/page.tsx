@@ -37,7 +37,7 @@ export default async function HomePage() {
         <>
           <section className="mx-auto grid max-w-7xl items-center gap-9 px-5 pb-16 pt-5 sm:px-8 lg:grid-cols-2 lg:gap-16 lg:pb-24 lg:pt-10">
             <div className="order-2 lg:order-1">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]"><AppIcon name="product" size={14} /> Product details</p>
+              <p className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]"><AppIcon name="product" size={14} /> Product details</p>
               <h1 className="mt-5 max-w-xl font-serif text-5xl leading-[1.04] tracking-[-0.05em] sm:text-6xl lg:text-7xl">{featured.name}</h1>
               <p className="mt-6 max-w-lg text-base leading-8 text-[#68766c]">{featured.shortDescription || "Explore the product, view its available details and check current ordering options."}</p>
               <p className="mt-7 text-2xl font-semibold tracking-tight text-[#244b36]">{formatGhsFromPesewas(featured.priceMinor)}</p>

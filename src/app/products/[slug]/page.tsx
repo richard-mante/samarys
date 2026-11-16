@@ -56,7 +56,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </div>
 
         <div className="flex flex-col justify-center lg:py-10">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]"><AppIcon name="product" size={14} /> Product details</p>
+          <p className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]"><AppIcon name="product" size={14} /> Product details</p>
           <h1 className="mt-5 font-serif text-5xl leading-[1.06] tracking-[-0.04em] text-[#203a2b] sm:text-6xl">{product.name}</h1>
           <p className="mt-6 text-lg leading-8 text-[#68766c]">{product.shortDescription || "Explore the available product information, imagery and ordering details below."}</p>
           <div className="mt-8 border-y border-[#e1e6dd] py-6">
