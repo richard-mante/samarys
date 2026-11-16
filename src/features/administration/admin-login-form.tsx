@@ -1,6 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowRight01Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { loginAdmin } from "./login-action";
@@ -18,7 +20,7 @@ export function AdminLoginForm() {
         <Input id="password" name="password" type="password" autoComplete="current-password" placeholder="Enter your password" required />
       </div>
       {state.error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-3.5 py-3 text-sm text-red-700">{state.error}</p>}
-      <Button type="submit" disabled={pending} className="w-full">{pending ? "Signing in…" : "Sign in"}</Button>
+      <Button type="submit" disabled={pending} className="w-full">{pending ? "Signing in…" : <>Sign in <HugeiconsIcon icon={ArrowRight01Icon} size={17} className="ml-2 inline" /></>}</Button>
     </form>
   );
 }

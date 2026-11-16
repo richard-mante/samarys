@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { LockKeyIcon } from "@hugeicons/core-free-icons";
 import { AdminLoginForm } from "@/features/administration/admin-login-form";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
@@ -12,7 +14,7 @@ export default function AdminLoginPage() {
         <DialogContent aria-describedby="login-description" showCloseButton={false}>
           <DialogHeader>
             <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]">Seller access</p>
-            <DialogTitle>Welcome back.</DialogTitle>
+            <DialogTitle><span className="inline-flex items-center gap-2"><HugeiconsIcon icon={LockKeyIcon} size={21} />Welcome back.</span></DialogTitle>
             <DialogDescription id="login-description">Sign in to manage Samary&apos;s product information, images and orders.</DialogDescription>
           </DialogHeader>
           <AdminLoginForm />
