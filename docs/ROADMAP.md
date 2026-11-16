@@ -25,6 +25,7 @@
 - [x] Build product image upload and gallery (signed Cloudinary uploads plus external image URLs).
 - [x] Implement dashboard product management.
 - [x] Add configurable settings and seller contact.
+- [x] Add customer help, FAQ and policy information pages.
 
 ## Phase 3 — Orders and WhatsApp
 - [x] Implement customer checkout and server-side order creation.
@@ -32,6 +33,9 @@
 - [x] Implement WhatsApp-assisted order path.
 - [x] Add seller order listing and payment visibility.
 - [x] Add seller order status transitions.
+- [x] Add customer order tracking and seller order search/filtering.
+- [x] Add customer directory and per-customer order history.
+- [x] Add seller activity log and catalogue audit records.
 
 ## Phase 4 — Paystack
 - [x] Initialize Paystack transactions server-side.
