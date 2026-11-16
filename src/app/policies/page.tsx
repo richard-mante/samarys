@@ -33,15 +33,15 @@ export default async function PoliciesPage() {
         </section>
         <section className="border-t border-[#dfe5dc] pt-6">
           <h2 className="font-serif text-2xl text-[#203a2b]">Delivery</h2>
-          <p className="mt-3 text-sm leading-7 text-[#758078]">{settings.deliveryPolicy}</p>
+          <p className="mt-3 whitespace-pre-line text-sm leading-7 text-[#758078]">{settings.deliveryPolicy}</p>
         </section>
         <section className="border-t border-[#dfe5dc] pt-6">
           <h2 className="font-serif text-2xl text-[#203a2b]">Returns and refunds</h2>
-          <p className="mt-3 text-sm leading-7 text-[#758078]">{settings.returnsPolicy}</p>
+          <p className="mt-3 whitespace-pre-line text-sm leading-7 text-[#758078]">{settings.returnsPolicy}</p>
         </section>
         <section className="border-t border-[#dfe5dc] pt-6">
           <h2 className="font-serif text-2xl text-[#203a2b]">Customer information and privacy</h2>
-          <p className="mt-3 text-sm leading-7 text-[#758078]">{settings.privacyPolicy}</p>
+          <p className="mt-3 whitespace-pre-line text-sm leading-7 text-[#758078]">{settings.privacyPolicy}</p>
         </section>
         <section className="border-t border-[#dfe5dc] pt-6">
           <h2 className="font-serif text-2xl text-[#203a2b]">Product information</h2>
