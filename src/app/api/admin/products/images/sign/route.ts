@@ -4,14 +4,15 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { db } from "@/db";
 import { products } from "@/db/schema";
-import { requireAdmin } from "@/lib/admin";
+import { getAdminSession } from "@/lib/auth";
 
 export const runtime = "nodejs";
 
 const requestSchema = z.object({ productId: z.string().uuid() });
 
 export async function POST(request: Request) {
-  await requireAdmin();
+  const session = await getAdminSession();
+  if (!session) return NextResponse.json({ error: "Please sign in to upload product images." }, { status: 401 });
   const parsed = requestSchema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Invalid product." }, { status: 400 });
 
