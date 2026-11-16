@@ -29,7 +29,7 @@ export default async function HomePage() {
           <a href="#approach" className="transition hover:text-[#244b36]">Our approach</a>
           <a href="#contact" className="transition hover:text-[#244b36]">Contact</a>
         </nav>
-        <div className="flex items-center gap-2">{settings.orderingEnabled && <CartIndicator />}<a href={sellerContactUrl} target="_blank" rel="noreferrer" className="hidden rounded-full border border-[#d7ded4] px-4 py-2.5 text-xs font-semibold text-[#244b36] transition hover:bg-white sm:inline-flex sm:px-5 sm:text-sm">Talk to us <span aria-hidden="true" className="ml-1">↗</span></a></div>
+        <div className="flex items-center gap-3"><Link href="/orders/track" className="text-xs font-semibold text-[#526b56] transition hover:text-[#244b36]">Track order</Link>{settings.orderingEnabled && <CartIndicator />}<a href={sellerContactUrl} target="_blank" rel="noreferrer" className="hidden rounded-full border border-[#d7ded4] px-4 py-2.5 text-xs font-semibold text-[#244b36] transition hover:bg-white sm:inline-flex sm:px-5 sm:text-sm">Talk to us <span aria-hidden="true" className="ml-1">↗</span></a></div>
       </header>
 
       <section className="mx-auto grid min-h-[660px] w-full max-w-7xl items-center gap-12 px-6 pb-20 pt-8 lg:min-h-[720px] lg:grid-cols-[1fr_0.94fr] lg:gap-16 lg:px-10 lg:pb-28 lg:pt-12">
@@ -142,7 +142,7 @@ export default async function HomePage() {
             <div><p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#a9bea4]">A question on your mind?</p><h2 className="mt-4 max-w-md font-serif text-4xl leading-tight tracking-[-0.04em] sm:text-5xl">We&apos;re just a message away.</h2></div>
             <div className="sm:justify-self-end"><a href={sellerContactUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-5 rounded-full bg-[#f8f7f2] px-7 py-4 text-sm font-semibold text-[#244b36] transition hover:bg-white">Chat on WhatsApp <span aria-hidden="true">↗</span></a><p className="mt-4 text-xs text-[#b8c6b4]">+233 55 944 8932</p></div>
           </div>
-          <div className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-6 text-xs text-[#b8c6b4]"><span className="font-serif text-xl text-[#f8f7f2]">Samary&apos;s<span className="text-[#a9bea4]">.</span></span><span>© {new Date().getFullYear()} Samary&apos;s. All rights reserved.</span><span>Product information is subject to seller verification.</span></div>
+          <div className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-6 text-xs text-[#b8c6b4]"><span className="font-serif text-xl text-[#f8f7f2]">Samary&apos;s<span className="text-[#a9bea4]">.</span></span><Link href="/orders/track" className="text-xs text-[#d4dfd1] transition hover:text-white">Track an order</Link><span>© {new Date().getFullYear()} Samary&apos;s. All rights reserved.</span><span>Product information is subject to seller verification.</span></div>
         </div>
       </footer>
     </main>
