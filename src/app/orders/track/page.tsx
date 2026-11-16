@@ -4,6 +4,7 @@ import { OrderTracker } from "@/features/orders/order-tracker";
 export const metadata = {
   title: "Track your order",
   description: "Look up the latest status of your Samary's order.",
+  alternates: { canonical: "/orders/track" },
 };
 
 export default function TrackOrderPage() {
