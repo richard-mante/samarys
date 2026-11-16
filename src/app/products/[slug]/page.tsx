@@ -3,7 +3,8 @@ import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
 import { products, productImages } from "@/db/schema";
 import { formatGhsFromPesewas } from "@/lib/money";
-import { createSellerWhatsAppUrl } from "@/lib/whatsapp";\nimport { AddToCartButton, CartIndicator } from "@/features/cart/cart-controls";
+import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
+import { AddToCartButton, CartIndicator } from "@/features/cart/cart-controls";
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
