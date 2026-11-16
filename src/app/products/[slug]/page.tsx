@@ -7,6 +7,17 @@ import { formatGhsFromPesewas } from "@/lib/money";
 import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
 import { AddToCartButton, CartIndicator } from "@/features/cart/cart-controls";
 import { getStoreSettings } from "@/lib/settings";
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const [product] = await db.select({ name: products.name, shortDescription: products.shortDescription }).from(products)
+    .where(eq(products.slug, slug)).limit(1);
+  if (!product) return { title: "Product not found" };
+  return {
+    title: product.name,
+    description: product.shortDescription || "View product information and contact the seller team.",
+    alternates: { canonical: "/products/" + slug },
+  };
+}
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
