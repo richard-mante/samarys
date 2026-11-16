@@ -34,7 +34,7 @@ export async function verifyAndSettlePaystackPayment(reference: string, payload?
   const [knownPayment] = await db.select({ id: payments.id, orderId: payments.orderId, status: payments.status })
     .from(payments).where(eq(payments.providerReference, reference)).limit(1);
   if (!knownPayment) throw new Error("No matching order was found for this payment reference.");
-  if (knownPayment.status === "PAID") return { orderId: knownPayment.orderId, alreadyPaid: true };
+  if (knownPayment.status === "PAID" || knownPayment.status === "REFUNDED") return { orderId: knownPayment.orderId, alreadyPaid: true };
   if (knownPayment.status !== "PENDING") throw new Error("This payment is no longer pending.");
 
   let transaction = payload;
@@ -71,7 +71,7 @@ export async function verifyAndSettlePaystackPayment(reference: string, payload?
     if (lockedOrder.totalMinor !== lockedPayment.amountMinor || lockedOrder.currency !== lockedPayment.currency) {
       throw new Error("The order total has changed and this payment cannot be applied.");
     }
-    if (lockedPayment.status === "PAID" || lockedOrder.paymentStatus === "PAID") {
+    if (lockedPayment.status === "PAID" || lockedPayment.status === "REFUNDED" || lockedOrder.paymentStatus === "PAID" || lockedOrder.paymentStatus === "REFUNDED") {
       return { orderId: lockedOrder.id, alreadyPaid: true };
     }
     if (lockedPayment.status !== "PENDING" || lockedOrder.paymentStatus !== "PENDING") {
