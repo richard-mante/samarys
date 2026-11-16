@@ -37,7 +37,7 @@ export default async function HelpPage() {
     },
     {
       question: "How much is delivery and where do you deliver?",
-      answer: "{settings.deliveryPolicy}",
+      answer: settings.deliveryPolicy,
     },
     {
       question: "Where can I find product information?",
@@ -49,7 +49,7 @@ export default async function HelpPage() {
     },
     {
       question: "What if I need to return an item or request a refund?",
-      answer: "{settings.returnsPolicy}",
+      answer: settings.returnsPolicy,
     },
   ];
 
