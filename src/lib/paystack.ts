@@ -79,7 +79,7 @@ export async function verifyAndSettlePaystackPayment(reference: string, payload?
     }
 
     let purchasedItems: { productId: string | null; quantity: number }[] = [];
-    let productRows: typeof products.$inferSelect[] = [];
+    let productRows: Array<typeof products.$inferSelect> = [];
     let reservedByProduct = new Map<string | null, number>();
     let stockUnavailable = false;
 
@@ -101,7 +101,7 @@ export async function verifyAndSettlePaystackPayment(reference: string, payload?
           inArray(orderItems.productId, productIds),
           ne(orders.id, lockedOrder.id),
           eq(orders.channel, "PAYSTACK"),
-          eq(orders.status, "PENDING_PAYMENT"),
+          inArray(orders.status, ["PENDING_PAYMENT", "CONFIRMED", "PROCESSING"]),
           eq(orders.paymentStatus, "PENDING"),
           gt(orders.createdAt, reservationCutoff),
         ))
