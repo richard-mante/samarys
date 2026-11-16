@@ -1,12 +1,20 @@
 # Paystack setup
 
+## Production domain
+
+The current production domain for Samary's is:
+
+`https://samary.catpad.shop`
+
+Set `NEXT_PUBLIC_APP_URL=https://samary.catpad.shop` in the Vercel production environment. Paystack callback URLs are generated from this setting.
+
 ## Environment
 
 Configure these server-side environment variables in the deployment environment and local `.env.local`:
 
 - `PAYSTACK_SECRET_KEY`: Paystack test or live secret key. Never expose this value to the browser.
 - `PAYSTACK_PUBLIC_KEY`: reserved for future client-side Paystack components; the current hosted checkout uses the secret-key initialization API.
-- `NEXT_PUBLIC_APP_URL`: canonical application origin, including `https://` in production.
+- `NEXT_PUBLIC_APP_URL`: canonical application origin. Use `https://samary.catpad.shop` in production.
 - `DATABASE_URL`: PostgreSQL connection string.
 
 Keep `ORDERS_ENABLED=false` until product pricing, product information, delivery terms and regulatory checks have been approved. Enable it only when the seller is ready to accept orders.
@@ -15,9 +23,7 @@ Keep `ORDERS_ENABLED=false` until product pricing, product information, delivery
 
 Register this webhook URL in the Paystack dashboard:
 
-`https://YOUR-DOMAIN/api/payments/paystack/webhook`
-
-Replace `YOUR-DOMAIN` with the deployed application host. The webhook endpoint validates Paystack's HMAC SHA-512 signature using `PAYSTACK_SECRET_KEY`, records event keys to prevent duplicate processing, and verifies amount, currency, reference and transaction status before marking an order paid.
+`https://samary.catpad.shop/api/payments/paystack/webhook`
 
 ## Customer payment flow
 
@@ -32,8 +38,9 @@ WhatsApp-assisted orders remain separate and unpaid until the seller records a p
 
 ## Before live mode
 
-- Add and verify Paystack webhook URL in the dashboard.
-- Configure production secret key and canonical app URL in hosting environment.
+- Add and verify the webhook URL above in the Paystack dashboard.
+- Configure production secret key and `NEXT_PUBLIC_APP_URL` in Vercel.
+- Add `samary.catpad.shop` to the Vercel project domains and configure the DNS records Vercel provides at the Catpad DNS provider.
 - Complete test transactions using Paystack test credentials.
 - Confirm product prices, stock policy, delivery fee policy and customer support process.
 - Confirm applicable Ghana FDA registration and advertising approvals before enabling live sales.
