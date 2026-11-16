@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useRef, useState } from "react";
+import type { FormEvent } from "react";
 import { addProductImage, removeProductImage } from "./actions";
 import { saveUploadedProductImage } from "./image-upload-actions";
 
@@ -15,7 +16,7 @@ export function ProductGalleryManager({ productId, images }: { productId: string
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
 
-  async function uploadImage(event: React.FormEvent<HTMLFormElement>) {
+  async function uploadImage(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setUploadError("");
     const file = fileRef.current?.files?.[0];
