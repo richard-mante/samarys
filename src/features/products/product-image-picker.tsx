@@ -2,6 +2,8 @@
 
 import { useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ImageAdd01Icon, Cancel01Icon } from "@hugeicons/core-free-icons";
 
 type Props = { name?: string };
 
@@ -74,7 +76,7 @@ export function ProductImagePicker({ name = "productImage" }: Props) {
             <p className="truncate text-xs text-[#68766c]">{fileName}</p>
             <label htmlFor={name + "-alt"} className="mb-1.5 mt-3 block text-xs font-medium text-[#405447]">Image description</label>
             <Input id={name + "-alt"} name="imageAltText" value={altText} onChange={(event) => setAltText(event.target.value)} placeholder="Describe the product image" required minLength={4} maxLength={240} />
-            <button type="button" onClick={() => { setImageData(""); setAltText(""); setFileName(""); if (inputRef.current) inputRef.current.value = ""; }} className="mt-2 text-xs font-medium text-[#9b5148] hover:underline">Remove image</button>
+            <button type="button" onClick={() => { setImageData(""); setAltText(""); setFileName(""); if (inputRef.current) inputRef.current.value = ""; }} className="mt-2 text-xs font-medium text-[#9b5148] hover:underline"><HugeiconsIcon icon={Cancel01Icon} size={14} className="mr-1 inline" />Remove image</button>
           </div>
         </div>
       )}
