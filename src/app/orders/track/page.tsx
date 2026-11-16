@@ -17,7 +17,7 @@ export default function TrackOrderPage() {
     </header>
     <section className="mx-auto max-w-7xl px-6 pb-24 pt-10 lg:px-10 lg:pt-16">
       <div className="mb-10 max-w-2xl">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]"<span className="inline-flex items-center gap-2"><HugeiconsIcon icon={Package01Icon} size={15} />Samary&apos;s · Order support</span></p>
+        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]"><span className="inline-flex items-center gap-2"><HugeiconsIcon icon={Package01Icon} size={15} />Samary&apos;s · Order support</span></p>
         <h1 className="mt-4 font-serif text-5xl tracking-[-0.055em] text-[#203a2b] sm:text-6xl">A little clarity on what&apos;s next.</h1>
         <p className="mt-5 text-sm leading-7 text-[#758078]">Check the latest fulfilment and payment status of an order. You&apos;ll need the order reference and the phone number used at checkout.</p>
       </div>
