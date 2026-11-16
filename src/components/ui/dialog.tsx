@@ -15,7 +15,7 @@ export const DialogOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
-    className={cn("fixed inset-0 z-50 bg-[#14231a]/55 backdrop-blur-[3px] data-[state=open]:animate-in data-[state=closed]:animate-out", className)}
+    className={cn("fixed inset-0 z-50 bg-[#14231a]/55 backdrop-blur-[3px] transition-opacity duration-200 data-[state=closed]:opacity-0 data-[state=open]:opacity-100", className)}
     {...props}
   />
 ));
@@ -23,19 +23,19 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 
 export const DialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
->(({ className, children, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> & { showCloseButton?: boolean }
+>(({ className, children, showCloseButton = true, ...props }, ref) => (
   <DialogPortal>
     <DialogOverlay />
     <DialogPrimitive.Content
       ref={ref}
-      className={cn("fixed left-1/2 top-1/2 z-50 grid w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 gap-5 rounded-3xl border border-[#e4e8e1] bg-[#fffefa] p-6 shadow-[0_24px_90px_rgba(20,35,26,0.22)] outline-none sm:p-8", className)}
+      className={cn("fixed left-1/2 top-1/2 z-50 grid w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 gap-5 rounded-3xl border border-[#e4e8e1] bg-[#fffefa] p-6 shadow-[0_24px_90px_rgba(20,35,26,0.22)] outline-none transition duration-200 data-[state=closed]:scale-[0.98] data-[state=closed]:opacity-0 data-[state=open]:scale-100 data-[state=open]:opacity-100 sm:p-8", className)}
       {...props}
     >
       {children}
-      <DialogPrimitive.Close className="absolute right-5 top-5 rounded-full p-2 text-[#829087] transition hover:bg-[#f1f4ef] hover:text-[#244b36]" aria-label="Close dialog">
+      {showCloseButton && <DialogPrimitive.Close className="absolute right-5 top-5 rounded-full p-2 text-[#829087] transition hover:bg-[#f1f4ef] hover:text-[#244b36]" aria-label="Close dialog">
         <span aria-hidden="true" className="text-xl leading-none">×</span>
-      </DialogPrimitive.Close>
+      </DialogPrimitive.Close>}
     </DialogPrimitive.Content>
   </DialogPortal>
 ));

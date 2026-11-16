@@ -17,7 +17,7 @@ export default async function HomePage() {
   const catalogue = await db.query.products.findMany({
     where: eq(products.isActive, true),
     limit: 8,
-    with: { images: { orderBy: [asc(products.createdAt)] } },
+    with: { images: true },
     orderBy: [asc(products.createdAt)],
   });
   const featured = catalogue[0];

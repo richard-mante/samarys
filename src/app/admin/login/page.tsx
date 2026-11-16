@@ -9,7 +9,7 @@ export default function AdminLoginPage() {
       <div aria-hidden="true" className="absolute -bottom-40 -right-24 h-[28rem] w-[28rem] rounded-full bg-[#e5e9df] blur-3xl" />
       <Link href="/" className="absolute left-6 top-6 font-serif text-2xl tracking-tight text-[#203a2b]">Samary&apos;s<span className="text-[#829a7b]">.</span></Link>
       <Dialog open>
-        <DialogContent aria-describedby="login-description">
+        <DialogContent aria-describedby="login-description" showCloseButton={false}>
           <DialogHeader>
             <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]">Seller access</p>
             <DialogTitle>Welcome back.</DialogTitle>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ProductImagePicker } from "./product-image-picker";
@@ -12,14 +12,16 @@ type ProductImage = { id: string; imageUrl: string; altText: string };
 export function ProductGalleryManager({ productId, images }: { productId: string; images: ProductImage[] }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const [uploadError, setUploadError] = useState("");
 
   async function addImage(formData: FormData) {
     const imageData = String(formData.get("imageData") ?? "");
     const altText = String(formData.get("imageAltText") ?? "");
-    if (!imageData) return;
+    if (!imageData) { setUploadError("Choose a product image first."); return; }
+    setUploadError("");
     const result = await saveUploadedProductImage(productId, imageData, altText);
     if (result.error) {
-      window.alert(result.error);
+      setUploadError(result.error);
       return;
     }
     router.refresh();
@@ -57,6 +59,7 @@ export function ProductGalleryManager({ productId, images }: { productId: string
 
       <form action={(formData) => startTransition(() => { void addImage(formData); })} className="mt-6 border-t border-[#edf0ea] pt-6">
         <ProductImagePicker name="gallery-image" />
+        {uploadError && <p role="alert" className="mt-3 text-sm text-red-700">{uploadError}</p>}
         <Button type="submit" disabled={pending} className="mt-4">{pending ? "Saving image…" : "Add product image"}</Button>
       </form>
     </section>

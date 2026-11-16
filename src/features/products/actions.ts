@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { eq, and } from "drizzle-orm";
+import { eq, and, ne } from "drizzle-orm";
 import { auditLogs, products, productImages } from "@/db/schema";
 import { db } from "@/db";
 import { requireAdmin } from "@/lib/admin";
@@ -35,7 +35,7 @@ async function createUniqueSlug(name: string, excludeProductId?: string) {
   while (true) {
     const [existing] = await db.select({ id: products.id }).from(products)
       .where(excludeProductId
-        ? and(eq(products.slug, candidate), (await import("drizzle-orm")).ne(products.id, excludeProductId))
+        ? and(eq(products.slug, candidate), ne(products.id, excludeProductId))
         : eq(products.slug, candidate))
       .limit(1);
     if (!existing) return candidate;
