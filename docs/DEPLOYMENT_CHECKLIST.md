@@ -94,7 +94,9 @@ Sign in to the seller dashboard and complete the following:
 - [ ] Review the storefront on mobile and desktop, including product details, basket, checkout, WhatsApp order handoff and admin pages.
 - [ ] Review and publish accurate contact, delivery, privacy, returns/refund and terms information as applicable.
 
-Customers can look up an order at `https://samary.catpad.shop/orders/track` using the order reference and the same phone number supplied at checkout. The lookup does not expose delivery address, email or other private customer details.\n\nThe product's final price has not yet been confirmed. Do not invent a price or publish unverified ingredients, certifications, treatment outcomes or cure claims.
+Customers can look up an order at `https://samary.catpad.shop/orders/track` using the order reference and the same phone number supplied at checkout. The lookup does not expose delivery address, email or other private customer details.
+
+The product's final price has not yet been confirmed. Do not invent a price or publish unverified ingredients, certifications, treatment outcomes or cure claims.
 
 ## 7. Complete launch approvals, then enable orders
 
