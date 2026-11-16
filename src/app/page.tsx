@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { eq, asc } from "drizzle-orm";
 import { db } from "@/db";
 import { products } from "@/db/schema";
@@ -8,7 +10,7 @@ import { getStoreSettings } from "@/lib/settings";
 
 export const metadata = {
   title: "Samary's Infection Set",
-  description: "Product details, images, price and ordering information for Samary's Infection Set.",
+  description: "Explore Samary's Infection Set, its available product information, price and ordering options.",
   alternates: { canonical: "/" },
 };
 
@@ -36,12 +38,12 @@ export default async function HomePage() {
         <>
           <section className="mx-auto grid max-w-7xl items-center gap-9 px-5 pb-16 pt-5 sm:px-8 lg:grid-cols-2 lg:gap-16 lg:pb-24 lg:pt-10">
             <div className="order-2 lg:order-1">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]">The product</p>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]">Product overview</p>
               <h1 className="mt-5 max-w-xl font-serif text-5xl leading-[1.04] tracking-[-0.05em] sm:text-6xl lg:text-7xl">{featured.name}</h1>
               {featured.shortDescription && <p className="mt-6 max-w-lg text-base leading-8 text-[#68766c]">{featured.shortDescription}</p>}
               <p className="mt-7 text-2xl font-semibold tracking-tight text-[#244b36]">{formatGhsFromPesewas(featured.priceMinor)}</p>
               <div className="mt-8 flex flex-wrap gap-3">
-                <Link href={"/products/" + featured.slug} className="inline-flex h-12 items-center justify-center rounded-full bg-[#244b36] px-7 text-sm font-semibold text-white transition hover:bg-[#183a28]">View product details <span className="ml-3">↗</span></Link>
+                <Link href={"/products/" + featured.slug} className="inline-flex h-12 items-center justify-center rounded-full bg-[#244b36] px-7 text-sm font-semibold text-white transition hover:bg-[#183a28]">View product details <HugeiconsIcon icon={ArrowUpRight01Icon} size={16} className="ml-2" /></Link>
                 {settings.orderingEnabled && <Link href="/checkout" className="inline-flex h-12 items-center justify-center rounded-full border border-[#d9dfd5] px-6 text-sm font-semibold text-[#244b36] transition hover:bg-white">Order now</Link>}
               </div>
             </div>
@@ -57,7 +59,7 @@ export default async function HomePage() {
           {catalogue.length > 1 && (
             <section className="border-t border-[#e6e8df] bg-[#fffefa]">
               <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:py-20">
-                <h2 className="font-serif text-3xl tracking-tight text-[#203a2b]">More products</h2>
+                <h2 className="font-serif text-3xl tracking-tight text-[#203a2b]">Explore the collection</h2>
                 <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                   {catalogue.slice(1).map((product) => (
                     <Link key={product.id} href={"/products/" + product.slug} className="group">
@@ -85,7 +87,7 @@ export default async function HomePage() {
       <footer className="border-t border-[#e6e8df] bg-[#fffefa]">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-5 py-6 text-xs text-[#849087] sm:px-8">
           <span className="font-serif text-lg text-[#203a2b]">Samary&apos;s<span className="text-[#829a7b]">.</span></span>
-          <span>Product information supplied by the seller.</span>
+          <span>Product details and availability are shown on each product page.</span>
         </div>
       </footer>
     </main>

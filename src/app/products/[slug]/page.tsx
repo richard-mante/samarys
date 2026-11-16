@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { notFound } from "next/navigation";
 import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
@@ -15,7 +17,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!product) return { title: "Product not found" };
   return {
     title: product.name,
-    description: product.shortDescription || "Product details and ordering information.",
+    description: product.shortDescription || "Explore product details, current price and ordering information.",
     alternates: { canonical: "/products/" + slug },
   };
 }
@@ -55,7 +57,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </div>
 
         <div className="flex flex-col justify-center lg:py-10">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]">Product details</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]">About the product</p>
           <h1 className="mt-5 font-serif text-5xl leading-[1.06] tracking-[-0.04em] text-[#203a2b] sm:text-6xl">{product.name}</h1>
           {product.shortDescription && <p className="mt-6 text-lg leading-8 text-[#68766c]">{product.shortDescription}</p>}
           <div className="mt-8 border-y border-[#e1e6dd] py-6">
@@ -66,7 +68,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           {product.description && <div className="mt-7 whitespace-pre-wrap text-sm leading-8 text-[#58665c]">{product.description}</div>}
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             {settings.orderingEnabled && <AddToCartButton productId={product.id} disabled={product.stockQuantity !== null && product.stockQuantity <= 0} />}
-            <a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex h-12 items-center justify-center rounded-full border border-[#d9dfd5] px-7 text-sm font-semibold text-[#244b36] transition hover:bg-white">Enquire about this product <span aria-hidden="true" className="ml-3">↗</span></a>
+            <a href={whatsappUrl} target="_blank" rel="noreferrer" className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-[#d9dfd5] px-7 text-sm font-semibold text-[#244b36] transition hover:bg-white">Ask about this product <HugeiconsIcon icon={ArrowUpRight01Icon} size={16} /></a>
           </div>
         </div>
       </section>
