@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db";
-import { productImages, products } from "@/db/schema";
+import { auditLogs, productImages, products } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
 
 const uploadedImageSchema = z.object({
@@ -13,7 +13,7 @@ const uploadedImageSchema = z.object({
 });
 
 export async function saveUploadedProductImage(productId: string, imageUrl: string, altText: string) {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const parsed = uploadedImageSchema.safeParse({ imageUrl, altText });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Check the image details." };
 
@@ -35,11 +35,17 @@ export async function saveUploadedProductImage(productId: string, imageUrl: stri
   try {
     const existing = await db.select({ sortOrder: productImages.sortOrder }).from(productImages)
       .where(eq(productImages.productId, productId));
-    await db.insert(productImages).values({
-      productId,
-      imageUrl: parsed.data.imageUrl,
-      altText: parsed.data.altText,
-      sortOrder: existing.length ? Math.max(...existing.map((image) => image.sortOrder)) + 1 : 0,
+    await db.transaction(async (tx) => {
+      const [created] = await tx.insert(productImages).values({
+        productId,
+        imageUrl: parsed.data.imageUrl,
+        altText: parsed.data.altText,
+        sortOrder: existing.length ? Math.max(...existing.map((image) => image.sortOrder)) + 1 : 0,
+      }).returning({ id: productImages.id });
+      await tx.insert(auditLogs).values({
+        adminId: admin.adminId, action: "PRODUCT_IMAGE_UPLOADED", entityType: "product", entityId: productId,
+        metadata: { imageId: created.id, altText: parsed.data.altText },
+      });
     });
   } catch {
     return { error: "The image uploaded, but could not be added to this product. Please try again." };
