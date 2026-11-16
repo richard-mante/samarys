@@ -114,7 +114,7 @@ export default async function HomePage() {
                       <div><h3 className="font-serif text-2xl tracking-tight text-[#203a2b]">{product.name}</h3><p className="mt-2 line-clamp-2 text-sm leading-6 text-[#758078]">{product.shortDescription || "Explore product details and ordering information."}</p></div>
                       <span className="mt-1 text-lg text-[#789173] transition group-hover:translate-x-1">↗</span>
                     </div>
-                    <p className="mt-4 text-sm font-semibold text-[#244b36]">{formatGhsFromPesewas(product.priceMinor)}</p>
+                    <p className="mt-4 text-sm font-semibold text-[#244b36]">{formatGhsFromPesewas(product.priceMinor)}</p><p className="mt-2 text-[11px] text-[#849087]">{product.stockQuantity !== null && product.stockQuantity <= 0 ? "Currently unavailable" : product.stockQuantity !== null && product.stockQuantity <= 5 ? "Limited availability" : "View product details"}</p>
                   </Link>
                 </article>
               ))}
