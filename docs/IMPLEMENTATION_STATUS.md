@@ -47,7 +47,7 @@ This document tracks implemented application capabilities. It is not a build or 
 ## Still to implement
 
 - Direct image file uploads and managed storage (current gallery accepts image URLs).
-- Paystack checkout, transaction verification and signed webhook handling.
+- Customer checkout supports hosted Paystack payments in GHS alongside WhatsApp-assisted order requests.\n- Paystack initialization calculates totals from active server-side product records and stores immutable order-item price snapshots.\n- Callback verification checks provider transaction status, reference, amount and currency before settling the order.\n- Signed Paystack webhooks use HMAC SHA-512 validation and persisted event keys for idempotent processing.\n- Payment result pages read verified payment state from PostgreSQL; URL parameters cannot claim payment success.\n- Paystack deployment variables and webhook registration are documented in `docs/PAYSTACK_SETUP.md`.
 - Customer-facing order status views and order lookup.
 
 - Complete dashboard operational polish.
