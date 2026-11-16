@@ -28,6 +28,7 @@ This document tracks implemented application capabilities. It is not a build or 
 - Order totals are calculated from current server-side product prices; delivery is explicitly confirmed separately by the seller.
 - WhatsApp order requests are stored as unpaid and are not represented as completed payments.
 - Seller can record a manually received WhatsApp payment, delivery fee and payment reference; the action is audit-logged.
+- The finance dashboard combines Paystack transaction records with seller-confirmed WhatsApp payment audit records.
 - Fulfilled status is blocked unless payment is marked paid.
 - Order status changes are written to the audit log within the same database transaction.
 
