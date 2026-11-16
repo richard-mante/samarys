@@ -3,7 +3,7 @@
 import { createHmac } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { and, eq } from "drizzle-orm";
-import { products, productImages } from "@/db/schema";
+import { auditLogs, products, productImages } from "@/db/schema";
 import { db } from "@/db";
 import { requireAdmin } from "@/lib/admin";
 import { productInputSchema } from "./validation";
@@ -25,15 +25,21 @@ function readProductForm(formData: FormData) {
 }
 
 export async function createProduct(_previous: ProductActionState, formData: FormData): Promise<ProductActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const parsed = readProductForm(formData);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Please check the product details." };
   const data = parsed.data;
   try {
-    await db.insert(products).values({
-      name: data.name, slug: data.slug, shortDescription: data.shortDescription || null,
-      description: data.description || null, priceMinor: cedisToPesewas(data.priceGhs),
-      stockQuantity: data.stockQuantity === "" ? null : data.stockQuantity ?? null, isActive: data.isActive,
+    await db.transaction(async (tx) => {
+      const [created] = await tx.insert(products).values({
+        name: data.name, slug: data.slug, shortDescription: data.shortDescription || null,
+        description: data.description || null, priceMinor: cedisToPesewas(data.priceGhs),
+        stockQuantity: data.stockQuantity === "" ? null : data.stockQuantity ?? null, isActive: data.isActive,
+      }).returning({ id: products.id });
+      await tx.insert(auditLogs).values({
+        adminId: admin.adminId, action: "PRODUCT_CREATED", entityType: "product", entityId: created.id,
+        metadata: { name: data.name, slug: data.slug, priceMinor: cedisToPesewas(data.priceGhs), isActive: data.isActive },
+      });
     });
   } catch {
     return { error: "Could not save product. Check that its URL slug is unique and try again." };
@@ -44,17 +50,24 @@ export async function createProduct(_previous: ProductActionState, formData: For
 }
 
 export async function updateProduct(productId: string, _previous: ProductActionState, formData: FormData): Promise<ProductActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const parsed = readProductForm(formData);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Please check the product details." };
   const data = parsed.data;
   try {
-    const updated = await db.update(products).set({
-      name: data.name, slug: data.slug, shortDescription: data.shortDescription || null,
-      description: data.description || null, priceMinor: cedisToPesewas(data.priceGhs),
-      stockQuantity: data.stockQuantity === "" ? null : data.stockQuantity ?? null,
-      isActive: data.isActive, updatedAt: new Date(),
-    }).where(eq(products.id, productId)).returning({ slug: products.slug });
+    const updated = await db.transaction(async (tx) => {
+      const [product] = await tx.update(products).set({
+        name: data.name, slug: data.slug, shortDescription: data.shortDescription || null,
+        description: data.description || null, priceMinor: cedisToPesewas(data.priceGhs),
+        stockQuantity: data.stockQuantity === "" ? null : data.stockQuantity ?? null,
+        isActive: data.isActive, updatedAt: new Date(),
+      }).where(eq(products.id, productId)).returning({ slug: products.slug });
+      if (product) await tx.insert(auditLogs).values({
+        adminId: admin.adminId, action: "PRODUCT_UPDATED", entityType: "product", entityId: productId,
+        metadata: { name: data.name, slug: data.slug, priceMinor: cedisToPesewas(data.priceGhs), stockQuantity: data.stockQuantity || null, isActive: data.isActive },
+      });
+      return product ? [product] : [];
+    });
     if (!updated.length) return { error: "This product could not be found." };
     revalidatePath("/");
     revalidatePath("/admin/products");
@@ -66,8 +79,15 @@ export async function updateProduct(productId: string, _previous: ProductActionS
 }
 
 export async function toggleProductVisibility(productId: string, isActive: boolean) {
-  await requireAdmin();
-  await db.update(products).set({ isActive, updatedAt: new Date() }).where(eq(products.id, productId));
+  const admin = await requireAdmin();
+  await db.transaction(async (tx) => {
+    const [updated] = await tx.update(products).set({ isActive, updatedAt: new Date() })
+      .where(eq(products.id, productId)).returning({ id: products.id });
+    if (updated) await tx.insert(auditLogs).values({
+      adminId: admin.adminId, action: "PRODUCT_VISIBILITY_UPDATED", entityType: "product", entityId: productId,
+      metadata: { isActive },
+    });
+  });
   revalidatePath("/");
   revalidatePath("/admin/products");
 }
@@ -78,7 +98,7 @@ const imageInputSchema = z.object({
 });
 
 export async function addProductImage(productId: string, _previous: ProductActionState, formData: FormData): Promise<ProductActionState> {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const parsed = imageInputSchema.safeParse({
     imageUrl: formData.get("imageUrl"),
     altText: formData.get("altText"),
@@ -90,11 +110,17 @@ export async function addProductImage(productId: string, _previous: ProductActio
 
   const existing = await db.select({ sortOrder: productImages.sortOrder }).from(productImages)
     .where(eq(productImages.productId, productId));
-  await db.insert(productImages).values({
-    productId,
-    imageUrl: parsed.data.imageUrl,
-    altText: parsed.data.altText,
-    sortOrder: existing.length ? Math.max(...existing.map((image) => image.sortOrder)) + 1 : 0,
+  await db.transaction(async (tx) => {
+    const [created] = await tx.insert(productImages).values({
+      productId,
+      imageUrl: parsed.data.imageUrl,
+      altText: parsed.data.altText,
+      sortOrder: existing.length ? Math.max(...existing.map((image) => image.sortOrder)) + 1 : 0,
+    }).returning({ id: productImages.id });
+    await tx.insert(auditLogs).values({
+      adminId: admin.adminId, action: "PRODUCT_IMAGE_ADDED", entityType: "product", entityId: productId,
+      metadata: { imageId: created.id, imageUrl: parsed.data.imageUrl, altText: parsed.data.altText },
+    });
   });
 
   revalidatePath("/admin/products/" + productId);
@@ -104,7 +130,7 @@ export async function addProductImage(productId: string, _previous: ProductActio
 }
 
 export async function removeProductImage(imageId: string, productId: string) {
-  await requireAdmin();
+  const admin = await requireAdmin();
   const [product] = await db.select({ slug: products.slug }).from(products).where(eq(products.id, productId)).limit(1);
   if (!product) return;
 
@@ -152,7 +178,15 @@ export async function removeProductImage(imageId: string, productId: string) {
     }
   }
 
-  await db.delete(productImages).where(and(eq(productImages.id, imageId), eq(productImages.productId, productId)));
+  await db.transaction(async (tx) => {
+    const [removed] = await tx.delete(productImages)
+      .where(and(eq(productImages.id, imageId), eq(productImages.productId, productId)))
+      .returning({ id: productImages.id });
+    if (removed) await tx.insert(auditLogs).values({
+      adminId: admin.adminId, action: "PRODUCT_IMAGE_REMOVED", entityType: "product", entityId: productId,
+      metadata: { imageId },
+    });
+  });
   revalidatePath("/admin/products/" + productId);
   revalidatePath("/products/" + product.slug);
   revalidatePath("/");
