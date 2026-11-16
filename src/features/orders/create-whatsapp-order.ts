@@ -82,7 +82,7 @@ export async function createWhatsAppOrder(_previous: CreateOrderState, formData:
     const subtotalMinor = lines.reduce((sum, line) => sum + line.lineTotalMinor, 0);
     if (!Number.isSafeInteger(subtotalMinor) || subtotalMinor <= 0) return { error: "The order total could not be calculated." };
 
-    const reference = "SAM-" + randomUUID().replace(/-/g, "").slice(0, 12).toUpperCase();
+    const reference = "SAM-" + randomUUID().replace(/-/g, "").slice(0, 16).toUpperCase();
     const details = customerInput.data;
     const customerPhone = normalizePhoneNumber(details.phone);
 
