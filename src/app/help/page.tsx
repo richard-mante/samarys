@@ -44,6 +44,10 @@ export default async function HelpPage() {
       answer: "Review the product page and the information on the product's own packaging. Contact the seller if you need clarification. The website does not provide medical advice or make unverified treatment promises.",
     },
     {
+      question: "What if payment went through after my order was cancelled?",
+      answer: "Contact the seller immediately and share your order reference. The app records the payment, but a refund must be reviewed and processed separately by the seller through Paystack.",
+    },
+    {
       question: "What if I need to return an item or request a refund?",
       answer: "Contact the seller before sending an item back. The seller must confirm the applicable return or refund terms for the product and order. Paystack refunds are not automatically initiated by this website.",
     },
