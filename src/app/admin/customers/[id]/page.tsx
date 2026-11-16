@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { count, desc, eq, sql, sum } from "drizzle-orm";
+import { count, eq, sql, sum } from "drizzle-orm";
 import { db } from "@/db";
 import { customers, orders } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
