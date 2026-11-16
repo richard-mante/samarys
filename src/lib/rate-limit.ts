@@ -8,16 +8,18 @@ import { auditLogs } from "@/db/schema";
 export async function consumeRateLimit({
   action,
   clientAddress,
+  identifier = "",
   limit,
   windowMs,
 }: {
   action: string;
   clientAddress: string;
+  identifier?: string;
   limit: number;
   windowMs: number;
 }) {
   const bucket = createHash("sha256")
-    .update(action + ":" + clientAddress + ":" + (process.env.SESSION_SECRET ?? "local-only"))
+    .update(action + ":" + identifier + ":" + clientAddress + ":" + (process.env.SESSION_SECRET ?? "local-only"))
     .digest("hex");
   const since = new Date(Date.now() - windowMs);
 
@@ -26,7 +28,7 @@ export async function consumeRateLimit({
       eq(auditLogs.entityType, "rate_limit"),
       lt(auditLogs.createdAt, new Date(Date.now() - 24 * 60 * 60 * 1000)),
     ));
-    // Serialize checks for the same hashed client bucket so parallel requests
+    // Serialize checks for the same hashed bucket so parallel requests
     // cannot all pass the limit at once.
     await tx.execute(sql`select pg_advisory_xact_lock(hashtextextended(${bucket}, 0))`);
     const [recent] = await tx.select({ total: count() }).from(auditLogs).where(and(
@@ -48,9 +50,8 @@ export async function consumeRateLimit({
 }
 
 export function getClientAddress(headers: Headers) {
-  return (
-    headers.get("x-vercel-forwarded-for") ??
-    headers.get("x-forwarded-for") ??
-    "unknown"
-  ).split(",")[0].trim().slice(0, 80);
+  // Vercel supplies this platform-controlled header. Do not trust the
+  // client-spoofable x-forwarded-for fallback for security rate limits.
+  return (headers.get("x-vercel-forwarded-for") ?? "unknown")
+    .split(",")[0].trim().slice(0, 80);
 }
