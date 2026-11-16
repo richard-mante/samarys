@@ -37,7 +37,7 @@ export default async function HelpPage() {
     },
     {
       question: "How much is delivery and where do you deliver?",
-      answer: "Delivery coverage and fees are confirmed by the seller for each order. The checkout subtotal is for the products; do not assume delivery is included unless the seller confirms it.",
+      answer: "{settings.deliveryPolicy}",
     },
     {
       question: "Where can I find product information?",
@@ -49,7 +49,7 @@ export default async function HelpPage() {
     },
     {
       question: "What if I need to return an item or request a refund?",
-      answer: "Contact the seller before sending an item back. The seller must confirm the applicable return or refund terms for the product and order. Paystack refunds are not automatically initiated by this website.",
+      answer: "{settings.returnsPolicy}",
     },
   ];
 
