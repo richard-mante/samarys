@@ -18,7 +18,7 @@ export default async function AdminSettingsPage() {
       <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#789173]">Customer support</p>
       <h2 className="mt-2 font-serif text-2xl text-[#203a2b]">Seller contact</h2>
       <p className="mt-2 text-sm leading-6 text-[#758078]">This number is used by the storefront for product enquiries and WhatsApp-assisted order requests. Changes are recorded in the admin audit log.</p>
-      <StoreSettingsForm sellerWhatsAppNumber={settings.sellerWhatsAppNumber} />
+      <StoreSettingsForm sellerWhatsAppNumber={settings.sellerWhatsAppNumber} deliveryPolicy={settings.deliveryPolicy} returnsPolicy={settings.returnsPolicy} privacyPolicy={settings.privacyPolicy} />
     </section>
 
     <section className="mt-5 rounded-2xl border border-[#e4e8e1] bg-white p-6 sm:p-8">
