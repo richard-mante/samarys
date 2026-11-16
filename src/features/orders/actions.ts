@@ -47,7 +47,7 @@ export async function updateOrderStatus(orderId: string, _previous: OrderActionS
 
       if (nextStatus === "CANCELLED" && current.paymentStatus === "PAID") {
         const purchasedItems = await tx.select({ productId: orderItems.productId, quantity: orderItems.quantity })
-          .from(orderItems).where(eq(orderItems.orderId, orderId));
+          .from(orderItems).where(eq(orderItems.orderId, orderId)).orderBy(asc(orderItems.productId));
         for (const item of purchasedItems) {
           if (!item.productId) continue;
           const [stock] = await tx.update(products).set({
