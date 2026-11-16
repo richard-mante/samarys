@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { UserGroupIcon, Search01Icon } from "@hugeicons/core-free-icons";
 import { count, desc, ilike, max, or, sql, sum } from "drizzle-orm";
 import { db } from "@/db";
 import { customers, orders } from "@/db/schema";
@@ -35,13 +37,13 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
 
   return <div>
     <div className="flex flex-wrap items-end justify-between gap-4">
-      <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Relationships</p><h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]">Customers</h1><p className="mt-2 text-sm text-[#758078]">Customer contact details, order history and verified spend.</p></div>
+      <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Relationships</p><h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]"<span className="inline-flex items-center gap-3"><HugeiconsIcon icon={UserGroupIcon} size={25} />Customers</span></h1><p className="mt-2 text-sm text-[#758078]">Customer contact details, order history and verified spend.</p></div>
       <span className="rounded-full bg-white px-4 py-2 text-xs font-medium text-[#68766c]">{rows.length} customers · latest 100</span>
     </div>
     <form method="get" className="mt-7 flex flex-col gap-3 rounded-2xl border border-[#e4e8e1] bg-white p-4 sm:flex-row">
       <label htmlFor="q" className="sr-only">Search customers</label>
       <input id="q" name="q" value={query} placeholder="Search name, phone or email" className="min-w-0 flex-1 rounded-xl border border-[#dfe5dc] px-4 py-3 text-sm outline-none focus:border-[#66836c]"/>
-      <div className="flex gap-2"><button type="submit" className="flex-1 rounded-full bg-[#244b36] px-6 py-3 text-sm font-semibold text-white">Search</button><Link href="/admin/customers" className="rounded-full border border-[#dfe5dc] px-5 py-3 text-sm font-semibold text-[#526157]">Reset</Link></div>
+      <div className="flex gap-2"><button type="submit" className="flex-1 rounded-full bg-[#244b36] px-6 py-3 text-sm font-semibold text-white"><HugeiconsIcon icon={Search01Icon} size={16} className="mr-2 inline" />Search</button><Link href="/admin/customers" className="rounded-full border border-[#dfe5dc] px-5 py-3 text-sm font-semibold text-[#526157]">Reset</Link></div>
     </form>
     <section className="mt-6 overflow-hidden rounded-2xl border border-[#e4e8e1] bg-white">
       {rows.length === 0 ? <div className="px-6 py-16 text-center"><p className="font-serif text-2xl text-[#405447]">No customers found</p><p className="mt-2 text-sm text-[#758078]">Customers will appear here after an order request is created.</p></div> :
