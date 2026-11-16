@@ -37,15 +37,19 @@ export default async function HelpPage() {
     },
     {
       question: "How much is delivery and where do you deliver?",
-      answer: "Delivery coverage and fees are confirmed by the seller for each order. The checkout subtotal is for the products; do not assume delivery is included unless the seller confirms it.",
+      answer: settings.deliveryPolicy,
     },
     {
       question: "Where can I find product information?",
       answer: "Review the product page and the information on the product's own packaging. Contact the seller if you need clarification. The website does not provide medical advice or make unverified treatment promises.",
     },
     {
+      question: "What if payment went through after my order was cancelled?",
+      answer: "Contact the seller immediately and share your order reference. The app records the payment, but a refund must be reviewed and processed separately by the seller through Paystack.",
+    },
+    {
       question: "What if I need to return an item or request a refund?",
-      answer: "Contact the seller before sending an item back. The seller must confirm the applicable return or refund terms for the product and order. Paystack refunds are not automatically initiated by this website.",
+      answer: settings.returnsPolicy,
     },
   ];
 
@@ -66,7 +70,7 @@ export default async function HelpPage() {
         {faqs.map((faq, index) => <article key={faq.question} className="py-7">
           <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9aa69a]">0{index + 1}</p>
           <h2 className="mt-2 font-serif text-2xl text-[#203a2b]">{faq.question}</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-[#758078]">{faq.answer}</p>
+          <p className="mt-3 max-w-3xl whitespace-pre-line text-sm leading-7 text-[#758078]">{faq.answer}</p>
           {"link" in faq && faq.link && <Link href="/orders/track" className="mt-3 inline-flex text-sm font-semibold text-[#41684d] hover:underline">Open order tracking ↗</Link>}
         </article>)}
       </div>

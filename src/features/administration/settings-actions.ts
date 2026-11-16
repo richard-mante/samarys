@@ -18,39 +18,60 @@ const settingsSchema = z.object({
       const digits = value.replace(/\D/g, "");
       return digits.length >= 10 && digits.length <= 15;
     }, "Enter a complete phone number with country code if needed."),
+  deliveryPolicy: z.string().trim().min(20).max(4000),
+  returnsPolicy: z.string().trim().min(20).max(4000),
+  privacyPolicy: z.string().trim().min(40).max(6000),
 });
 
 export async function updateStoreSettings(_previous: SettingsActionState, formData: FormData): Promise<SettingsActionState> {
   const admin = await requireAdmin();
   const parsed = settingsSchema.safeParse({
     sellerWhatsAppNumber: formData.get("sellerWhatsAppNumber"),
+    deliveryPolicy: formData.get("deliveryPolicy"),
+    returnsPolicy: formData.get("returnsPolicy"),
+    privacyPolicy: formData.get("privacyPolicy"),
   });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Check the settings and try again." };
 
   const phone = normalizePhoneNumber(parsed.data.sellerWhatsAppNumber);
+  const settings = [
+    ["seller_whatsapp_number", phone],
+    ["delivery_policy", parsed.data.deliveryPolicy],
+    ["returns_policy", parsed.data.returnsPolicy],
+    ["privacy_policy", parsed.data.privacyPolicy],
+  ] as const;
   try {
     await db.transaction(async (tx) => {
-      await tx.insert(siteSettings).values({
-        key: "seller_whatsapp_number",
-        value: phone,
-        updatedAt: new Date(),
-      }).onConflictDoUpdate({
-        target: siteSettings.key,
-        set: { value: phone, updatedAt: new Date() },
-      });
+      for (const [key, value] of settings) {
+        await tx.insert(siteSettings).values({
+          key,
+          value,
+          updatedAt: new Date(),
+        }).onConflictDoUpdate({
+          target: siteSettings.key,
+          set: { value, updatedAt: new Date() },
+        });
+      }
 
       await tx.insert(auditLogs).values({
         adminId: admin.adminId,
         action: "STORE_SETTINGS_UPDATED",
         entityType: "site_settings",
-        entityId: "seller_whatsapp_number",
-        metadata: { sellerWhatsAppNumber: phone },
+        entityId: "storefront",
+        metadata: {
+          sellerWhatsAppNumber: phone,
+          deliveryPolicyUpdated: true,
+          returnsPolicyUpdated: true,
+          privacyPolicyUpdated: true,
+        },
       });
     });
 
     revalidatePath("/");
     revalidatePath("/products/[slug]", "page");
     revalidatePath("/checkout");
+    revalidatePath("/help");
+    revalidatePath("/policies");
     revalidatePath("/admin/settings");
     return { success: "Store settings saved." };
   } catch {

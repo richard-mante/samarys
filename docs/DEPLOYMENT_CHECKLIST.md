@@ -94,7 +94,7 @@ Sign in to the seller dashboard and complete the following:
 - [ ] Confirm the seller WhatsApp number is correct: **+233 559 448 932**.
 - [ ] Confirm delivery areas, delivery fees, delivery instructions and customer support arrangements.
 - [ ] Review the storefront on mobile and desktop, including product details, basket, checkout, WhatsApp order handoff, order tracking, help/FAQ and customer policy pages, plus the seller dashboard.
-- [ ] Review and publish accurate contact, delivery, privacy, returns/refund and terms information as applicable.
+- [ ] In Seller dashboard → Settings, review and publish accurate WhatsApp contact, delivery, privacy and returns/refund information. Have the seller approve the final wording and any legal terms before launch.
 
 Customers can look up an order at `https://samary.catpad.shop/orders/track` using the order reference and the same phone number supplied at checkout. The lookup does not expose delivery address, email or other private customer details.
 

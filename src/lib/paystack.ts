@@ -31,6 +31,12 @@ export function verifyPaystackSignature(rawBody: string, signature: string | nul
 
 export async function verifyAndSettlePaystackPayment(reference: string, payload?: PaystackTransaction) {
   const secret = getSecretKey();
+  const [knownPayment] = await db.select({ id: payments.id, orderId: payments.orderId, status: payments.status })
+    .from(payments).where(eq(payments.providerReference, reference)).limit(1);
+  if (!knownPayment) throw new Error("No matching order was found for this payment reference.");
+  if (knownPayment.status === "PAID") return { orderId: knownPayment.orderId, alreadyPaid: true };
+  if (knownPayment.status !== "PENDING") throw new Error("This payment is no longer pending.");
+
   let transaction = payload;
 
   if (!transaction) {
@@ -50,22 +56,26 @@ export async function verifyAndSettlePaystackPayment(reference: string, payload?
   }
 
   return db.transaction(async (tx) => {
-    const [payment] = await tx.select().from(payments)
-      .where(eq(payments.providerReference, reference)).limit(1);
-    if (!payment) throw new Error("No matching order was found for this payment reference.");
+    // Lock both records so seller cancellation and payment settlement cannot overwrite one another.
+    const [lockedPayment] = await tx.select().from(payments)
+      .where(eq(payments.providerReference, reference)).for("update").limit(1);
+    if (!lockedPayment) throw new Error("No matching order was found for this payment reference.");
 
-    if (transaction!.amount !== payment.amountMinor || transaction!.currency !== payment.currency) {
+    const [lockedOrder] = await tx.select().from(orders)
+      .where(eq(orders.id, lockedPayment.orderId)).for("update").limit(1);
+    if (!lockedOrder) throw new Error("The order linked to this payment no longer exists.");
+
+    if (transaction!.amount !== lockedPayment.amountMinor || transaction!.currency !== lockedPayment.currency) {
       throw new Error("The verified payment amount or currency does not match this order.");
     }
-
-    if (payment.status === "PAID") {
-      return { orderId: payment.orderId, alreadyPaid: true };
-    }
-
-    const [order] = await tx.select().from(orders).where(eq(orders.id, payment.orderId)).limit(1);
-    if (!order) throw new Error("The order linked to this payment no longer exists.");
-    if (order.totalMinor !== payment.amountMinor || order.currency !== payment.currency) {
+    if (lockedOrder.totalMinor !== lockedPayment.amountMinor || lockedOrder.currency !== lockedPayment.currency) {
       throw new Error("The order total has changed and this payment cannot be applied.");
+    }
+    if (lockedPayment.status === "PAID" || lockedOrder.paymentStatus === "PAID") {
+      return { orderId: lockedOrder.id, alreadyPaid: true };
+    }
+    if (lockedPayment.status !== "PENDING" || lockedOrder.paymentStatus !== "PENDING") {
+      throw new Error("This order is no longer awaiting payment.");
     }
 
     const paidAt = transaction!.paid_at ? new Date(transaction!.paid_at) : new Date();
@@ -75,22 +85,32 @@ export async function verifyAndSettlePaystackPayment(reference: string, payload?
       verifiedAt: new Date(),
       providerPayload: transaction,
       updatedAt: new Date(),
-    }).where(and(eq(payments.id, payment.id), eq(payments.status, "PENDING")))
+    }).where(and(eq(payments.id, lockedPayment.id), eq(payments.status, "PENDING")))
       .returning({ id: payments.id });
-    if (!paidPayment) return { orderId: order.id, alreadyPaid: true };
+    if (!paidPayment) return { orderId: lockedOrder.id, alreadyPaid: true };
 
     const [paidOrder] = await tx.update(orders).set({
       paymentStatus: "PAID",
-      status: order.status === "PENDING_PAYMENT" ? "CONFIRMED" : order.status,
+      status: lockedOrder.status === "PENDING_PAYMENT" ? "CONFIRMED" : lockedOrder.status,
       updatedAt: new Date(),
-    }).where(and(eq(orders.id, order.id), eq(orders.paymentStatus, "PENDING")))
-      .returning({ id: orders.id });
+    }).where(and(
+      eq(orders.id, lockedOrder.id),
+      eq(orders.paymentStatus, "PENDING"),
+      eq(orders.status, lockedOrder.status),
+    )).returning({ id: orders.id });
     if (!paidOrder) throw new Error("The order payment state changed while settling this transaction.");
 
-    // Finite stock is reduced only once payment is verified. Null stock means untracked stock.
-    if (order.status !== "CANCELLED") {
+    if (lockedOrder.status === "CANCELLED") {
+      await tx.insert(auditLogs).values({
+        action: "PAYMENT_VERIFIED_FOR_CANCELLED_ORDER",
+        entityType: "order",
+        entityId: lockedOrder.id,
+        metadata: { orderReference: lockedOrder.reference, note: "Seller review and refund may be required." },
+      });
+    } else {
+      // Finite stock is reduced only once payment is verified. Null stock means untracked stock.
       const items = await tx.select({ productId: orderItems.productId, quantity: orderItems.quantity })
-        .from(orderItems).where(eq(orderItems.orderId, order.id));
+        .from(orderItems).where(eq(orderItems.orderId, lockedOrder.id));
       for (const item of items) {
         if (!item.productId) continue;
         const [stock] = await tx.update(products).set({
@@ -102,12 +122,12 @@ export async function verifyAndSettlePaystackPayment(reference: string, payload?
             action: "PRODUCT_STOCK_DECREMENTED",
             entityType: "product",
             entityId: item.productId,
-            metadata: { orderReference: order.reference, quantity: item.quantity, remainingQuantity: stock.stockQuantity },
+            metadata: { orderReference: lockedOrder.reference, quantity: item.quantity, remainingQuantity: stock.stockQuantity },
           });
         }
       }
     }
 
-    return { orderId: order.id, alreadyPaid: false };
+    return { orderId: lockedOrder.id, alreadyPaid: false };
   });
 }

@@ -46,6 +46,8 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
       <span className="rounded-full bg-[#edf3eb] px-4 py-2 text-xs font-semibold text-[#41684d]">{statusLabels[order.status] ?? order.status}</span>
     </div>
 
+    {order.status === "CANCELLED" && order.paymentStatus === "PAID" && <div role="alert" className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5 text-sm leading-6 text-amber-900">Payment was received for this cancelled order. Review the transaction in Paystack and arrange a refund if appropriate; refunds are not processed automatically by this app.</div>}
+
     <div className="mt-8 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
       <div className="space-y-6">
         <section className="rounded-2xl border border-[#e4e8e1] bg-white p-6 sm:p-7">

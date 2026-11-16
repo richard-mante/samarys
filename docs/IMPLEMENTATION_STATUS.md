@@ -31,7 +31,7 @@ This document tracks implemented application capabilities. It is not a build or 
 - Seller can search orders by customer name, phone or reference and filter by fulfilment status, payment status and order channel.
 - Seller can review a timestamped activity log for order, payment, settings and catalogue changes.
 - Seller can search the customer directory and review customer profiles, order history and lifetime verified spend.
-- Seller WhatsApp contact is editable in the dashboard, persisted in site settings and reused by storefront enquiry/order links.
+- Seller WhatsApp contact and customer-facing delivery, returns and privacy policy text are editable in settings, persisted in site settings and rendered on the public help/policy pages.
 - Seller can inspect individual orders, customer contact details, delivery notes, line items, totals and linked payment records.
 - Seller can move orders through guarded fulfilment transitions.
 - Seller can record a manually received WhatsApp payment, delivery fee and payment reference; the action is audit-logged.
