@@ -27,7 +27,7 @@ export async function updateOrderStatus(orderId: string, _previous: OrderActionS
 
   try {
     const result = await db.transaction(async (tx) => {
-      const [current] = await tx.select().from(orders).where(eq(orders.id, orderId)).limit(1);
+      const [current] = await tx.select().from(orders).where(eq(orders.id, orderId)).for("update").limit(1);
       if (!current) return { error: "This order could not be found." } as const;
 
       const nextStatus = parsed.data;
@@ -109,7 +109,7 @@ export async function recordWhatsAppPayment(orderId: string, _previous: OrderAct
 
   try {
     const result = await db.transaction(async (tx) => {
-      const [current] = await tx.select().from(orders).where(eq(orders.id, orderId)).limit(1);
+      const [current] = await tx.select().from(orders).where(eq(orders.id, orderId)).for("update").limit(1);
       if (!current) return { error: "This order could not be found." } as const;
       if (current.channel !== "WHATSAPP") return { error: "Manual payment recording is only available for WhatsApp-assisted orders." } as const;
       if (current.paymentStatus === "PAID") return { error: "This order is already marked as paid." } as const;
