@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { compare, hash } from "bcryptjs";
 import { db } from "@/db";
