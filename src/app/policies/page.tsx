@@ -5,6 +5,7 @@ import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
 export const metadata = {
   title: "Customer information & policies",
   description: "Important information about Samary's orders, delivery, payments and customer privacy.",
+  alternates: { canonical: "/policies" },
 };
 
 export default async function PoliciesPage() {
