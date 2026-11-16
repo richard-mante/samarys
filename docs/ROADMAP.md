@@ -7,24 +7,24 @@
 - [x] Initialize Next.js application configuration and storefront shell.
 - [x] Add environment template and setup instructions.
 - [x] Add initial Drizzle schema and database client.
-- [ ] Install dependencies and configure local environment.
+- [ ] Install dependencies and configure local environment (project owner).
 
 ## Phase 1 — Data and application foundation
 - [x] Define initial relational schema.
 - [x] Add database connection module.
-- [ ] Configure Neon credentials and validate connection.
-- [ ] Generate and review first migration.
+- [ ] Configure Neon credentials and validate connection (project owner).
+- [ ] Generate and review first migration (project owner).
 - [ ] Add validation, formatting and shared domain types.
 - [x] Establish admin authentication and server-side authorization.
 - [x] Add explicit administrator provisioning workflow.
 
 ## Phase 2 — Storefront and product management
 - [x] Add initial responsive storefront shell.
-- [ ] Complete design system and responsive storefront.
+- [x] Complete premium responsive storefront experience.
 - [x] Add dynamic product detail pages.
 - [x] Build product image upload and gallery (signed Cloudinary uploads plus external image URLs).
-- [ ] Implement dashboard product management.
-- [ ] Add configurable settings and seller contact.
+- [x] Implement dashboard product management.
+- [x] Add configurable settings and seller contact.
 
 ## Phase 3 — Orders and WhatsApp
 - [x] Implement customer checkout and server-side order creation.
@@ -41,6 +41,6 @@
 - [x] Add payment reconciliation actions.
 
 ## Phase 5 — Verification and launch
-- [ ] Review security, accessibility, performance and SEO.
-- [ ] Complete product and regulatory launch gates.
-- [ ] Deploy production only after launch gates pass.
+- [ ] Final security, accessibility, performance and SEO review.
+- [ ] Complete product and regulatory launch gates with the seller.
+- [ ] Deploy production only after launch gates pass (project owner).
