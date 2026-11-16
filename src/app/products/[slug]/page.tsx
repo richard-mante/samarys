@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
@@ -64,6 +65,16 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <p className="mt-4 max-w-md text-xs leading-6 text-[#849087]">Product information is provided by the seller. Please confirm ingredients, directions, suitability and any safety questions directly with the seller before purchasing.</p>
         </div>
       </section>
+      <footer className="border-t border-[#e3e8df] bg-[#fffefa]">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-6 text-xs text-[#849087] lg:px-10">
+          <Link href="/" className="font-serif text-lg text-[#203a2b]">Samary&apos;s<span className="text-[#829a7b]">.</span></Link>
+          <nav aria-label="Customer links" className="flex flex-wrap gap-5">
+            <Link href="/help" className="hover:text-[#244b36]">Help & FAQs</Link>
+            <Link href="/orders/track" className="hover:text-[#244b36]">Track order</Link>
+            <Link href="/policies" className="hover:text-[#244b36]">Customer policies</Link>
+          </nav>
+        </div>
+      </footer>
     </main>
   );
 }
