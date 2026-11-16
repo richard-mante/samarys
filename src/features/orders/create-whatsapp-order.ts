@@ -8,6 +8,7 @@ import { db } from "@/db";
 import { customers, orderItems, orders, products } from "@/db/schema";
 import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
 import { formatGhsFromPesewas } from "@/lib/money";
+import { normalizePhoneNumber } from "@/lib/phone";
 
 export type CreateOrderState = {
   error?: string;
@@ -18,7 +19,7 @@ export type CreateOrderState = {
 
 const customerSchema = z.object({
   fullName: z.string().trim().min(2).max(180),
-  phone: z.string().trim().min(7).max(32).regex(/^\+?[0-9\s()-]+$/, "Enter a valid phone number."),
+  phone: z.string().trim().min(7).max(32).regex(/^\+?[0-9\s()-]+$/, "Enter a valid phone number.").refine((value) => { const digits = value.replace(/\D/g, ""); return digits.length >= 10 && digits.length <= 15; }, "Enter a complete phone number with country code if needed."),
   email: z.union([z.string().trim().email().max(320), z.literal("")]).optional(),
   deliveryAddress: z.string().trim().min(5).max(2000),
   deliveryCity: z.string().trim().min(2).max(120),
@@ -79,9 +80,10 @@ export async function createWhatsAppOrder(_previous: CreateOrderState, formData:
 
     const reference = "SAM-" + randomUUID().replace(/-/g, "").slice(0, 12).toUpperCase();
     const details = customerInput.data;
+    const customerPhone = normalizePhoneNumber(details.phone);
 
     await db.transaction(async (tx) => {
-      const [existingCustomer] = await tx.select().from(customers).where(eq(customers.phone, details.phone)).limit(1);
+      const [existingCustomer] = await tx.select().from(customers).where(eq(customers.phone, customerPhone)).limit(1);
       let customerId: string;
       if (existingCustomer) {
         const [updatedCustomer] = await tx.update(customers).set({
@@ -93,7 +95,7 @@ export async function createWhatsAppOrder(_previous: CreateOrderState, formData:
       } else {
         const [createdCustomer] = await tx.insert(customers).values({
           fullName: details.fullName,
-          phone: details.phone,
+          phone: customerPhone,
           email: details.email || null,
         }).returning({ id: customers.id });
         customerId = createdCustomer.id;
@@ -137,7 +139,7 @@ export async function createWhatsAppOrder(_previous: CreateOrderState, formData:
       "",
       "Subtotal (delivery not included): " + formatGhsFromPesewas(subtotalMinor),
       "Customer: " + details.fullName,
-      "Phone: " + details.phone,
+      "Phone: " + customerPhone,
       "Delivery address: " + details.deliveryAddress + ", " + details.deliveryCity + (details.deliveryRegion ? ", " + details.deliveryRegion : ""),
       details.deliveryNotes ? "Delivery note: " + details.deliveryNotes : "",
       "",
