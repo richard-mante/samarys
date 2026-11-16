@@ -60,9 +60,9 @@ export async function updateStoreSettings(_previous: SettingsActionState, formDa
         entityId: "storefront",
         metadata: {
           sellerWhatsAppNumber: phone,
-          deliveryPolicy: parsed.data.deliveryPolicy,
-          returnsPolicy: parsed.data.returnsPolicy,
-          privacyPolicy: parsed.data.privacyPolicy,
+          deliveryPolicyUpdated: true,
+          returnsPolicyUpdated: true,
+          privacyPolicyUpdated: true,
         },
       });
     });
