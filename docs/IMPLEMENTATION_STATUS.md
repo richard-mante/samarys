@@ -18,23 +18,32 @@ This document tracks implemented application capabilities. It is not a build or 
 - Sellers can add and remove product gallery images using public image URLs and accessible alt text.
 - Public product pages only expose active products and render seller-managed gallery images.
 - The home page features active catalogue products and their lead images.
+- Product deletion is intentionally not provided because historical order items must retain their product snapshots.
+
+## Seller workspace
+
 - Seller dashboard includes live product/order/revenue metrics, recent orders, unpaid requests and low-stock alerts.
 - Seller workspace navigation is responsive and highlights the active section.
 - Seller WhatsApp contact is editable in the dashboard, persisted in site settings and reused by storefront enquiry/order links.
-- Product deletion is intentionally not provided because historical order items must retain their product snapshots.
-
-## Seller order operations
-
-- Seller can inspect an individual order, customer contact details, delivery notes, line items, totals and linked payment records.
+- Seller can inspect individual orders, customer contact details, delivery notes, line items, totals and linked payment records.
 - Seller can move orders through guarded fulfilment transitions.
-- Customers can build a persistent basket and submit a WhatsApp-assisted order request with contact and delivery details.
-- Order totals are calculated from current server-side product prices; delivery is explicitly confirmed separately by the seller.
-- WhatsApp order requests are stored as unpaid and are not represented as completed payments.
-- Customer ordering is gated by the server-only ORDERS_ENABLED flag and defaults to disabled until seller pricing and regulatory checks are complete.
 - Seller can record a manually received WhatsApp payment, delivery fee and payment reference; the action is audit-logged.
 - The finance dashboard combines Paystack transaction records with seller-confirmed WhatsApp payment audit records.
 - Fulfilled status is blocked unless payment is marked paid.
 - Order status changes are written to the audit log within the same database transaction.
+
+## Customer ordering and payments
+
+- Customers can build a persistent basket and submit a WhatsApp-assisted order request with contact and delivery details.
+- WhatsApp order requests are stored as unpaid and are not represented as completed payments.
+- Customer checkout supports hosted Paystack payments in GHS alongside WhatsApp-assisted order requests.
+- Order totals are calculated from active server-side product prices; browser totals are never trusted.
+- Paystack initialization creates order and payment records with immutable item-price snapshots before redirecting to hosted checkout.
+- Callback verification checks provider transaction status, reference, amount and currency before settling the order.
+- Signed Paystack webhooks use HMAC SHA-512 validation and persisted event keys for idempotent processing.
+- Payment result pages read verified payment state from PostgreSQL; URL parameters alone cannot claim payment success.
+- Customer ordering is gated by the server-only `ORDERS_ENABLED` flag and defaults to disabled until seller pricing and regulatory checks are complete.
+- Paystack deployment variables and webhook registration are documented in `docs/PAYSTACK_SETUP.md`.
 
 ## Storefront experience
 
@@ -47,15 +56,13 @@ This document tracks implemented application capabilities. It is not a build or 
 ## Still to implement
 
 - Direct image file uploads and managed storage (current gallery accepts image URLs).
-- Customer checkout supports hosted Paystack payments in GHS alongside WhatsApp-assisted order requests.\n- Paystack initialization calculates totals from active server-side product records and stores immutable order-item price snapshots.\n- Callback verification checks provider transaction status, reference, amount and currency before settling the order.\n- Signed Paystack webhooks use HMAC SHA-512 validation and persisted event keys for idempotent processing.\n- Payment result pages read verified payment state from PostgreSQL; URL parameters cannot claim payment success.\n- Paystack deployment variables and webhook registration are documented in `docs/PAYSTACK_SETUP.md`.
 - Customer-facing order status views and order lookup.
-
 - Complete dashboard operational polish.
 
 ## Launch dependencies
 
 - Neon PostgreSQL connection string.
 - Session signing secret.
-- Paystack test/live credentials.
+- Paystack test/live credentials and webhook registration.
 - Seller-approved product information, actual product photography and ingredients.
 - Confirmed product price, delivery coverage/fees and applicable Ghana FDA registration/advertising approvals before live sales.
