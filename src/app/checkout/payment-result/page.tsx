@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { payments } from "@/db/schema";
 
-export const metadata = { title: "Payment status" };
+export const metadata = { title: "Payment status", robots: { index: false, follow: false } };
 
 export default async function PaymentResultPage({ searchParams }: { searchParams: Promise<{ status?: string; reference?: string }> }) {
   const params = await searchParams;
