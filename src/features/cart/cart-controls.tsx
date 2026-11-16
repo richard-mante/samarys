@@ -12,7 +12,7 @@ export function CartIndicator() {
   </Link>;
 }
 
-export function AddToCartButton({ productId }: { productId: string }) {
+export function AddToCartButton({ productId, disabled = false }: { productId: string; disabled?: boolean }) {
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
   return <button type="button" onClick={() => { addItem(productId); setAdded(true); }} className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#244b36] px-8 py-4 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#183a28] sm:w-fit">
