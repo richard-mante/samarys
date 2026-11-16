@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { useCart } from "@/features/cart/cart-provider";
 import { formatGhsFromPesewas } from "@/lib/money";
 import { createWhatsAppOrder } from "@/features/orders/create-whatsapp-order";
@@ -13,6 +13,36 @@ const fieldClass = "w-full rounded-xl border border-[#dfe5dc] bg-white px-4 py-3
 export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
   const { items, ready, setQuantity, removeItem, clearCart } = useCart();
   const [state, action, pending] = useActionState(createWhatsAppOrder, {});
+  const formRef = useRef<HTMLFormElement>(null);
+  const [paymentPending, setPaymentPending] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  async function startPaystackPayment() {
+    if (!formRef.current) return;
+    setPaymentError(null);
+    const data = new FormData(formRef.current);
+    const email = String(data.get("email") ?? "").trim();
+    if (!email) { setPaymentError("Add your email address to continue with Paystack."); return; }
+    setPaymentPending(true);
+    try {
+      const response = await fetch("/api/payments/paystack/initialize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: data.get("fullName"), phone: data.get("phone"), email,
+          deliveryAddress: data.get("deliveryAddress"), deliveryCity: data.get("deliveryCity"),
+          deliveryRegion: data.get("deliveryRegion"), deliveryNotes: data.get("deliveryNotes"),
+          items: JSON.parse(String(data.get("items") ?? "[]")),
+        }),
+      });
+      const result = await response.json() as { authorizationUrl?: string; error?: string };
+      if (!response.ok || !result.authorizationUrl) throw new Error(result.error || "Could not start payment.");
+      window.location.assign(result.authorizationUrl);
+    } catch (error) {
+      setPaymentError(error instanceof Error ? error.message : "Could not start payment. Please try again.");
+      setPaymentPending(false);
+    }
+  }
   const productMap = new Map(products.map((product) => [product.id, product]));
   const cartLines = items.map((item) => ({ ...item, product: productMap.get(item.productId) })).filter((item) => item.product);
   const unavailableItems = items.filter((item) => !productMap.has(item.productId));
@@ -45,7 +75,7 @@ export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
     </section>;
   }
 
-  return <form action={action} className="grid gap-8 lg:grid-cols-[1fr_0.82fr]">
+  return <form ref={formRef} action={action} className="grid gap-8 lg:grid-cols-[1fr_0.82fr]">
     <div className="space-y-7">
       <section className="rounded-2xl border border-[#e4e8e1] bg-white p-6 sm:p-8">
         <div className="flex items-center justify-between gap-4"><div><p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#789173]">Your selection</p><h2 className="mt-2 font-serif text-2xl text-[#203a2b]">Order summary</h2></div><span className="text-xs text-[#849087]">{cartLines.length} product(s)</span></div>
@@ -65,7 +95,7 @@ export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2"><label htmlFor="fullName" className="mb-2 block text-sm font-medium text-[#304236]">Full name</label><input id="fullName" name="fullName" autoComplete="name" required minLength={2} maxLength={180} className={fieldClass} placeholder="Your full name"/></div>
           <div><label htmlFor="phone" className="mb-2 block text-sm font-medium text-[#304236]">Phone number</label><input id="phone" name="phone" type="tel" autoComplete="tel" required minLength={7} maxLength={32} className={fieldClass} placeholder="e.g. 055 000 0000"/></div>
-          <div><label htmlFor="email" className="mb-2 block text-sm font-medium text-[#304236]">Email <span className="font-normal text-[#9aa49a]">(optional)</span></label><input id="email" name="email" type="email" autoComplete="email" className={fieldClass} placeholder="you@example.com"/></div>
+          <div><label htmlFor="email" className="mb-2 block text-sm font-medium text-[#304236]">Email <span className="font-normal text-[#9aa49a]">(required for Paystack)</span></label><input id="email" name="email" type="email" autoComplete="email" className={fieldClass} placeholder="you@example.com"/></div>
           <div className="sm:col-span-2"><label htmlFor="deliveryAddress" className="mb-2 block text-sm font-medium text-[#304236]">Delivery address / landmark</label><input id="deliveryAddress" name="deliveryAddress" autoComplete="street-address" required minLength={5} maxLength={2000} className={fieldClass} placeholder="House number, street or nearby landmark"/></div>
           <div><label htmlFor="deliveryCity" className="mb-2 block text-sm font-medium text-[#304236]">Town / city</label><input id="deliveryCity" name="deliveryCity" autoComplete="address-level2" required minLength={2} maxLength={120} className={fieldClass} placeholder="e.g. Accra"/></div>
           <div><label htmlFor="deliveryRegion" className="mb-2 block text-sm font-medium text-[#304236]">Region <span className="font-normal text-[#9aa49a]">(optional)</span></label><input id="deliveryRegion" name="deliveryRegion" autoComplete="address-level1" maxLength={120} className={fieldClass} placeholder="e.g. Greater Accra"/></div>
@@ -80,11 +110,14 @@ export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
       <div className="mt-6 flex justify-between gap-4 text-sm text-[#68766c]"><span>Items subtotal</span><span className="font-semibold text-[#304236]">{formatGhsFromPesewas(subtotal)}</span></div>
       <div className="mt-4 flex justify-between gap-4 border-t border-[#dce5d8] pt-4 text-sm text-[#68766c]"><span>Delivery</span><span className="font-medium text-[#526b56]">Confirm with seller</span></div>
       <div className="mt-5 flex justify-between gap-4 border-t border-[#dce5d8] pt-5"><span className="text-sm font-semibold text-[#304236]">Items total</span><span className="text-xl font-semibold tracking-tight text-[#244b36]">{formatGhsFromPesewas(subtotal)}</span></div>
-      <p className="mt-5 text-xs leading-6 text-[#758078]">This is an order request, not a payment. Delivery cost and availability will be confirmed by the seller on WhatsApp. No payment is collected on this page.</p>
+      <p className="mt-5 text-xs leading-6 text-[#758078]">Choose secure online payment with Paystack, or send an order request to the seller on WhatsApp. Delivery cost and availability are confirmed separately.</p>
       <input type="hidden" name="items" value={JSON.stringify(cartLines.map(({ productId, quantity }) => ({ productId, quantity })))} />
       {state.error && <p role="alert" className="mt-5 rounded-xl bg-red-50 p-3 text-sm text-red-700">{state.error}</p>}
-      <button type="submit" disabled={pending || cartLines.length !== items.length || subtotal <= 0} className="mt-6 w-full rounded-full bg-[#244b36] px-6 py-4 text-sm font-semibold text-white transition hover:bg-[#183a28] disabled:cursor-not-allowed disabled:opacity-50">{pending ? "Saving your request…" : "Continue with WhatsApp ↗"}</button>
-      <p className="mt-4 text-center text-[10px] leading-5 text-[#849087]">By continuing, you agree to be contacted about this order request.</p>
+      {paymentError && <p role="alert" className="mt-5 rounded-xl bg-red-50 p-3 text-sm text-red-700">{paymentError}</p>}
+      <button type="button" onClick={startPaystackPayment} disabled={paymentPending || pending || cartLines.length !== items.length || subtotal <= 0} className="mt-6 w-full rounded-full bg-[#244b36] px-6 py-4 text-sm font-semibold text-white transition hover:bg-[#183a28] disabled:cursor-not-allowed disabled:opacity-50">{paymentPending ? "Connecting to Paystack…" : "Pay securely with Paystack"}</button>
+      <div className="my-4 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9aa49a]"><span className="h-px flex-1 bg-[#dce5d8]" />or<span className="h-px flex-1 bg-[#dce5d8]" /></div>
+      <button type="submit" disabled={pending || paymentPending || cartLines.length !== items.length || subtotal <= 0} className="w-full rounded-full border border-[#b9c9b6] bg-white px-6 py-4 text-sm font-semibold text-[#244b36] transition hover:bg-[#f8faf6] disabled:cursor-not-allowed disabled:opacity-50">{pending ? "Saving your request…" : "Continue with WhatsApp ↗"}</button>
+      <p className="mt-4 text-center text-[10px] leading-5 text-[#849087]">Paystack payments are verified on the server. WhatsApp requests remain unpaid until the seller confirms receipt.</p>
     </aside>
   </form>;
 }
