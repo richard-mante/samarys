@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { AdminNavigation } from "@/features/administration/admin-navigation";
 
+export const metadata = { title: "Seller workspace", robots: { index: false, follow: false } };
+
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-[#f5f6f2] lg:grid lg:grid-cols-[248px_1fr]">
