@@ -43,35 +43,6 @@ export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
       setPaymentPending(false);
     }
   }
-  const formRef = useRef<HTMLFormElement>(null);
-  const [paymentPending, setPaymentPending] = useState(false);
-  const [paymentError, setPaymentError] = useState<string | null>(null);
-
-  async function startPaystackPayment() {
-    if (!formRef.current) return;
-    setPaymentError(null);
-    const data = new FormData(formRef.current);
-    const email = String(data.get("email") ?? "").trim();
-    if (!email) { setPaymentError("Add your email address to continue with Paystack."); return; }
-    setPaymentPending(true);
-    try {
-      const response = await fetch("/api/payments/paystack/initialize", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: data.get("fullName"), phone: data.get("phone"), email,
-          deliveryAddress: data.get("deliveryAddress"), deliveryCity: data.get("deliveryCity"),
-          deliveryRegion: data.get("deliveryRegion"), deliveryNotes: data.get("deliveryNotes"),
-          items: JSON.parse(String(data.get("items") ?? "[]")),
-        }),
-      });
-      const result = await response.json() as { authorizationUrl?: string; error?: string };
-      if (!response.ok || !result.authorizationUrl) throw new Error(result.error || "Could not start payment.");
-      window.location.assign(result.authorizationUrl);
-    } catch (error) {
-      setPaymentError(error instanceof Error ? error.message : "Could not start payment. Please try again.");
-      setPaymentPending(false);
-    }
-  }
   const productMap = new Map(products.map((product) => [product.id, product]));
   const cartLines = items.map((item) => ({ ...item, product: productMap.get(item.productId) })).filter((item) => item.product);
   const unavailableItems = items.filter((item) => !productMap.has(item.productId));
@@ -124,7 +95,7 @@ export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2"><label htmlFor="fullName" className="mb-2 block text-sm font-medium text-[#304236]">Full name</label><input id="fullName" name="fullName" autoComplete="name" required minLength={2} maxLength={180} className={fieldClass} placeholder="Your full name"/></div>
           <div><label htmlFor="phone" className="mb-2 block text-sm font-medium text-[#304236]">Phone number</label><input id="phone" name="phone" type="tel" autoComplete="tel" required minLength={7} maxLength={32} className={fieldClass} placeholder="e.g. 055 000 0000"/></div>
-          <div><label htmlFor="email" className="mb-2 block text-sm font-medium text-[#304236]">Email <span className="font-normal text-[#9aa49a]">(optional)</span></label><input id="email" name="email" type="email" autoComplete="email" className={fieldClass} placeholder="you@example.com"/></div>
+          <div><label htmlFor="email" className="mb-2 block text-sm font-medium text-[#304236]">Email <span className="font-normal text-[#9aa49a]">(required for Paystack)</span></label><input id="email" name="email" type="email" autoComplete="email" className={fieldClass} placeholder="you@example.com"/></div>
           <div className="sm:col-span-2"><label htmlFor="deliveryAddress" className="mb-2 block text-sm font-medium text-[#304236]">Delivery address / landmark</label><input id="deliveryAddress" name="deliveryAddress" autoComplete="street-address" required minLength={5} maxLength={2000} className={fieldClass} placeholder="House number, street or nearby landmark"/></div>
           <div><label htmlFor="deliveryCity" className="mb-2 block text-sm font-medium text-[#304236]">Town / city</label><input id="deliveryCity" name="deliveryCity" autoComplete="address-level2" required minLength={2} maxLength={120} className={fieldClass} placeholder="e.g. Accra"/></div>
           <div><label htmlFor="deliveryRegion" className="mb-2 block text-sm font-medium text-[#304236]">Region <span className="font-normal text-[#9aa49a]">(optional)</span></label><input id="deliveryRegion" name="deliveryRegion" autoComplete="address-level1" maxLength={120} className={fieldClass} placeholder="e.g. Greater Accra"/></div>
