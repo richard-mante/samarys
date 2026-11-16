@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
-import { paymentEvents } from "@/db/schema";
+import { paymentEvents, payments } from "@/db/schema";
 import { verifyAndSettlePaystackPayment, verifyPaystackSignature } from "@/lib/paystack";
 
 export const runtime = "nodejs";
@@ -23,7 +23,6 @@ export async function POST(request: Request) {
   } catch {
     return NextResponse.json({ error: "Invalid payload." }, { status: 400 });
   }
-
   if (payload.event !== "charge.success" || !payload.data?.reference) {
     return NextResponse.json({ received: true });
   }
@@ -31,24 +30,36 @@ export async function POST(request: Request) {
   const reference = payload.data.reference;
   const eventKey = "paystack:charge.success:" + reference;
   try {
-    const [existing] = await db.select({ id: paymentEvents.id }).from(paymentEvents)
+    const [existing] = await db.select().from(paymentEvents)
       .where(eq(paymentEvents.providerEventKey, eventKey)).limit(1);
-    if (existing) return NextResponse.json({ received: true, duplicate: true });
-
-    const [event] = await db.insert(paymentEvents).values({
-      providerEventKey: eventKey,
-      eventType: "charge.success",
-      status: "RECEIVED",
-    }).onConflictDoNothing().returning({ id: paymentEvents.id });
-    if (!event) return NextResponse.json({ received: true, duplicate: true });
+    let eventId: string;
+    if (existing) {
+      if (existing.status === "PROCESSED" || existing.status === "RECEIVED") {
+        return NextResponse.json({ received: true, duplicate: true });
+      }
+      await db.update(paymentEvents).set({ status: "RECEIVED", processedAt: null })
+        .where(eq(paymentEvents.id, existing.id));
+      eventId = existing.id;
+    } else {
+      const [created] = await db.insert(paymentEvents).values({
+        providerEventKey: eventKey, eventType: "charge.success", status: "RECEIVED",
+      }).onConflictDoNothing().returning({ id: paymentEvents.id });
+      if (!created) return NextResponse.json({ received: true, duplicate: true });
+      eventId = created.id;
+    }
 
     try {
       const settled = await verifyAndSettlePaystackPayment(reference, payload.data);
-      await db.update(paymentEvents).set({ paymentId: (await db.query.payments.findFirst({ where: (table, { eq }) => eq(table.providerReference, reference), columns: { id: true } }))?.id ?? null, status: "PROCESSED", processedAt: new Date() }).where(eq(paymentEvents.id, eventId));
+      const [payment] = await db.select({ id: payments.id }).from(payments)
+        .where(eq(payments.providerReference, reference)).limit(1);
+      await db.update(paymentEvents).set({
+        paymentId: payment?.id ?? null, status: "PROCESSED", processedAt: new Date(),
+      }).where(eq(paymentEvents.id, eventId));
       return NextResponse.json({ received: true, orderId: settled.orderId });
-    } catch (error) {
-      await db.update(paymentEvents).set({ status: "FAILED", processedAt: new Date() }).where(eq(paymentEvents.id, event.id));
-      throw error;
+    } catch {
+      await db.update(paymentEvents).set({ status: "FAILED", processedAt: new Date() })
+        .where(eq(paymentEvents.id, eventId));
+      throw new Error("Webhook processing failed.");
     }
   } catch {
     return NextResponse.json({ error: "Webhook processing failed. Paystack may retry this event." }, { status: 500 });
