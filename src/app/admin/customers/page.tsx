@@ -47,7 +47,7 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
       {rows.length === 0 ? <div className="px-6 py-16 text-center"><p className="font-serif text-2xl text-[#405447]">No customers found</p><p className="mt-2 text-sm text-[#758078]">Customers will appear here after an order request is created.</p></div> :
         <div className="divide-y divide-[#edf0ea]">{rows.map((customer) => <Link key={customer.id} href={"/admin/customers/" + customer.id} className="grid gap-3 px-6 py-5 transition hover:bg-[#fbfcf9] sm:grid-cols-[1fr_auto_auto] sm:items-center">
           <div className="min-w-0"><p className="truncate text-sm font-semibold text-[#304236]">{customer.fullName}</p><p className="mt-1 text-xs text-[#849087]">{customer.phone}{customer.email ? " · " + customer.email : ""}</p></div>
-          <div className="text-xs text-[#758078]">{Number(customer.orderCount)} {Number(customer.orderCount) === 1 ? "order" : "orders"}</div>
+          <div className="text-xs text-[#758078]">{Number(customer.orderCount)} {Number(customer.orderCount) === 1 ? "order" : "orders"}<p className="mt-1 text-[10px] text-[#9aa49a]">{customer.lastOrderAt ? "Last order " + new Intl.DateTimeFormat("en-GH", { dateStyle: "medium" }).format(customer.lastOrderAt) : "No orders yet"}</p></div>
           <div className="sm:text-right"><p className="text-sm font-semibold text-[#203a2b]">{formatGhsFromPesewas(Number(customer.paidTotal ?? 0))}</p><p className="mt-1 text-[10px] text-[#9aa49a]">Verified spend</p></div>
         </Link>)}</div>}
     </section>
