@@ -27,6 +27,7 @@ This document tracks implemented application capabilities. It is not a build or 
 - Seller workspace navigation is responsive and highlights the active section.
 - Seller can search orders by customer name, phone or reference and filter by fulfilment status, payment status and order channel.
 - Seller can review a timestamped activity log for order, payment, settings and catalogue changes.
+- Seller can search the customer directory and review customer profiles, order history and lifetime verified spend.
 - Seller WhatsApp contact is editable in the dashboard, persisted in site settings and reused by storefront enquiry/order links.
 - Seller can inspect individual orders, customer contact details, delivery notes, line items, totals and linked payment records.
 - Seller can move orders through guarded fulfilment transitions.
@@ -53,6 +54,7 @@ This document tracks implemented application capabilities. It is not a build or 
 
 - Premium botanical/editorial direction with warm ivory, deep green and sage.
 - Responsive landing page with product discovery, seller contact and clear product-information messaging.
+- Public help/FAQ and customer policy information pages explain the current order, payment, delivery and privacy flows; seller-specific legal terms still require approval.
 - Product detail pages show seller-managed imagery, price and WhatsApp enquiry.
 - Reduced-motion and visible keyboard-focus preferences are respected.
 - No unverified medical claims, ingredients, certifications or treatment outcomes are presented as facts.
