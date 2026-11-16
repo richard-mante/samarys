@@ -4,8 +4,12 @@ import { db } from "@/db";
 import { products } from "@/db/schema";
 import { formatGhsFromPesewas } from "@/lib/money";
 import { CartIndicator } from "@/features/cart/cart-controls";
+import { getStoreSettings } from "@/lib/settings";
+import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
 
 export default async function HomePage() {
+  const settings = await getStoreSettings();
+  const sellerContactUrl = createSellerWhatsAppUrl(undefined, settings.sellerWhatsAppNumber);
   const catalogue = await db.query.products.findMany({
     where: eq(products.isActive, true),
     limit: 8,
@@ -25,7 +29,7 @@ export default async function HomePage() {
           <a href="#approach" className="transition hover:text-[#244b36]">Our approach</a>
           <a href="#contact" className="transition hover:text-[#244b36]">Contact</a>
         </nav>
-        <div className="flex items-center gap-2"><CartIndicator /><a href="https://wa.me/233559448932" target="_blank" rel="noreferrer" className="hidden rounded-full border border-[#d7ded4] px-4 py-2.5 text-xs font-semibold text-[#244b36] transition hover:bg-white sm:inline-flex sm:px-5 sm:text-sm">Talk to us <span aria-hidden="true" className="ml-1">↗</span></a></div>
+        <div className="flex items-center gap-2"><CartIndicator /><a href={sellerContactUrl} target="_blank" rel="noreferrer" className="hidden rounded-full border border-[#d7ded4] px-4 py-2.5 text-xs font-semibold text-[#244b36] transition hover:bg-white sm:inline-flex sm:px-5 sm:text-sm">Talk to us <span aria-hidden="true" className="ml-1">↗</span></a></div>
       </header>
 
       <section className="mx-auto grid min-h-[660px] w-full max-w-7xl items-center gap-12 px-6 pb-20 pt-8 lg:min-h-[720px] lg:grid-cols-[1fr_0.94fr] lg:gap-16 lg:px-10 lg:pb-28 lg:pt-12">
@@ -39,7 +43,7 @@ export default async function HomePage() {
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <a href="#collection" className="inline-flex items-center gap-5 rounded-full bg-[#244b36] px-7 py-4 text-sm font-semibold text-white shadow-[0_12px_28px_rgba(36,75,54,0.16)] transition hover:-translate-y-0.5 hover:bg-[#183a28]">Explore the collection <span aria-hidden="true">↗</span></a>
-            <a href="https://wa.me/233559448932" target="_blank" rel="noreferrer" className="rounded-full px-5 py-4 text-sm font-medium text-[#526b56] transition hover:bg-white">Speak with us</a>
+            <a href={sellerContactUrl} target="_blank" rel="noreferrer" className="rounded-full px-5 py-4 text-sm font-medium text-[#526b56] transition hover:bg-white">Speak with us</a>
           </div>
           <div className="mt-12 flex items-center gap-4 border-t border-[#e2e6dd] pt-6">
             <div className="flex -space-x-2">
@@ -93,7 +97,7 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-6 py-20 lg:px-10 lg:py-28">
           <div className="flex flex-wrap items-end justify-between gap-6">
             <div><p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#789173]">01 / The collection</p><h2 className="mt-4 font-serif text-4xl tracking-[-0.045em] text-[#203a2b] sm:text-5xl">A closer look.</h2><p className="mt-4 max-w-lg text-sm leading-7 text-[#758078]">Take a moment to explore the products and the information currently available.</p></div>
-            <a href="https://wa.me/233559448932" target="_blank" rel="noreferrer" className="text-sm font-semibold text-[#41684d] transition hover:text-[#203a2b]">Need help choosing? <span aria-hidden="true">↗</span></a>
+            <a href={sellerContactUrl} target="_blank" rel="noreferrer" className="text-sm font-semibold text-[#41684d] transition hover:text-[#203a2b]">Need help choosing? <span aria-hidden="true">↗</span></a>
           </div>
           {catalogue.length > 0 ? (
             <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -136,7 +140,7 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-6 py-14 lg:px-10 lg:py-20">
           <div className="grid gap-10 sm:grid-cols-2 sm:items-end">
             <div><p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-[#a9bea4]">A question on your mind?</p><h2 className="mt-4 max-w-md font-serif text-4xl leading-tight tracking-[-0.04em] sm:text-5xl">We&apos;re just a message away.</h2></div>
-            <div className="sm:justify-self-end"><a href="https://wa.me/233559448932" target="_blank" rel="noreferrer" className="inline-flex items-center gap-5 rounded-full bg-[#f8f7f2] px-7 py-4 text-sm font-semibold text-[#244b36] transition hover:bg-white">Chat on WhatsApp <span aria-hidden="true">↗</span></a><p className="mt-4 text-xs text-[#b8c6b4]">+233 55 944 8932</p></div>
+            <div className="sm:justify-self-end"><a href={sellerContactUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-5 rounded-full bg-[#f8f7f2] px-7 py-4 text-sm font-semibold text-[#244b36] transition hover:bg-white">Chat on WhatsApp <span aria-hidden="true">↗</span></a><p className="mt-4 text-xs text-[#b8c6b4]">+233 55 944 8932</p></div>
           </div>
           <div className="mt-16 flex flex-wrap items-center justify-between gap-4 border-t border-white/15 pt-6 text-xs text-[#b8c6b4]"><span className="font-serif text-xl text-[#f8f7f2]">Samary&apos;s<span className="text-[#a9bea4]">.</span></span><span>© {new Date().getFullYear()} Samary&apos;s. All rights reserved.</span><span>Product information is subject to seller verification.</span></div>
         </div>
