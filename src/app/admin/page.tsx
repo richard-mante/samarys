@@ -3,8 +3,9 @@ import { count, eq, sum } from "drizzle-orm";
 import { db } from "@/db";
 import { orders, products } from "@/db/schema";
 import { formatGhsFromPesewas } from "@/lib/money";
+import { requireAdmin } from "@/lib/admin";
 
-export default async function AdminOverviewPage() {
+export default async function AdminOverviewPage() {\n  await requireAdmin();
   const [orderCount, productCount, paidRevenue, recentOrders] = await Promise.all([
     db.select({ value: count() }).from(orders),
     db.select({ value: count() }).from(products),
