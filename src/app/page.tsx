@@ -2,7 +2,8 @@ import Link from "next/link";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { products } from "@/db/schema";
-import { formatGhsFromPesewas } from "@/lib/money";\nimport { CartIndicator } from "@/features/cart/cart-controls";
+import { formatGhsFromPesewas } from "@/lib/money";
+import { CartIndicator } from "@/features/cart/cart-controls";
 
 export default async function HomePage() {
   const catalogue = await db.query.products.findMany({
