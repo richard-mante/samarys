@@ -15,6 +15,7 @@ export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
   const [state, action, pending] = useActionState(createWhatsAppOrder, {});
   const productMap = new Map(products.map((product) => [product.id, product]));
   const cartLines = items.map((item) => ({ ...item, product: productMap.get(item.productId) })).filter((item) => item.product);
+  const unavailableItems = items.filter((item) => !productMap.has(item.productId));
   const subtotal = cartLines.reduce((sum, item) => sum + (item.product?.priceMinor ?? 0) * item.quantity, 0);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
     </section>;
   }
 
-  if (items.length === 0 || cartLines.length === 0) {
+  if (items.length === 0) {
     return <section className="rounded-[1.75rem] border border-dashed border-[#d9e1d6] bg-white px-6 py-16 text-center">
       <p className="font-serif text-3xl text-[#405447]">Your order basket is empty.</p>
       <p className="mx-auto mt-3 max-w-sm text-sm leading-7 text-[#849087]">Explore the collection and add the products you would like to enquire about.</p>
