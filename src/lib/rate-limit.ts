@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createHash } from "node:crypto";
-import { and, count, eq, gte, sql } from "drizzle-orm";
+import { and, count, eq, gte, lt, sql } from "drizzle-orm";
 import { db } from "@/db";
 import { auditLogs } from "@/db/schema";
 
@@ -22,6 +22,10 @@ export async function consumeRateLimit({
   const since = new Date(Date.now() - windowMs);
 
   return db.transaction(async (tx) => {
+    await tx.delete(auditLogs).where(and(
+      eq(auditLogs.entityType, "rate_limit"),
+      lt(auditLogs.createdAt, new Date(Date.now() - 24 * 60 * 60 * 1000)),
+    ));
     // Serialize checks for the same hashed client bucket so parallel requests
     // cannot all pass the limit at once.
     await tx.execute(sql`select pg_advisory_xact_lock(hashtextextended(${bucket}, 0))`);
