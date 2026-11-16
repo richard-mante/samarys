@@ -151,7 +151,7 @@ export async function removeProductImage(imageId: string, productId: string) {
         if (parts[0]?.match(/^v\d+$/)) parts.shift();
         const filename = parts.pop() ?? "";
         const publicId = [...parts, filename.replace(/\.[^.]+$/, "")].filter(Boolean).join("/");
-        if (publicId) {
+        if (publicId.startsWith("samarys/products/" + productId + "/")) {
           const timestamp = Math.floor(Date.now() / 1000);
           const signature = createHmac("sha1", apiSecret)
             .update("public_id=" + publicId + "&timestamp=" + timestamp)

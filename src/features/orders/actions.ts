@@ -45,6 +45,27 @@ export async function updateOrderStatus(orderId: string, _previous: OrderActionS
 
       if (!updated) return { error: "This order changed while you were editing it. Refresh and try again." } as const;
 
+      if (nextStatus === "CANCELLED" && current.paymentStatus === "PAID") {
+        const purchasedItems = await tx.select({ productId: orderItems.productId, quantity: orderItems.quantity })
+          .from(orderItems).where(eq(orderItems.orderId, orderId));
+        for (const item of purchasedItems) {
+          if (!item.productId) continue;
+          const [stock] = await tx.update(products).set({
+            stockQuantity: sql`${products.stockQuantity} + ${item.quantity}`,
+            updatedAt: new Date(),
+          }).where(eq(products.id, item.productId)).returning({ stockQuantity: products.stockQuantity });
+          if (stock && stock.stockQuantity !== null) {
+            await tx.insert(auditLogs).values({
+              adminId: admin.adminId,
+              action: "PRODUCT_STOCK_RESTOCKED",
+              entityType: "product",
+              entityId: item.productId,
+              metadata: { orderReference: current.reference, quantity: item.quantity, remainingQuantity: stock.stockQuantity },
+            });
+          }
+        }
+      }
+
       await tx.insert(auditLogs).values({
         adminId: admin.adminId,
         action: "ORDER_STATUS_UPDATED",
@@ -58,6 +79,7 @@ export async function updateOrderStatus(orderId: string, _previous: OrderActionS
     if ("error" in result) return result;
     revalidatePath("/admin/orders");
     revalidatePath("/admin/orders/" + orderId);
+    if (parsed.data === "CANCELLED") { revalidatePath("/admin/products"); revalidatePath("/"); }
     return result;
   } catch {
     return { error: "Could not update this order. Please try again." };

@@ -24,8 +24,16 @@ export async function saveUploadedProductImage(productId: string, imageUrl: stri
   } catch {
     return { error: "The uploaded image URL is invalid." };
   }
-  if (!cloudName || url.hostname !== "res.cloudinary.com" || !url.pathname.startsWith("/" + cloudName + "/image/upload/")) {
+  const uploadPrefix = "/" + cloudName + "/image/upload/";
+  if (!cloudName || url.hostname !== "res.cloudinary.com" || !url.pathname.startsWith(uploadPrefix)) {
     return { error: "Only images uploaded to the configured Samary's Cloudinary account can be saved here." };
+  }
+  const uploadParts = url.pathname.slice(uploadPrefix.length).split("/");
+  if (uploadParts[0]?.match(/^v\d+$/)) uploadParts.shift();
+  const uploadedFilename = uploadParts.pop() ?? "";
+  const uploadedPublicId = [...uploadParts, uploadedFilename.replace(/\.[^.]+$/, "")].filter(Boolean).join("/");
+  if (!uploadedPublicId.startsWith("samarys/products/" + productId + "/")) {
+    return { error: "This image was not uploaded for the selected product." };
   }
 
   const [product] = await db.select({ slug: products.slug }).from(products)

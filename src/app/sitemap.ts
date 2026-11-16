@@ -3,6 +3,8 @@ import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { products } from "@/db/schema";
 
+export const dynamic = "force-dynamic";
+
 const siteUrl = process.env.NEXT_PUBLIC_APP_URL || "https://samary.catpad.shop";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
