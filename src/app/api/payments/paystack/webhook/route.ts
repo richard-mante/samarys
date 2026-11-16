@@ -8,7 +8,7 @@ export const runtime = "nodejs";
 
 type WebhookPayload = {
   event?: string;
-  data?: { reference?: string; [key: string]: unknown };
+  data?: { reference?: string; status?: string; amount?: number; currency?: string; paid_at?: string | null; [key: string]: unknown };
 };
 
 export async function POST(request: Request) {
@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 
     try {
       const settled = await verifyAndSettlePaystackPayment(reference, payload.data);
-      await db.update(paymentEvents).set({ paymentId: (await db.query.payments.findFirst({ where: (table, { eq }) => eq(table.providerReference, reference), columns: { id: true } }))?.id ?? null, status: "PROCESSED", processedAt: new Date() }).where(eq(paymentEvents.id, event.id));
+      await db.update(paymentEvents).set({ paymentId: (await db.query.payments.findFirst({ where: (table, { eq }) => eq(table.providerReference, reference), columns: { id: true } }))?.id ?? null, status: "PROCESSED", processedAt: new Date() }).where(eq(paymentEvents.id, eventId));
       return NextResponse.json({ received: true, orderId: settled.orderId });
     } catch (error) {
       await db.update(paymentEvents).set({ status: "FAILED", processedAt: new Date() }).where(eq(paymentEvents.id, event.id));
