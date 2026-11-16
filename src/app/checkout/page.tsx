@@ -8,6 +8,7 @@ import { CheckoutForm } from "@/features/cart/checkout-form";
 import { CartIndicator } from "@/features/cart/cart-controls";
 import { getStoreSettings } from "@/lib/settings";
 import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
+import { AppIcon } from "@/components/ui/app-icon";
 
 export const metadata = { title: "Your order", alternates: { canonical: "/checkout" }, robots: { index: false, follow: false } };
 

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
 import { payments } from "@/db/schema";
+import { AppIcon } from "@/components/ui/app-icon";
 
 export const metadata = { title: "Payment status", robots: { index: false, follow: false } };
 
@@ -16,7 +17,7 @@ export default async function PaymentResultPage({ searchParams }: { searchParams
   const failed = params.status === "failed" || payment?.status === "FAILED";
   return <main className="flex min-h-screen items-center justify-center bg-[#f8f7f2] px-6 py-16">
     <section className="w-full max-w-xl rounded-[1.75rem] border border-[#dce5d8] bg-white p-8 text-center shadow-[0_20px_60px_rgba(37,65,45,0.06)] sm:p-12">
-      <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#edf4eb] text-2xl text-[#41684d]" aria-hidden="true">{success ? "✓" : failed ? "!" : "…"}</span>
+      <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[#edf4eb] text-[#41684d]" aria-hidden="true">{success ? <AppIcon name="success" size={28} /> : failed ? <AppIcon name="information" size={28} /> : <AppIcon name="clock" size={28} />}</span>
       <p className="mt-6 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]">Samary&apos;s · Payment</p>
       <h1 className="mt-3 font-serif text-4xl tracking-tight text-[#203a2b]">{success ? "Payment confirmed." : failed ? "Payment not confirmed." : "Payment is being checked."}</h1>
       <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-[#758078]">{success ? "Your payment has been verified and your order is confirmed. Keep your reference for any follow-up." : failed ? "We could not confirm a successful payment for this reference. If money was deducted, please contact the seller before trying again." : "We have not received final confirmation yet. Please allow a moment, then contact the seller if your payment was deducted."}</p>
