@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowLeft01Icon, ShoppingBag01Icon, Package01Icon, UserGroupIcon, CreditCardIcon, WhatsappIcon, ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { notFound } from "next/navigation";
 import { and, desc, eq } from "drizzle-orm";
 import { db } from "@/db";
@@ -46,10 +48,10 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
   } | null;
 
   return <div className="mx-auto max-w-5xl">
-    <Link href="/admin/orders" className="text-sm text-[#66836c] transition hover:text-[#244b36]">← Back to orders</Link>
+    <Link href="/admin/orders" className="text-sm text-[#66836c] transition hover:text-[#244b36]"><HugeiconsIcon icon={ArrowLeft01Icon} size={15} className="mr-1.5 inline" />Back to orders</Link>
     <div className="mt-6 flex flex-wrap items-start justify-between gap-5">
       <div>
-        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#66836c]">Order management</p>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#66836c]"<span className="inline-flex items-center gap-2"><HugeiconsIcon icon={ShoppingBag01Icon} size={16} />Order management</span></p>
         <h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]">{order.reference}</h1>
         <p className="mt-2 text-sm text-[#758078]">Placed {new Intl.DateTimeFormat("en-GH", { dateStyle: "long", timeStyle: "short" }).format(order.createdAt)}</p>
       </div>
@@ -64,7 +66,7 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
     <div className="mt-8 grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
       <div className="space-y-6">
         <section className="rounded-2xl border border-[#e4e8e1] bg-white p-6 sm:p-7">
-          <h2 className="font-serif text-2xl text-[#203a2b]">Items ordered</h2>
+          <h2 className="font-serif text-2xl text-[#203a2b]"<span className="inline-flex items-center gap-2"><HugeiconsIcon icon={Package01Icon} size={19} />Items ordered</span></h2>
           <div className="mt-5 divide-y divide-[#edf0ea]">
             {order.items.map((item) => (
               <div key={item.id} className="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0">
@@ -81,7 +83,7 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
         </section>
 
         <section className="rounded-2xl border border-[#e4e8e1] bg-white p-6 sm:p-7">
-          <h2 className="font-serif text-2xl text-[#203a2b]">Customer details</h2>
+          <h2 className="font-serif text-2xl text-[#203a2b]"<span className="inline-flex items-center gap-2"><HugeiconsIcon icon={UserGroupIcon} size={19} />Customer details</span></h2>
           <dl className="mt-5 grid gap-4 sm:grid-cols-2">
             <div><dt className="text-xs text-[#849087]">Full name</dt><dd className="mt-1 text-sm font-medium text-[#304236]">{order.customer.fullName}</dd></div>
             <div><dt className="text-xs text-[#849087]">Phone</dt><dd className="mt-1 text-sm font-medium text-[#304236]">{order.customer.phone}</dd></div>
@@ -92,7 +94,7 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
         </section>
 
         <section className="rounded-2xl border border-[#e4e8e1] bg-white p-6 sm:p-7">
-          <h2 className="font-serif text-2xl text-[#203a2b]">Payment record</h2>
+          <h2 className="font-serif text-2xl text-[#203a2b]"<span className="inline-flex items-center gap-2"><HugeiconsIcon icon={CreditCardIcon} size={19} />Payment record</span></h2>
           <p className="mt-2 text-sm text-[#758078]">Payment status: <strong className="text-[#304236]">{order.paymentStatus}</strong>{order.channel === "WHATSAPP" && order.paymentStatus !== "PAID" ? " · Payment is arranged directly with the seller." : ""}</p>
           {order.payments.length > 0 ? (
             <div className="mt-4 divide-y divide-[#edf0ea]">{order.payments.map(payment => <div key={payment.id} className="py-3 first:pt-0"><p className="text-sm font-medium text-[#304236]">{payment.provider} · {payment.status}</p><p className="mt-1 break-all text-xs text-[#849087]">{payment.providerReference}</p><p className="mt-1 text-xs text-[#849087]">{formatGhsFromPesewas(payment.amountMinor)}</p></div>)}</div>
@@ -110,12 +112,12 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
 
       <aside className="space-y-6">
         <section className="rounded-2xl border border-[#e4e8e1] bg-white p-6 sm:p-7">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#789173]">Fulfilment</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#789173]"<span className="inline-flex items-center gap-2"><HugeiconsIcon icon={Package01Icon} size={15} />Fulfilment</span></p>
           <h2 className="mt-2 font-serif text-2xl text-[#203a2b]">Update order</h2>
           <p className="mt-2 text-sm leading-6 text-[#758078]">Move this order through its next valid step. Every change is recorded in the admin audit log.</p>
           <div className="mt-6"><OrderStatusForm orderId={order.id} status={order.status} paymentStatus={order.paymentStatus} /></div>
         </section>
-        <a href={"https://wa.me/" + normalizePhoneNumber(order.customer.phone) + "?text=" + encodeURIComponent("Hello " + order.customer.fullName + ", regarding your Samary's order " + order.reference + ".")} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-2xl border border-[#dce5d8] bg-[#f1f5ef] p-5 text-sm font-semibold text-[#315b3b] transition hover:bg-[#e8efe5]">Contact customer on WhatsApp <span aria-hidden="true">↗</span></a>
+        <a href={"https://wa.me/" + normalizePhoneNumber(order.customer.phone) + "?text=" + encodeURIComponent("Hello " + order.customer.fullName + ", regarding your Samary's order " + order.reference + ".")} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-2xl border border-[#dce5d8] bg-[#f1f5ef] p-5 text-sm font-semibold text-[#315b3b] transition hover:bg-[#e8efe5]"><span className="inline-flex items-center gap-2"><HugeiconsIcon icon={WhatsappIcon} size={18} />Contact customer on WhatsApp</span><HugeiconsIcon icon={ArrowUpRight01Icon} size={16} /></a>
       </aside>
     </div>
   </div>;
