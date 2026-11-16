@@ -1,6 +1,4 @@
 import Link from "next/link";
-import { HugeiconsIcon } from "@hugeicons/react";
-import { ArrowLeft01Icon, ArrowUpRight01Icon, WhatsappIcon, Package01Icon } from "@hugeicons/core-free-icons";
 import { getStoreSettings } from "@/lib/settings";
 import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
 import { AppIcon } from "@/components/ui/app-icon";
@@ -63,10 +61,10 @@ export default async function HelpPage() {
   return <main className="min-h-screen bg-[#f8f7f2]">
     <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
       <Link href="/" className="font-serif text-2xl tracking-tight text-[#203a2b]">Samary&apos;s<span className="text-[#829a7b]">.</span></Link>
-      <Link href="/" className="text-sm font-medium text-[#66836c] hover:text-[#244b36]"><HugeiconsIcon icon={ArrowLeft01Icon} size={15} className="mr-1.5 inline" /><AppIcon name="back" size={16} /> Back to the collection</Link>
+      <Link href="/" className="text-sm font-medium text-[#66836c] hover:text-[#244b36]"><AppIcon name="back" size={15} /><AppIcon name="back" size={16} /> Back to the collection</Link>
     </header>
     <section className="mx-auto max-w-4xl px-6 pb-24 pt-10 lg:px-10 lg:pt-16">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]"><span className="inline-flex items-center gap-2"><HugeiconsIcon icon={Package01Icon} size={15} />Customer care · Samary&apos;s</span></p>
+      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]"><span className="inline-flex items-center gap-2"><AppIcon name="support" size={15} />Customer care · Samary&apos;s</span></p>
       <h1 className="mt-4 font-serif text-5xl tracking-[-0.055em] text-[#203a2b] sm:text-6xl">A little help, when you need it.</h1>
       <p className="mt-5 max-w-2xl text-sm leading-7 text-[#758078]">Find practical answers about checkout, payment, delivery and order updates. If something is still unclear, speak directly with the seller.</p>
       <div className="mt-8 flex flex-wrap gap-3">
