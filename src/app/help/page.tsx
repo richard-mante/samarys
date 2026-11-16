@@ -70,7 +70,7 @@ export default async function HelpPage() {
         {faqs.map((faq, index) => <article key={faq.question} className="py-7">
           <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9aa69a]">0{index + 1}</p>
           <h2 className="mt-2 font-serif text-2xl text-[#203a2b]">{faq.question}</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-[#758078]">{faq.answer}</p>
+          <p className="mt-3 max-w-3xl whitespace-pre-line text-sm leading-7 text-[#758078]">{faq.answer}</p>
           {"link" in faq && faq.link && <Link href="/orders/track" className="mt-3 inline-flex text-sm font-semibold text-[#41684d] hover:underline">Open order tracking ↗</Link>}
         </article>)}
       </div>
