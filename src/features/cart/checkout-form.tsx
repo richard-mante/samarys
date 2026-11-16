@@ -12,7 +12,66 @@ const fieldClass = "w-full rounded-xl border border-[#dfe5dc] bg-white px-4 py-3
 
 export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
   const { items, ready, setQuantity, removeItem, clearCart } = useCart();
-  const [state, action, pending] = useActionState(createWhatsAppOrder, {});\n  const formRef = useRef<HTMLFormElement>(null);\n  const [paymentPending, setPaymentPending] = useState(false);\n  const [paymentError, setPaymentError] = useState<string | null>(null);\n\n  async function startPaystackPayment() {\n    if (!formRef.current) return;\n    setPaymentError(null);\n    const data = new FormData(formRef.current);\n    const email = String(data.get("email") ?? "").trim();\n    if (!email) { setPaymentError("Add your email address to continue with Paystack."); return; }\n    setPaymentPending(true);\n    try {\n      const response = await fetch("/api/payments/paystack/initialize", {\n        method: "POST", headers: { "Content-Type": "application/json" },\n        body: JSON.stringify({\n          fullName: data.get("fullName"), phone: data.get("phone"), email,\n          deliveryAddress: data.get("deliveryAddress"), deliveryCity: data.get("deliveryCity"),\n          deliveryRegion: data.get("deliveryRegion"), deliveryNotes: data.get("deliveryNotes"),\n          items: JSON.parse(String(data.get("items") ?? "[]")),\n        }),\n      });\n      const result = await response.json() as { authorizationUrl?: string; error?: string };\n      if (!response.ok || !result.authorizationUrl) throw new Error(result.error || "Could not start payment.");\n      window.location.assign(result.authorizationUrl);\n    } catch (error) {\n      setPaymentError(error instanceof Error ? error.message : "Could not start payment. Please try again.");\n      setPaymentPending(false);\n    }\n  }
+  const [state, action, pending] = useActionState(createWhatsAppOrder, {});
+  const formRef = useRef<HTMLFormElement>(null);
+  const [paymentPending, setPaymentPending] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  async function startPaystackPayment() {
+    if (!formRef.current) return;
+    setPaymentError(null);
+    const data = new FormData(formRef.current);
+    const email = String(data.get("email") ?? "").trim();
+    if (!email) { setPaymentError("Add your email address to continue with Paystack."); return; }
+    setPaymentPending(true);
+    try {
+      const response = await fetch("/api/payments/paystack/initialize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: data.get("fullName"), phone: data.get("phone"), email,
+          deliveryAddress: data.get("deliveryAddress"), deliveryCity: data.get("deliveryCity"),
+          deliveryRegion: data.get("deliveryRegion"), deliveryNotes: data.get("deliveryNotes"),
+          items: JSON.parse(String(data.get("items") ?? "[]")),
+        }),
+      });
+      const result = await response.json() as { authorizationUrl?: string; error?: string };
+      if (!response.ok || !result.authorizationUrl) throw new Error(result.error || "Could not start payment.");
+      window.location.assign(result.authorizationUrl);
+    } catch (error) {
+      setPaymentError(error instanceof Error ? error.message : "Could not start payment. Please try again.");
+      setPaymentPending(false);
+    }
+  }
+  const formRef = useRef<HTMLFormElement>(null);
+  const [paymentPending, setPaymentPending] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
+
+  async function startPaystackPayment() {
+    if (!formRef.current) return;
+    setPaymentError(null);
+    const data = new FormData(formRef.current);
+    const email = String(data.get("email") ?? "").trim();
+    if (!email) { setPaymentError("Add your email address to continue with Paystack."); return; }
+    setPaymentPending(true);
+    try {
+      const response = await fetch("/api/payments/paystack/initialize", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          fullName: data.get("fullName"), phone: data.get("phone"), email,
+          deliveryAddress: data.get("deliveryAddress"), deliveryCity: data.get("deliveryCity"),
+          deliveryRegion: data.get("deliveryRegion"), deliveryNotes: data.get("deliveryNotes"),
+          items: JSON.parse(String(data.get("items") ?? "[]")),
+        }),
+      });
+      const result = await response.json() as { authorizationUrl?: string; error?: string };
+      if (!response.ok || !result.authorizationUrl) throw new Error(result.error || "Could not start payment.");
+      window.location.assign(result.authorizationUrl);
+    } catch (error) {
+      setPaymentError(error instanceof Error ? error.message : "Could not start payment. Please try again.");
+      setPaymentPending(false);
+    }
+  }
   const productMap = new Map(products.map((product) => [product.id, product]));
   const cartLines = items.map((item) => ({ ...item, product: productMap.get(item.productId) })).filter((item) => item.product);
   const unavailableItems = items.filter((item) => !productMap.has(item.productId));
@@ -83,8 +142,11 @@ export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
       <p className="mt-5 text-xs leading-6 text-[#758078]">Choose secure online payment with Paystack, or send an order request to the seller on WhatsApp. Delivery cost and availability are confirmed separately.</p>
       <input type="hidden" name="items" value={JSON.stringify(cartLines.map(({ productId, quantity }) => ({ productId, quantity })))} />
       {state.error && <p role="alert" className="mt-5 rounded-xl bg-red-50 p-3 text-sm text-red-700">{state.error}</p>}
-      <button type="submit" disabled={pending || cartLines.length !== items.length || subtotal <= 0} className="mt-6 w-full rounded-full bg-[#244b36] px-6 py-4 text-sm font-semibold text-white transition hover:bg-[#183a28] disabled:cursor-not-allowed disabled:opacity-50">{pending ? "Saving your request…" : "Continue with WhatsApp ↗"}</button>
-      <p className="mt-4 text-center text-[10px] leading-5 text-[#849087]">By continuing, you agree to be contacted about this order request.</p>
+      {paymentError && <p role="alert" className="mt-5 rounded-xl bg-red-50 p-3 text-sm text-red-700">{paymentError}</p>}
+      <button type="button" onClick={startPaystackPayment} disabled={paymentPending || pending || cartLines.length !== items.length || subtotal <= 0} className="mt-6 w-full rounded-full bg-[#244b36] px-6 py-4 text-sm font-semibold text-white transition hover:bg-[#183a28] disabled:cursor-not-allowed disabled:opacity-50">{paymentPending ? "Connecting to Paystack…" : "Pay securely with Paystack"}</button>
+      <div className="my-4 flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9aa49a]"><span className="h-px flex-1 bg-[#dce5d8]" />or<span className="h-px flex-1 bg-[#dce5d8]" /></div>
+      <button type="submit" disabled={pending || paymentPending || cartLines.length !== items.length || subtotal <= 0} className="w-full rounded-full border border-[#b9c9b6] bg-white px-6 py-4 text-sm font-semibold text-[#244b36] transition hover:bg-[#f8faf6] disabled:cursor-not-allowed disabled:opacity-50">{pending ? "Saving your request…" : "Continue with WhatsApp ↗"}</button>
+      <p className="mt-4 text-center text-[10px] leading-5 text-[#849087]">Paystack payments are verified on the server. WhatsApp requests remain unpaid until the seller confirms receipt.</p>
     </aside>
   </form>;
 }
