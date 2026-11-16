@@ -75,30 +75,30 @@ export async function verifyAndSettlePaystackPayment(reference: string, payload?
       verifiedAt: new Date(),
       providerPayload: transaction,
       updatedAt: new Date(),
-    }).where(and(eq(payments.id, payment.id), eq(payments.status, "PENDING")))
+    }).where(and(eq(payments.id, lockedPayment.id), eq(payments.status, "PENDING")))
       .returning({ id: payments.id });
     if (!paidPayment) return { orderId: order.id, alreadyPaid: true };
 
     const [paidOrder] = await tx.update(orders).set({
       paymentStatus: "PAID",
-      status: order.status === "PENDING_PAYMENT" ? "CONFIRMED" : order.status,
+      status: lockedOrder.status === "PENDING_PAYMENT" ? "CONFIRMED" : lockedOrder.status,
       updatedAt: new Date(),
-    }).where(and(eq(orders.id, order.id), eq(orders.paymentStatus, "PENDING")))
+    }).where(and(eq(orders.id, lockedOrder.id), eq(orders.paymentStatus, "PENDING"), eq(orders.status, lockedOrder.status)))
       .returning({ id: orders.id });
     if (!paidOrder) throw new Error("The order payment state changed while settling this transaction.");
-    if (order.status === "CANCELLED") {
+    if (lockedOrder.status === "CANCELLED") {
       await tx.insert(auditLogs).values({
         action: "PAYMENT_VERIFIED_FOR_CANCELLED_ORDER",
         entityType: "order",
-        entityId: order.id,
-        metadata: { orderReference: order.reference, note: "Seller review and refund may be required." },
+        entityId: lockedOrder.id,
+        metadata: { orderReference: lockedOrder.reference, note: "Seller review and refund may be required." },
       });
     }
 
     // Finite stock is reduced only once payment is verified. Null stock means untracked stock.
-    if (order.status !== "CANCELLED") {
+    if (lockedOrder.status !== "CANCELLED") {
       const items = await tx.select({ productId: orderItems.productId, quantity: orderItems.quantity })
-        .from(orderItems).where(eq(orderItems.orderId, order.id));
+        .from(orderItems).where(eq(orderItems.orderId, lockedOrder.id));
       for (const item of items) {
         if (!item.productId) continue;
         const [stock] = await tx.update(products).set({
