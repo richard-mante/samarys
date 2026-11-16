@@ -122,9 +122,9 @@ export async function removeProductImage(imageId: string, productId: string) {
       const prefix = "/" + cloudName + "/image/upload/";
       if (url.hostname === "res.cloudinary.com" && url.pathname.startsWith(prefix)) {
         const parts = url.pathname.slice(prefix.length).split("/");
-        if (parts[0]?.match(/^v\\d+$/)) parts.shift();
+        if (parts[0]?.match(/^v\d+$/)) parts.shift();
         const filename = parts.pop() ?? "";
-        const publicId = [...parts, filename.replace(/\\.[^.]+$/, "")].filter(Boolean).join("/");
+        const publicId = [...parts, filename.replace(/\.[^.]+$/, "")].filter(Boolean).join("/");
         if (publicId) {
           const timestamp = Math.floor(Date.now() / 1000);
           const signature = createHmac("sha1", apiSecret)
