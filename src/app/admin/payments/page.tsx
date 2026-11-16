@@ -5,6 +5,7 @@ import { db } from "@/db";
 import { auditLogs, orders } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
 import { formatGhsFromPesewas } from "@/lib/money";
+import { AppIcon } from "@/components/ui/app-icon";
 
 export default async function AdminPaymentsPage() {
   await requireAdmin();
@@ -52,7 +53,7 @@ export default async function AdminPaymentsPage() {
   return <div>
     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Finance</p>
     <h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]"><span className="inline-flex items-center gap-3"><HugeiconsIcon icon={CreditCardIcon} size={25} />Payments</span></h1>
-    <p className="mt-2 text-sm text-[#758078]">Online Paystack transactions and seller-confirmed WhatsApp payments.</p>
+    <p className="mt-2 text-sm text-[#758078]"><AppIcon name="wallet" size={15} /> Online Paystack transactions and seller-confirmed WhatsApp payments.</p>
     <div className="mt-8 overflow-hidden rounded-2xl border border-[#e4e8e1] bg-white">
       {entries.length === 0 ? <p className="px-6 py-16 text-center text-sm text-[#758078]">No payment records have been recorded.</p> :
         <div className="divide-y divide-[#edf0ea]">{entries.map(payment => <article key={payment.id} className="grid gap-3 px-6 py-5 md:grid-cols-[1fr_auto_auto] md:items-center">
