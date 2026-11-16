@@ -20,7 +20,7 @@ export function ProductGalleryManager({ productId, images }: { productId: string
     setUploadError("");
     const file = fileRef.current?.files?.[0];
     if (!file) { setUploadError("Choose a product image first."); return; }
-    if (!file.type.startsWith("image/")) { setUploadError("Choose a valid image file."); return; }
+    if (!["image/jpeg", "image/png", "image/webp", "image/avif"].includes(file.type)) { setUploadError("Use a JPG, PNG, WebP or AVIF image."); return; }
     if (file.size > 8 * 1024 * 1024) { setUploadError("Choose an image smaller than 8 MB."); return; }
     if (altText.trim().length < 4) { setUploadError("Add a short image description."); return; }
 
@@ -97,7 +97,7 @@ export function ProductGalleryManager({ productId, images }: { productId: string
         <div>
           <p className="text-sm font-semibold text-[#304236]">Upload from your device</p>
           <p className="mt-1 text-xs leading-5 text-[#849087]">Image files up to 8 MB</p>
-          <input ref={fileRef} type="file" accept="image/*" required className="mt-3 block w-full text-sm text-[#526157] file:mr-4 file:rounded-full file:border-0 file:bg-[#edf3eb] file:px-4 file:py-2.5 file:text-xs file:font-semibold file:text-[#315b3b] hover:file:bg-[#e2ecdf]" />
+          <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp,image/avif" required className="mt-3 block w-full text-sm text-[#526157] file:mr-4 file:rounded-full file:border-0 file:bg-[#edf3eb] file:px-4 file:py-2.5 file:text-xs file:font-semibold file:text-[#315b3b] hover:file:bg-[#e2ecdf]" />
         </div>
         <div>
           <label htmlFor="uploadedAltText" className="mb-2 block text-sm font-medium text-[#304236]">Image description</label>
