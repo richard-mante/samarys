@@ -94,6 +94,13 @@ export function OrderTracker() {
           <div className="rounded-xl bg-[#f6f8f4] p-4"><p className="text-xs text-[#849087]">Payment</p><p className="mt-1 text-sm font-semibold text-[#304236]">{paymentLabels[order.paymentStatus]}</p></div>
           <div className="rounded-xl bg-[#f6f8f4] p-4"><p className="text-xs text-[#849087]">Order channel</p><p className="mt-1 text-sm font-semibold text-[#304236]">{order.channel === "PAYSTACK" ? "Online checkout" : "WhatsApp-assisted"}</p></div>
         </div>
+        {order.channel === "PAYSTACK" && order.paymentStatus === "PENDING" && order.status !== "CANCELLED" && (
+          <p className="mt-5 rounded-xl bg-[#f6f8f4] p-4 text-xs leading-6 text-[#68766c]">
+            {new Date(order.createdAt).getTime() + 30 * 60 * 1000 > Date.now()
+              ? "Your online checkout is holding finite stock until " + new Intl.DateTimeFormat("en-GH", { dateStyle: "medium", timeStyle: "short" }).format(new Date(new Date(order.createdAt).getTime() + 30 * 60 * 1000)) + ". Complete payment before then."
+              : "The 30-minute stock reservation has expired. If payment is completed now, availability will be checked again and the seller may need to arrange a refund if stock is no longer available."}
+          </p>
+        )}
         <div className="mt-7">
           <h3 className="font-serif text-xl text-[#203a2b]">Items</h3>
           <div className="mt-3 divide-y divide-[#edf0ea]">{order.items.map((item) => <div key={item.id} className="flex justify-between gap-4 py-3 text-sm"><div><p className="font-medium text-[#405447]">{item.name}</p><p className="mt-1 text-xs text-[#849087]">Qty {item.quantity} × {money(item.unitPriceMinor, order.currency)}</p></div><p className="font-semibold text-[#304236]">{money(item.lineTotalMinor, order.currency)}</p></div>)}</div>
