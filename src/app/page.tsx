@@ -1,3 +1,5 @@
+export const metadata = { title: "Thoughtful product information and personal support", description: "Explore Samarys product information, speak with the seller and manage your order.", alternates: { canonical: "/" } };
+
 import Link from "next/link";
 import { eq } from "drizzle-orm";
 import { db } from "@/db";
