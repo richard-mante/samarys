@@ -5,6 +5,7 @@ import { db } from "@/db";
 import { auditLogs, orders } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
 import { formatGhsFromPesewas } from "@/lib/money";
+import { normalizePhoneNumber } from "@/lib/phone";
 import { OrderStatusForm } from "@/features/orders/order-status-form";
 import { RecordWhatsAppPaymentForm } from "@/features/orders/record-whatsapp-payment-form";
 
@@ -99,7 +100,7 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
           <p className="mt-2 text-sm leading-6 text-[#758078]">Move this order through its next valid step. Every change is recorded in the admin audit log.</p>
           <div className="mt-6"><OrderStatusForm orderId={order.id} status={order.status} paymentStatus={order.paymentStatus} /></div>
         </section>
-        <a href={"https://wa.me/" + order.customer.phone.replace(/\D/g, "") + "?text=" + encodeURIComponent("Hello " + order.customer.fullName + ", regarding your Samary's order " + order.reference + ".")} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-2xl border border-[#dce5d8] bg-[#f1f5ef] p-5 text-sm font-semibold text-[#315b3b] transition hover:bg-[#e8efe5]">Contact customer on WhatsApp <span aria-hidden="true">↗</span></a>
+        <a href={"https://wa.me/" + normalizePhoneNumber(order.customer.phone) + "?text=" + encodeURIComponent("Hello " + order.customer.fullName + ", regarding your Samary's order " + order.reference + ".")} target="_blank" rel="noreferrer" className="flex items-center justify-between rounded-2xl border border-[#dce5d8] bg-[#f1f5ef] p-5 text-sm font-semibold text-[#315b3b] transition hover:bg-[#e8efe5]">Contact customer on WhatsApp <span aria-hidden="true">↗</span></a>
       </aside>
     </div>
   </div>;
