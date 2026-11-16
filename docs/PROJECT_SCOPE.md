@@ -14,7 +14,7 @@ The seller's WhatsApp number is configured as +233559448932 (display: 055 944 89
 ### Customer storefront
 - Homepage and brand presentation.
 - Product detail page with configurable gallery, description, price and availability.
-- FAQ, contact and policy pages.
+- FAQ, contact and customer information/policy pages.
 - Responsive layouts and accessible interactions.
 
 ### Checkout and orders
@@ -39,8 +39,8 @@ The seller's WhatsApp number is configured as +233559448932 (display: 055 944 89
 - Product, price, availability and image management.
 - Order search, filtering and status updates.
 - Payment history and reconciliation.
-- Customer order history.
-- Store settings, seller WhatsApp number and delivery settings.
+- Customer directory and per-customer order history.
+- Store settings and seller WhatsApp contact; delivery coverage and fees are confirmed with the seller per order until the seller supplies fixed delivery rules.
 - Audit trail for sensitive administrative actions.
 
 ## Explicitly out of scope for V1
