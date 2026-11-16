@@ -2,11 +2,12 @@
 
 import { revalidatePath } from "next/cache";
 import { eq } from "drizzle-orm";
-import { products } from "@/db/schema";
+import { products, productImages } from "@/db/schema";
 import { db } from "@/db";
 import { requireAdmin } from "@/lib/admin";
 import { productInputSchema } from "./validation";
 import { cedisToPesewas } from "@/lib/money";
+import { z } from "zod";
 
 export type ProductActionState = { error?: string; success?: string };
 
@@ -68,4 +69,45 @@ export async function toggleProductVisibility(productId: string, isActive: boole
   await db.update(products).set({ isActive, updatedAt: new Date() }).where(eq(products.id, productId));
   revalidatePath("/");
   revalidatePath("/admin/products");
+}
+
+const imageInputSchema = z.object({
+  imageUrl: z.string().trim().url().max(2000).refine((value) => /^https?:\\/\\//i.test(value), "Use a public HTTPS or HTTP image URL."),
+  altText: z.string().trim().min(4, "Add a short description for accessibility.").max(240),
+});
+
+export async function addProductImage(productId: string, _previous: ProductActionState, formData: FormData): Promise<ProductActionState> {
+  await requireAdmin();
+  const parsed = imageInputSchema.safeParse({
+    imageUrl: formData.get("imageUrl"),
+    altText: formData.get("altText"),
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Check the image details." };
+
+  const [product] = await db.select({ slug: products.slug }).from(products).where(eq(products.id, productId)).limit(1);
+  if (!product) return { error: "This product could not be found." };
+
+  const existing = await db.select({ sortOrder: productImages.sortOrder }).from(productImages)
+    .where(eq(productImages.productId, productId));
+  await db.insert(productImages).values({
+    productId,
+    imageUrl: parsed.data.imageUrl,
+    altText: parsed.data.altText,
+    sortOrder: existing.length ? Math.max(...existing.map((image) => image.sortOrder)) + 1 : 0,
+  });
+
+  revalidatePath("/admin/products/" + productId);
+  revalidatePath("/products/" + product.slug);
+  revalidatePath("/");
+  return { success: "Image added to the product gallery." };
+}
+
+export async function removeProductImage(imageId: string, productId: string) {
+  await requireAdmin();
+  const [product] = await db.select({ slug: products.slug }).from(products).where(eq(products.id, productId)).limit(1);
+  if (!product) return;
+  await db.delete(productImages).where(eq(productImages.id, imageId));
+  revalidatePath("/admin/products/" + productId);
+  revalidatePath("/products/" + product.slug);
+  revalidatePath("/");
 }
