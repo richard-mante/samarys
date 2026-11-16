@@ -27,6 +27,7 @@ This document tracks implemented application capabilities. It is not a build or 
 - Seller dashboard includes live product/order/revenue metrics, recent orders, unpaid requests and low-stock alerts.
 - Seller workspace navigation is responsive and highlights the active section.
 - Administrator can change the account password from settings after verifying the current password; password changes are audit-logged.
+- Administrator sign-in is throttled after repeated failures, and login attempts are recorded without storing raw IP addresses.
 - Seller can search orders by customer name, phone or reference and filter by fulfilment status, payment status and order channel.
 - Seller can review a timestamped activity log for order, payment, settings and catalogue changes.
 - Seller can search the customer directory and review customer profiles, order history and lifetime verified spend.
@@ -59,6 +60,7 @@ This document tracks implemented application capabilities. It is not a build or 
 - Public help/FAQ and customer policy information pages explain the current order, payment, delivery and privacy flows; seller-specific legal terms still require approval.
 - Product detail pages show seller-managed imagery, price and WhatsApp enquiry.
 - Reduced-motion and visible keyboard-focus preferences are respected.
+- Public routes have page-specific canonical metadata, private areas are excluded from indexing, and sitemap/robots routes are generated.
 - No unverified medical claims, ingredients, certifications or treatment outcomes are presented as facts.
 
 ## Remaining work before launch
