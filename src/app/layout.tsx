@@ -12,9 +12,6 @@ export const metadata: Metadata = {
     template: "%s | Samary's",
   },
   description: "Discover Samary's product information and ordering options.",
-  alternates: {
-    canonical: "/",
-  },
 };
 
 export default function RootLayout({

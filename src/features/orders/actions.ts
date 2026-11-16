@@ -1,10 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { db } from "@/db";
-import { auditLogs, orders } from "@/db/schema";
+import { auditLogs, orderItems, orders, products } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
 import { cedisToPesewas } from "@/lib/money";
 
@@ -108,6 +108,25 @@ export async function recordWhatsAppPayment(orderId: string, _previous: OrderAct
 
       if (!updated) return { error: "This order changed while you were recording payment. Refresh and try again." } as const;
 
+      const purchasedItems = await tx.select({ productId: orderItems.productId, quantity: orderItems.quantity })
+        .from(orderItems).where(eq(orderItems.orderId, orderId));
+      for (const item of purchasedItems) {
+        if (!item.productId) continue;
+        const [stock] = await tx.update(products).set({
+          stockQuantity: sql`${products.stockQuantity} - ${item.quantity}`,
+          updatedAt: new Date(),
+        }).where(eq(products.id, item.productId)).returning({ stockQuantity: products.stockQuantity });
+        if (stock && stock.stockQuantity !== null) {
+          await tx.insert(auditLogs).values({
+            adminId: admin.adminId,
+            action: "PRODUCT_STOCK_DECREMENTED",
+            entityType: "product",
+            entityId: item.productId,
+            metadata: { orderReference: current.reference, quantity: item.quantity, remainingQuantity: stock.stockQuantity },
+          });
+        }
+      }
+
       await tx.insert(auditLogs).values({
         adminId: admin.adminId,
         action: "MANUAL_WHATSAPP_PAYMENT_RECORDED",
@@ -128,6 +147,8 @@ export async function recordWhatsAppPayment(orderId: string, _previous: OrderAct
     revalidatePath("/admin/orders");
     revalidatePath("/admin/orders/" + orderId);
     revalidatePath("/admin");
+    revalidatePath("/admin/products");
+    revalidatePath("/");
     return result;
   } catch {
     return { error: "Could not record payment. Please try again." };

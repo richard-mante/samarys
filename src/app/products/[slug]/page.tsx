@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { asc, eq } from "drizzle-orm";
 import { db } from "@/db";
@@ -6,6 +7,17 @@ import { formatGhsFromPesewas } from "@/lib/money";
 import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
 import { AddToCartButton, CartIndicator } from "@/features/cart/cart-controls";
 import { getStoreSettings } from "@/lib/settings";
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const [product] = await db.select({ name: products.name, shortDescription: products.shortDescription }).from(products)
+    .where(eq(products.slug, slug)).limit(1);
+  if (!product) return { title: "Product not found" };
+  return {
+    title: product.name,
+    description: product.shortDescription || "View product information and contact the seller team.",
+    alternates: { canonical: "/products/" + slug },
+  };
+}
 
 export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -64,6 +76,16 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <p className="mt-4 max-w-md text-xs leading-6 text-[#849087]">Product information is provided by the seller. Please confirm ingredients, directions, suitability and any safety questions directly with the seller before purchasing.</p>
         </div>
       </section>
+      <footer className="border-t border-[#e3e8df] bg-[#fffefa]">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-6 py-6 text-xs text-[#849087] lg:px-10">
+          <Link href="/" className="font-serif text-lg text-[#203a2b]">Samary&apos;s<span className="text-[#829a7b]">.</span></Link>
+          <nav aria-label="Customer links" className="flex flex-wrap gap-5">
+            <Link href="/help" className="hover:text-[#244b36]">Help & FAQs</Link>
+            <Link href="/orders/track" className="hover:text-[#244b36]">Track order</Link>
+            <Link href="/policies" className="hover:text-[#244b36]">Customer policies</Link>
+          </nav>
+        </div>
+      </footer>
     </main>
   );
 }

@@ -57,6 +57,8 @@ Use a strong password of at least 12 characters. This command creates the admin 
 
 `https://samary.catpad.shop/admin/login`
 
+After her first sign-in, open **Settings → Change administrator password** and replace the initial password with a private one.
+
 ## 5. Configure Paystack
 
 In the Paystack Dashboard:
@@ -91,7 +93,7 @@ Sign in to the seller dashboard and complete the following:
 - [ ] Configure Cloudinary image storage with `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` and `CLOUDINARY_API_SECRET` in Vercel. The seller can upload product images directly from the dashboard; existing public image URLs remain supported.
 - [ ] Confirm the seller WhatsApp number is correct: **+233 559 448 932**.
 - [ ] Confirm delivery areas, delivery fees, delivery instructions and customer support arrangements.
-- [ ] Review the storefront on mobile and desktop, including product details, basket, checkout, WhatsApp order handoff and admin pages.
+- [ ] Review the storefront on mobile and desktop, including product details, basket, checkout, WhatsApp order handoff, order tracking, help/FAQ and customer policy pages, plus the seller dashboard.
 - [ ] Review and publish accurate contact, delivery, privacy, returns/refund and terms information as applicable.
 
 Customers can look up an order at `https://samary.catpad.shop/orders/track` using the order reference and the same phone number supplied at checkout. The lookup does not expose delivery address, email or other private customer details.

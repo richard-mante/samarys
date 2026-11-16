@@ -1,9 +1,9 @@
 import "server-only";
 
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { db } from "@/db";
-import { orders, payments } from "@/db/schema";
+import { auditLogs, orderItems, orders, payments, products } from "@/db/schema";
 
 type PaystackTransaction = {
   status?: string;
@@ -69,19 +69,44 @@ export async function verifyAndSettlePaystackPayment(reference: string, payload?
     }
 
     const paidAt = transaction!.paid_at ? new Date(transaction!.paid_at) : new Date();
-    await tx.update(payments).set({
+    const [paidPayment] = await tx.update(payments).set({
       status: "PAID",
       paidAt,
       verifiedAt: new Date(),
       providerPayload: transaction,
       updatedAt: new Date(),
-    }).where(and(eq(payments.id, payment.id), eq(payments.status, "PENDING")));
+    }).where(and(eq(payments.id, payment.id), eq(payments.status, "PENDING")))
+      .returning({ id: payments.id });
+    if (!paidPayment) return { orderId: order.id, alreadyPaid: true };
 
-    await tx.update(orders).set({
+    const [paidOrder] = await tx.update(orders).set({
       paymentStatus: "PAID",
       status: order.status === "PENDING_PAYMENT" ? "CONFIRMED" : order.status,
       updatedAt: new Date(),
-    }).where(and(eq(orders.id, order.id), eq(orders.paymentStatus, "PENDING")));
+    }).where(and(eq(orders.id, order.id), eq(orders.paymentStatus, "PENDING")))
+      .returning({ id: orders.id });
+    if (!paidOrder) throw new Error("The order payment state changed while settling this transaction.");
+
+    // Finite stock is reduced only once payment is verified. Null stock means untracked stock.
+    if (order.status !== "CANCELLED") {
+      const items = await tx.select({ productId: orderItems.productId, quantity: orderItems.quantity })
+        .from(orderItems).where(eq(orderItems.orderId, order.id));
+      for (const item of items) {
+        if (!item.productId) continue;
+        const [stock] = await tx.update(products).set({
+          stockQuantity: sql`${products.stockQuantity} - ${item.quantity}`,
+          updatedAt: new Date(),
+        }).where(eq(products.id, item.productId)).returning({ stockQuantity: products.stockQuantity });
+        if (stock && stock.stockQuantity !== null) {
+          await tx.insert(auditLogs).values({
+            action: "PRODUCT_STOCK_DECREMENTED",
+            entityType: "product",
+            entityId: item.productId,
+            metadata: { orderReference: order.reference, quantity: item.quantity, remainingQuantity: stock.stockQuantity },
+          });
+        }
+      }
+    }
 
     return { orderId: order.id, alreadyPaid: false };
   });

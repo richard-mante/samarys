@@ -1,9 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
+import { compare, hash } from "bcryptjs";
 import { db } from "@/db";
-import { auditLogs, siteSettings } from "@/db/schema";
+import { admins, auditLogs, siteSettings } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
 import { normalizePhoneNumber } from "@/lib/phone";
 
@@ -53,5 +55,52 @@ export async function updateStoreSettings(_previous: SettingsActionState, formDa
     return { success: "Store settings saved." };
   } catch {
     return { error: "Could not save store settings. Please try again." };
+  }
+}
+
+
+const passwordSchema = z.object({
+  currentPassword: z.string().min(1).max(200),
+  newPassword: z.string().min(12, "Use at least 12 characters for your new password.").max(200),
+  confirmPassword: z.string().min(1).max(200),
+}).refine((values) => values.newPassword === values.confirmPassword, {
+  message: "The new passwords do not match.",
+  path: ["confirmPassword"],
+});
+
+export async function changeAdminPassword(_previous: SettingsActionState, formData: FormData): Promise<SettingsActionState> {
+  const admin = await requireAdmin();
+  const parsed = passwordSchema.safeParse({
+    currentPassword: formData.get("currentPassword"),
+    newPassword: formData.get("newPassword"),
+    confirmPassword: formData.get("confirmPassword"),
+  });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Check the password fields." };
+
+  const [record] = await db.select({ passwordHash: admins.passwordHash, email: admins.email })
+    .from(admins).where(eq(admins.id, admin.adminId)).limit(1);
+  if (!record || !(await compare(parsed.data.currentPassword, record.passwordHash))) {
+    return { error: "Your current password is incorrect." };
+  }
+  if (parsed.data.currentPassword === parsed.data.newPassword) {
+    return { error: "Choose a new password that is different from your current one." };
+  }
+
+  try {
+    const passwordHash = await hash(parsed.data.newPassword, 12);
+    await db.transaction(async (tx) => {
+      await tx.update(admins).set({ passwordHash, updatedAt: new Date() }).where(eq(admins.id, admin.adminId));
+      await tx.insert(auditLogs).values({
+        adminId: admin.adminId,
+        action: "ADMIN_PASSWORD_CHANGED",
+        entityType: "admin",
+        entityId: admin.adminId,
+        metadata: { email: record.email },
+      });
+    });
+    revalidatePath("/admin/settings");
+    return { success: "Your password has been changed." };
+  } catch {
+    return { error: "Could not change your password. Please try again." };
   }
 }

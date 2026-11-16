@@ -15,6 +15,7 @@ This document tracks implemented application capabilities. It is not a build or 
 - Seller authentication is required for catalogue administration.
 - Sellers can create products.
 - Sellers can edit product details, price, stock quantity and storefront visibility.
+- Finite product stock is decremented transactionally when a Paystack payment is verified or a WhatsApp payment is manually confirmed; untracked stock remains unlimited.
 - Sellers can add and remove product gallery images using public image URLs and accessible alt text.
 - Sellers can upload image files directly to Cloudinary using server-signed uploads; the Cloudinary API secret remains server-side.
 - Public product pages only expose active products and render seller-managed gallery images.
@@ -25,8 +26,10 @@ This document tracks implemented application capabilities. It is not a build or 
 
 - Seller dashboard includes live product/order/revenue metrics, recent orders, unpaid requests and low-stock alerts.
 - Seller workspace navigation is responsive and highlights the active section.
+- Administrator can change the account password from settings after verifying the current password; password changes are audit-logged.
 - Seller can search orders by customer name, phone or reference and filter by fulfilment status, payment status and order channel.
 - Seller can review a timestamped activity log for order, payment, settings and catalogue changes.
+- Seller can search the customer directory and review customer profiles, order history and lifetime verified spend.
 - Seller WhatsApp contact is editable in the dashboard, persisted in site settings and reused by storefront enquiry/order links.
 - Seller can inspect individual orders, customer contact details, delivery notes, line items, totals and linked payment records.
 - Seller can move orders through guarded fulfilment transitions.
@@ -53,6 +56,7 @@ This document tracks implemented application capabilities. It is not a build or 
 
 - Premium botanical/editorial direction with warm ivory, deep green and sage.
 - Responsive landing page with product discovery, seller contact and clear product-information messaging.
+- Public help/FAQ and customer policy information pages explain the current order, payment, delivery and privacy flows; seller-specific legal terms still require approval.
 - Product detail pages show seller-managed imagery, price and WhatsApp enquiry.
 - Reduced-motion and visible keyboard-focus preferences are respected.
 - No unverified medical claims, ingredients, certifications or treatment outcomes are presented as facts.
