@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { customers, orderItems, orders } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
 import { formatGhsFromPesewas } from "@/lib/money";
+import { normalizePhoneNumber } from "@/lib/phone";
 
 const statusLabels: Record<string, string> = {
   PENDING_PAYMENT: "Awaiting payment",
@@ -22,6 +23,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
   await requireAdmin();
   const params = await searchParams;
   const query = (params.q ?? "").trim().slice(0, 120);
+  const phoneSearch = query.replace(/\\D/g, "").length >= 7 ? normalizePhoneNumber(query) : query;
   const status = validStatuses.includes(params.status as typeof validStatuses[number]) ? params.status : "";
   const payment = validPayments.includes(params.payment as typeof validPayments[number]) ? params.payment : "";
   const channel = params.channel === "PAYSTACK" || params.channel === "WHATSAPP" ? params.channel : "";
@@ -30,7 +32,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
     query ? or(
       ilike(orders.reference, "%" + query + "%"),
       ilike(customers.fullName, "%" + query + "%"),
-      ilike(customers.phone, "%" + query + "%"),
+      ilike(customers.phone, "%" + phoneSearch + "%"),
     ) : undefined,
     status ? eq(orders.status, status as typeof validStatuses[number]) : undefined,
     payment ? eq(orders.paymentStatus, payment as typeof validPayments[number]) : undefined,
