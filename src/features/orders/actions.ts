@@ -137,7 +137,7 @@ export async function recordWhatsAppPayment(orderId: string, _previous: OrderAct
         .where(and(
           inArray(orderItems.productId, productIds),
           eq(orders.channel, "PAYSTACK"),
-          eq(orders.status, "PENDING_PAYMENT"),
+          inArray(orders.status, ["PENDING_PAYMENT", "CONFIRMED", "PROCESSING"]),
           eq(orders.paymentStatus, "PENDING"),
           gt(orders.createdAt, reservationCutoff),
         ))
