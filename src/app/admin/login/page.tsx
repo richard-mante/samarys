@@ -1,15 +1,24 @@
+import Link from "next/link";
 import { AdminLoginForm } from "@/features/administration/admin-login-form";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 export default function AdminLoginPage() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#f5f6f2] px-5 py-12">
-      <div className="w-full max-w-md rounded-3xl border border-[#e4e8e1] bg-white p-8 shadow-sm">
-        <a href="/" className="text-xl font-semibold tracking-tight">Samary&apos;s<span className="text-[#66836c]">.</span></a>
-        <p className="mt-8 text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Seller workspace</p>
-        <h1 className="mt-2 font-serif text-4xl">Welcome back.</h1>
-        <p className="mt-2 text-sm leading-6 text-[#758078]">Sign in to manage your products and customer orders.</p>
-        <div className="mt-8"><AdminLoginForm /></div>
-      </div>
+    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#f2f4ee] px-4 py-12">
+      <div aria-hidden="true" className="absolute -left-32 -top-32 h-96 w-96 rounded-full bg-[#dce5d8] blur-3xl" />
+      <div aria-hidden="true" className="absolute -bottom-40 -right-24 h-[28rem] w-[28rem] rounded-full bg-[#e5e9df] blur-3xl" />
+      <Link href="/" className="absolute left-6 top-6 font-serif text-2xl tracking-tight text-[#203a2b]">Samary&apos;s<span className="text-[#829a7b]">.</span></Link>
+      <Dialog open>
+        <DialogContent aria-describedby="login-description">
+          <DialogHeader>
+            <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]">Seller access</p>
+            <DialogTitle>Welcome back.</DialogTitle>
+            <DialogDescription id="login-description">Sign in to manage Samary&apos;s product information, images and orders.</DialogDescription>
+          </DialogHeader>
+          <AdminLoginForm />
+          <p className="text-center text-xs text-[#9aa49a]">Authorised seller access only.</p>
+        </DialogContent>
+      </Dialog>
     </main>
   );
 }
