@@ -1,5 +1,6 @@
 "use server";
 
+import { createHmac } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { and, eq } from "drizzle-orm";
 import { products, productImages } from "@/db/schema";
@@ -106,6 +107,51 @@ export async function removeProductImage(imageId: string, productId: string) {
   await requireAdmin();
   const [product] = await db.select({ slug: products.slug }).from(products).where(eq(products.id, productId)).limit(1);
   if (!product) return;
+
+  const [image] = await db.select({ imageUrl: productImages.imageUrl }).from(productImages)
+    .where(and(eq(productImages.id, imageId), eq(productImages.productId, productId))).limit(1);
+  if (!image) return;
+
+  // Remove managed Cloudinary assets as well as their gallery records.
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+  const apiKey = process.env.CLOUDINARY_API_KEY;
+  const apiSecret = process.env.CLOUDINARY_API_SECRET;
+  if (cloudName && apiKey && apiSecret) {
+    try {
+      const url = new URL(image.imageUrl);
+      const prefix = "/" + cloudName + "/image/upload/";
+      if (url.hostname === "res.cloudinary.com" && url.pathname.startsWith(prefix)) {
+        const parts = url.pathname.slice(prefix.length).split("/");
+        if (parts[0]?.match(/^v\\d+$/)) parts.shift();
+        const filename = parts.pop() ?? "";
+        const publicId = [...parts, filename.replace(/\\.[^.]+$/, "")].filter(Boolean).join("/");
+        if (publicId) {
+          const timestamp = Math.floor(Date.now() / 1000);
+          const signature = createHmac("sha1", apiSecret)
+            .update("public_id=" + publicId + "&timestamp=" + timestamp)
+            .digest("hex");
+          const payload = new FormData();
+          payload.set("public_id", publicId);
+          payload.set("timestamp", String(timestamp));
+          payload.set("api_key", apiKey);
+          payload.set("signature", signature);
+          const response = await fetch("https://api.cloudinary.com/v1_1/" + cloudName + "/image/destroy", {
+            method: "POST",
+            body: payload,
+            cache: "no-store",
+          });
+          const result = await response.json() as { result?: string };
+          if (!response.ok || (result.result !== "ok" && result.result !== "not found")) {
+            throw new Error("Cloudinary could not remove the image.");
+          }
+        }
+      }
+    } catch {
+      // Keep the gallery entry if a managed asset could not be deleted, so the seller can retry.
+      return;
+    }
+  }
+
   await db.delete(productImages).where(and(eq(productImages.id, imageId), eq(productImages.productId, productId)));
   revalidatePath("/admin/products/" + productId);
   revalidatePath("/products/" + product.slug);
