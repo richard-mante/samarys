@@ -114,7 +114,7 @@ Before accepting real customer orders, the seller must confirm the product ident
 
 - [ ] Confirm `https://samary.catpad.shop` loads over HTTPS.
 - [ ] Sign in to `/admin/login` and confirm product/settings/order pages work.
-- [ ] Place and reconcile a Paystack test order before enabling live mode.
+- [ ] Place and reconcile a Paystack test order before enabling live mode, including checking that finite stock is reserved during checkout, released after failed/expired checkout and decremented after verified payment.
 - [ ] Confirm WhatsApp-assisted orders are received by the seller and remain unpaid until payment is recorded by the seller.
 - [ ] Monitor Vercel deployment/runtime logs and Paystack transactions/webhook delivery after launch.
 
