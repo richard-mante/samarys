@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import type { FormEvent } from "react";
-import Link from "next/link";
 
 type OrderResult = {
   reference: string;
@@ -34,8 +33,8 @@ const paymentLabels: Record<OrderResult["paymentStatus"], string> = {
   REFUNDED: "Refunded",
 };
 
-function money(amount: number) {
-  return new Intl.NumberFormat("en-GH", { style: "currency", currency: "GHS" }).format(amount / 100);
+function money(amount: number, currency: string) {
+  return new Intl.NumberFormat("en-GH", { style: "currency", currency }).format(amount / 100);
 }
 
 export function OrderTracker() {
@@ -73,7 +72,7 @@ export function OrderTracker() {
       <h2 className="mt-2 font-serif text-2xl text-[#203a2b]">Find your order</h2>
       <p className="mt-3 text-sm leading-6 text-[#758078]">Enter the reference from your order confirmation and the phone number you used at checkout.</p>
       <label htmlFor="order-reference" className="mt-6 mb-2 block text-sm font-medium text-[#304236]">Order reference</label>
-      <input id="order-reference" value={reference} onChange={(event) => setReference(event.target.value.toUpperCase())} placeholder="SAM-XXXXXXXXXXXX" autoComplete="off" required maxLength={20} className="w-full rounded-xl border border-[#dfe5dc] px-4 py-3 text-sm uppercase tracking-[0.08em] outline-none focus:border-[#66836c] focus:ring-2 focus:ring-[#dce5d8]" />
+      <input id="order-reference" value={reference} onChange={(event) => setReference(event.target.value.toUpperCase())} placeholder="SAM-XXXXXXXXXXXXXXXX" autoComplete="off" required maxLength={20} className="w-full rounded-xl border border-[#dfe5dc] px-4 py-3 text-sm uppercase tracking-[0.08em] outline-none focus:border-[#66836c] focus:ring-2 focus:ring-[#dce5d8]" />
       <label htmlFor="order-phone" className="mt-5 mb-2 block text-sm font-medium text-[#304236]">Checkout phone number</label>
       <input id="order-phone" type="tel" value={phone} onChange={(event) => setPhone(event.target.value)} placeholder="e.g. 055 000 0000" autoComplete="tel" required minLength={7} maxLength={32} className="w-full rounded-xl border border-[#dfe5dc] px-4 py-3 text-sm outline-none focus:border-[#66836c] focus:ring-2 focus:ring-[#dce5d8]" />
       {error && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</p>}
@@ -97,12 +96,12 @@ export function OrderTracker() {
         </div>
         <div className="mt-7">
           <h3 className="font-serif text-xl text-[#203a2b]">Items</h3>
-          <div className="mt-3 divide-y divide-[#edf0ea]">{order.items.map((item) => <div key={item.id} className="flex justify-between gap-4 py-3 text-sm"><div><p className="font-medium text-[#405447]">{item.name}</p><p className="mt-1 text-xs text-[#849087]">Qty {item.quantity} × {money(item.unitPriceMinor)}</p></div><p className="font-semibold text-[#304236]">{money(item.lineTotalMinor)}</p></div>)}</div>
+          <div className="mt-3 divide-y divide-[#edf0ea]">{order.items.map((item) => <div key={item.id} className="flex justify-between gap-4 py-3 text-sm"><div><p className="font-medium text-[#405447]">{item.name}</p><p className="mt-1 text-xs text-[#849087]">Qty {item.quantity} × {money(item.unitPriceMinor, order.currency)}</p></div><p className="font-semibold text-[#304236]">{money(item.lineTotalMinor, order.currency)}</p></div>)}</div>
         </div>
         <div className="mt-5 space-y-2 border-t border-[#edf0ea] pt-5 text-sm">
-          <div className="flex justify-between text-[#758078]"><span>Items subtotal</span><span>{money(order.subtotalMinor)}</span></div>
-          <div className="flex justify-between text-[#758078]"><span>Delivery</span><span>{order.deliveryFeeMinor > 0 ? money(order.deliveryFeeMinor) : "To be confirmed"}</span></div>
-          <div className="flex justify-between border-t border-[#edf0ea] pt-3 font-semibold text-[#203a2b]"><span>Order total</span><span>{money(order.totalMinor)}</span></div>
+          <div className="flex justify-between text-[#758078]"><span>Items subtotal</span><span>{money(order.subtotalMinor, order.currency)}</span></div>
+          <div className="flex justify-between text-[#758078]"><span>Delivery</span><span>{order.deliveryFeeMinor > 0 ? money(order.deliveryFeeMinor, order.currency) : "To be confirmed"}</span></div>
+          <div className="flex justify-between border-t border-[#edf0ea] pt-3 font-semibold text-[#203a2b]"><span>Order total</span><span>{money(order.totalMinor, order.currency)}</span></div>
         </div>
         <p className="mt-5 text-xs leading-6 text-[#849087]">{order.status === "FULFILLED" ? "This order has been marked as fulfilled. Contact the seller if you need any further assistance." : order.status === "CANCELLED" ? "This order has been cancelled. Please contact the seller if you need help." : "The seller will update this status as your order progresses. WhatsApp-assisted orders remain unpaid until the seller records payment."}</p>
       </>}
