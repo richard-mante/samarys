@@ -34,7 +34,7 @@ export function ProductGalleryManager({ productId, images }: { productId: string
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#66836c]">Product media</p>
-          <h2 className="mt-2 font-serif text-2xl text-[#203a2b]"<span className="inline-flex items-center gap-2"><HugeiconsIcon icon={Image01Icon} size={20} />Product images</span></h2>
+          <h2 className="mt-2 font-serif text-2xl text-[#203a2b]"><span className="inline-flex items-center gap-2"><HugeiconsIcon icon={Image01Icon} size={20} />Product images</span></h2>
           <p className="mt-2 max-w-lg text-sm leading-6 text-[#758078]">Upload clear product photography. Images are optimised and stored directly with this product.</p>
         </div>
         <span className="rounded-full bg-[#f1f4ef] px-3 py-1.5 text-xs font-medium text-[#526b56]">{images.length} {images.length === 1 ? "image" : "images"}</span>

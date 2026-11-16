@@ -65,7 +65,7 @@ export function ProductImagePicker({ name = "productImage" }: Props) {
           <p className="mt-1 text-xs text-[#849087]">Optional · Stored with the product · Optimised automatically</p>
         </div>
         <button type="button" onClick={() => inputRef.current?.click()} className="rounded-full border border-[#d9dfd5] bg-white px-4 py-2 text-xs font-semibold text-[#244b36] hover:bg-[#f2f5ef]">
-          {imageData ? "Choose another" : "Choose image"}
+          <><HugeiconsIcon icon={ImageAdd01Icon} size={15} className="mr-1.5 inline" />{imageData ? "Choose another" : "Choose image"}</>
         </button>
         <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp,image/avif" className="sr-only" onChange={(event) => void handleFile(event.target.files?.[0])} />
       </div>
