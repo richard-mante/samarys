@@ -61,6 +61,7 @@ export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
       <h1 className="mt-3 font-serif text-4xl tracking-tight text-[#203a2b]">One last step.</h1>
       <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-[#758078]">{state.success}</p>
       <p className="mt-5 rounded-xl bg-[#f5f7f3] px-4 py-3 text-sm font-semibold text-[#405447]">Reference: {state.reference}</p>
+      <Link href="/orders/track" className="mt-4 inline-flex text-sm font-semibold text-[#41684d] hover:underline">Track this order ↗</Link>
       <a href={state.whatsappUrl} target="_blank" rel="noreferrer" className="mt-7 inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#244b36] px-7 py-4 text-sm font-semibold text-white transition hover:bg-[#183a28] sm:w-auto">Continue to WhatsApp <span aria-hidden="true">↗</span></a>
       <p className="mt-4 text-xs leading-6 text-[#849087]">Your request is saved, but it is not yet a paid or confirmed order. The seller will confirm availability and delivery cost with you.</p>
       <Link href="/" className="mt-6 inline-block text-sm font-medium text-[#66836c] hover:underline">Return to the collection</Link>
