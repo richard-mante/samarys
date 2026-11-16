@@ -6,35 +6,17 @@ import { z } from "zod";
 import { db } from "@/db";
 import { auditLogs, productImages, products } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
+import { productImageDataSchema } from "./validation";
 
 const uploadedImageSchema = z.object({
-  imageUrl: z.string().url().max(2000),
+  imageData: productImageDataSchema,
   altText: z.string().trim().min(4, "Add a short description for accessibility.").max(240),
 });
 
-export async function saveUploadedProductImage(productId: string, imageUrl: string, altText: string) {
+export async function saveUploadedProductImage(productId: string, imageData: string, altText: string) {
   const admin = await requireAdmin();
-  const parsed = uploadedImageSchema.safeParse({ imageUrl, altText });
+  const parsed = uploadedImageSchema.safeParse({ imageData, altText });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Check the image details." };
-
-  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-  let url: URL;
-  try {
-    url = new URL(parsed.data.imageUrl);
-  } catch {
-    return { error: "The uploaded image URL is invalid." };
-  }
-  const uploadPrefix = "/" + cloudName + "/image/upload/";
-  if (!cloudName || url.hostname !== "res.cloudinary.com" || !url.pathname.startsWith(uploadPrefix)) {
-    return { error: "Only images uploaded to the configured Samary's Cloudinary account can be saved here." };
-  }
-  const uploadParts = url.pathname.slice(uploadPrefix.length).split("/");
-  if (uploadParts[0]?.match(/^v\d+$/)) uploadParts.shift();
-  const uploadedFilename = uploadParts.pop() ?? "";
-  const uploadedPublicId = [...uploadParts, uploadedFilename.replace(/\.[^.]+$/, "")].filter(Boolean).join("/");
-  if (!uploadedPublicId.startsWith("samarys/products/" + productId + "/")) {
-    return { error: "This image was not uploaded for the selected product." };
-  }
 
   const [product] = await db.select({ slug: products.slug }).from(products)
     .where(eq(products.id, productId)).limit(1);
@@ -46,21 +28,21 @@ export async function saveUploadedProductImage(productId: string, imageUrl: stri
     await db.transaction(async (tx) => {
       const [created] = await tx.insert(productImages).values({
         productId,
-        imageUrl: parsed.data.imageUrl,
+        imageUrl: parsed.data.imageData,
         altText: parsed.data.altText,
         sortOrder: existing.length ? Math.max(...existing.map((image) => image.sortOrder)) + 1 : 0,
       }).returning({ id: productImages.id });
       await tx.insert(auditLogs).values({
         adminId: admin.adminId, action: "PRODUCT_IMAGE_UPLOADED", entityType: "product", entityId: productId,
-        metadata: { imageId: created.id, altText: parsed.data.altText },
+        metadata: { imageId: created.id, altText: parsed.data.altText, storage: "database_base64" },
       });
     });
   } catch {
-    return { error: "The image uploaded, but could not be added to this product. Please try again." };
+    return { error: "The image could not be saved. Choose a smaller image and try again." };
   }
 
   revalidatePath("/admin/products/" + productId);
   revalidatePath("/products/" + product.slug);
   revalidatePath("/");
-  return { success: "Product image uploaded and added to the gallery." };
+  return { success: "Product image added." };
 }
