@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowUpRight01Icon, Logout01Icon, Store01Icon } from "@hugeicons/core-free-icons";
 import { AdminNavigation } from "@/features/administration/admin-navigation";
 
 export const metadata = { title: "Seller workspace", robots: { index: false, follow: false } };
@@ -12,7 +14,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <Link href="/" className="font-serif text-[26px] tracking-[-0.04em] text-[#203a2b]">Samary&apos;s<span className="text-[#829a7b]">.</span></Link>
             <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.19em] text-[#9aa49a]">Seller workspace</p>
           </div>
-          <Link href="/" className="rounded-full border border-[#e2e8df] px-3.5 py-2 text-[11px] font-semibold text-[#526b56] transition hover:bg-[#f5f7f3] lg:hidden">View store ↗</Link>
+          <Link href="/" className="inline-flex items-center gap-2 rounded-full border border-[#e2e8df] px-3.5 py-2 text-[11px] font-semibold text-[#526b56] transition hover:bg-[#f5f7f3] lg:hidden"><HugeiconsIcon icon={Store01Icon} size={15} />View store</Link>
         </div>
 
         <div className="mt-6 border-t border-[#edf0ea] pt-5 lg:mt-10 lg:border-0 lg:pt-0">
@@ -26,8 +28,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <p className="mt-1 text-[10px] leading-5 text-[#849087]">Manage products, customers and orders.</p>
           </div>
           <div className="flex items-center gap-4 lg:mt-5 lg:justify-between">
-            <Link href="/" className="hidden text-xs font-medium text-[#78847a] transition hover:text-[#244b36] lg:inline">View storefront ↗</Link>
-            <Link href="/admin/logout" className="text-xs font-semibold text-[#9b665d] transition hover:text-[#8c4036]">Sign out</Link>
+            <Link href="/" className="hidden items-center gap-1.5 text-xs font-medium text-[#78847a] transition hover:text-[#244b36] lg:inline-flex">View storefront <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} /></Link>
+            <Link href="/admin/logout" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#9b665d] transition hover:text-[#8c4036]"><HugeiconsIcon icon={Logout01Icon} size={15} />Sign out</Link>
           </div>
         </div>
       </aside>
@@ -36,7 +38,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         <header className="sticky top-0 z-20 hidden border-b border-[#e4e8e1]/80 bg-[#f8f9f6]/90 px-6 py-4 backdrop-blur-xl lg:block lg:px-10">
           <div className="mx-auto flex max-w-7xl items-center justify-between">
             <p className="text-xs text-[#849087]">Administration <span className="mx-2 text-[#c4cdc1]">/</span> <span className="font-medium text-[#526157]">Your business, in focus.</span></p>
-            <Link href="/" className="text-xs font-semibold text-[#526b56] transition hover:text-[#203a2b]">View storefront ↗</Link>
+            <Link href="/" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#526b56] transition hover:text-[#203a2b]">View storefront <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} /></Link>
           </div>
         </header>
         <main className="mx-auto w-full max-w-7xl px-5 py-7 sm:px-6 sm:py-8 lg:px-10 lg:py-10">{children}</main>

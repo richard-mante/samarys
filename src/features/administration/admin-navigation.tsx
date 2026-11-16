@@ -2,15 +2,20 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  Home01Icon, Package01Icon, ShoppingBag01Icon, UserGroupIcon,
+  CreditCardIcon, Activity01Icon, Settings01Icon,
+} from "@hugeicons/core-free-icons";
 
 const links = [
-  { href: "/admin", label: "Overview", short: "Home" },
-  { href: "/admin/products", label: "Products", short: "Products" },
-  { href: "/admin/orders", label: "Orders", short: "Orders" },
-  { href: "/admin/customers", label: "Customers", short: "Customers" },
-  { href: "/admin/payments", label: "Payments", short: "Payments" },
-  { href: "/admin/activity", label: "Activity log", short: "Activity" },
-  { href: "/admin/settings", label: "Settings", short: "Settings" },
+  { href: "/admin", label: "Overview", short: "Home", icon: Home01Icon },
+  { href: "/admin/products", label: "Products", short: "Products", icon: Package01Icon },
+  { href: "/admin/orders", label: "Orders", short: "Orders", icon: ShoppingBag01Icon },
+  { href: "/admin/customers", label: "Customers", short: "Customers", icon: UserGroupIcon },
+  { href: "/admin/payments", label: "Payments", short: "Payments", icon: CreditCardIcon },
+  { href: "/admin/activity", label: "Activity log", short: "Activity", icon: Activity01Icon },
+  { href: "/admin/settings", label: "Settings", short: "Settings", icon: Settings01Icon },
 ];
 
 export function AdminNavigation() {
@@ -34,7 +39,7 @@ export function AdminNavigation() {
                 : "text-[#718075] hover:bg-[#f5f7f3] hover:text-[#304236]"
             )}
           >
-            <span className={"h-1.5 w-1.5 rounded-full transition " + (active ? "bg-[#668b67]" : "bg-transparent group-hover:bg-[#c4d1bf]")} />
+            <HugeiconsIcon icon={link.icon} size={19} strokeWidth={1.7} aria-hidden="true" />
             <span className="lg:hidden">{link.short}</span>
             <span className="hidden lg:inline">{link.label}</span>
           </Link>
