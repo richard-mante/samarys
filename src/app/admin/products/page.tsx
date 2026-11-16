@@ -3,8 +3,9 @@ import { desc } from "drizzle-orm";
 import { db } from "@/db";
 import { products } from "@/db/schema";
 import { formatGhsFromPesewas } from "@/lib/money";
+import { requireAdmin } from "@/lib/admin";
 
-export default async function AdminProductsPage() {
+export default async function AdminProductsPage() {\n  await requireAdmin();
   const rows = await db.select().from(products).orderBy(desc(products.createdAt));
   return <div>
     <div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Catalogue</p><h1 className="mt-2 font-serif text-4xl">Products</h1><p className="mt-2 text-sm text-[#758078]">Manage product information, pricing and availability.</p></div><Link href="/admin/products/new" className="rounded-full bg-[#244b36] px-5 py-3 text-sm font-semibold text-white">Add product</Link></div>
