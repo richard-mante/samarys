@@ -31,6 +31,12 @@ export function verifyPaystackSignature(rawBody: string, signature: string | nul
 
 export async function verifyAndSettlePaystackPayment(reference: string, payload?: PaystackTransaction) {
   const secret = getSecretKey();
+  const [knownPayment] = await db.select({ id: payments.id, orderId: payments.orderId, status: payments.status })
+    .from(payments).where(eq(payments.providerReference, reference)).limit(1);
+  if (!knownPayment) throw new Error("No matching order was found for this payment reference.");
+  if (knownPayment.status === "PAID") return { orderId: knownPayment.orderId, alreadyPaid: true };
+  if (knownPayment.status !== "PENDING") throw new Error("This payment is no longer pending.");
+
   let transaction = payload;
 
   if (!transaction) {
