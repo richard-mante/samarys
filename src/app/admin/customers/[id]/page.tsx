@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { desc, eq } from "drizzle-orm";
+import { count, desc, eq, sql, sum } from "drizzle-orm";
 import { db } from "@/db";
 import { customers, orders } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
@@ -26,7 +26,11 @@ export default async function AdminCustomerDetailPage({ params }: { params: Prom
     with: { items: true },
     limit: 100,
   });
-  const verifiedSpend = history.reduce((total, order) => total + (order.paymentStatus === "PAID" ? order.totalMinor : 0), 0);
+  const [metrics] = await db.select({
+    orderCount: count(orders.id),
+    verifiedSpend: sum(sql<number>`case when ${orders.paymentStatus} = 'PAID' then ${orders.totalMinor} else 0 end`),
+  }).from(orders).where(eq(orders.customerId, id));
+  const verifiedSpend = Number(metrics?.verifiedSpend ?? 0);
 
   return <div className="mx-auto max-w-5xl">
     <Link href="/admin/customers" className="text-sm text-[#66836c] hover:text-[#244b36]">← Back to customers</Link>
@@ -35,7 +39,7 @@ export default async function AdminCustomerDetailPage({ params }: { params: Prom
       <a href={"https://wa.me/" + customer.phone} target="_blank" rel="noreferrer" className="rounded-full bg-[#244b36] px-5 py-3 text-sm font-semibold text-white">Message customer ↗</a>
     </div>
     <section className="mt-8 grid gap-4 sm:grid-cols-3">
-      <div className="rounded-2xl border border-[#e4e8e1] bg-white p-5"><p className="text-xs text-[#849087]">Orders</p><p className="mt-3 text-3xl font-semibold text-[#203a2b]">{history.length}</p></div>
+      <div className="rounded-2xl border border-[#e4e8e1] bg-white p-5"><p className="text-xs text-[#849087]">Orders</p><p className="mt-3 text-3xl font-semibold text-[#203a2b]">{Number(metrics?.orderCount ?? 0)}</p></div>
       <div className="rounded-2xl border border-[#e4e8e1] bg-white p-5"><p className="text-xs text-[#849087]">Verified spend</p><p className="mt-3 text-2xl font-semibold text-[#203a2b]">{formatGhsFromPesewas(verifiedSpend)}</p></div>
       <div className="rounded-2xl border border-[#e4e8e1] bg-white p-5"><p className="text-xs text-[#849087]">Last order</p><p className="mt-3 text-sm font-semibold text-[#203a2b]">{history[0] ? new Intl.DateTimeFormat("en-GH", { dateStyle: "medium" }).format(history[0].createdAt) : "No orders yet"}</p></div>
     </section>
