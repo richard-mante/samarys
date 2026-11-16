@@ -26,7 +26,7 @@ This document tracks implemented application capabilities. It is not a build or 
 - Seller can move orders through guarded fulfilment transitions.
 - Customers can build a persistent basket and submit a WhatsApp-assisted order request with contact and delivery details.
 - Order totals are calculated from current server-side product prices; delivery is explicitly confirmed separately by the seller.
-- WhatsApp order requests are stored as unpaid and are not represented as completed payments.
+- WhatsApp order requests are stored as unpaid and are not represented as completed payments.\n- Seller can record a manually received WhatsApp payment, delivery fee and payment reference; the action is audit-logged.
 - Fulfilled status is blocked unless payment is marked paid.
 - Order status changes are written to the audit log within the same database transaction.
 
