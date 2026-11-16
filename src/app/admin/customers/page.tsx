@@ -37,7 +37,7 @@ export default async function AdminCustomersPage({ searchParams }: { searchParam
 
   return <div>
     <div className="flex flex-wrap items-end justify-between gap-4">
-      <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Relationships</p><h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]"<span className="inline-flex items-center gap-3"><HugeiconsIcon icon={UserGroupIcon} size={25} />Customers</span></h1><p className="mt-2 text-sm text-[#758078]">Customer contact details, order history and verified spend.</p></div>
+      <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Relationships</p><h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]"><span className="inline-flex items-center gap-3"><HugeiconsIcon icon={UserGroupIcon} size={25} />Customers</span></h1><p className="mt-2 text-sm text-[#758078]">Customer contact details, order history and verified spend.</p></div>
       <span className="rounded-full bg-white px-4 py-2 text-xs font-medium text-[#68766c]">{rows.length} customers · latest 100</span>
     </div>
     <form method="get" className="mt-7 flex flex-col gap-3 rounded-2xl border border-[#e4e8e1] bg-white p-4 sm:flex-row">

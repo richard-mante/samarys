@@ -20,7 +20,7 @@ export default async function AdminActivityPage() {
 
   return <div>
     <div className="flex flex-wrap items-end justify-between gap-4">
-      <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Workspace history</p><h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]"<span className="inline-flex items-center gap-3"><HugeiconsIcon icon={Activity01Icon} size={25} />Activity log</span></h1><p className="mt-2 text-sm text-[#758078]">A record of important changes made in the seller workspace.</p></div>
+      <div><p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#66836c]">Workspace history</p><h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]"><span className="inline-flex items-center gap-3"><HugeiconsIcon icon={Activity01Icon} size={25} />Activity log</span></h1><p className="mt-2 text-sm text-[#758078]">A record of important changes made in the seller workspace.</p></div>
       <span className="rounded-full bg-white px-4 py-2 text-xs font-medium text-[#68766c]">Latest {entries.length} activities</span>
     </div>
     <section className="mt-8 overflow-hidden rounded-2xl border border-[#e4e8e1] bg-white">
