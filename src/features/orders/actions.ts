@@ -82,8 +82,8 @@ export async function recordWhatsAppPayment(orderId: string, _previous: OrderAct
   });
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Check the payment details." };
 
-  const amountReceivedMinor = Math.round(parsed.data.amountReceivedGhs * 100);
-  const deliveryFeeMinor = Math.round(parsed.data.deliveryFeeGhs * 100);
+  const amountReceivedMinor = cedisToPesewas(parsed.data.amountReceivedGhs);
+  const deliveryFeeMinor = cedisToPesewas(parsed.data.deliveryFeeGhs);
 
   try {
     const result = await db.transaction(async (tx) => {
