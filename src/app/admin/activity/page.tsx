@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { desc } from "drizzle-orm";
 import { db } from "@/db";
 import { auditLogs } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
