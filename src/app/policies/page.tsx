@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowLeft01Icon, ArrowUpRight01Icon, WhatsappIcon } from "@hugeicons/core-free-icons";
 import { getStoreSettings } from "@/lib/settings";
 import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
 
@@ -15,7 +17,7 @@ export default async function PoliciesPage() {
   return <main className="min-h-screen bg-[#f8f7f2]">
     <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
       <Link href="/" className="font-serif text-2xl tracking-tight text-[#203a2b]">Samary&apos;s<span className="text-[#829a7b]">.</span></Link>
-      <Link href="/" className="text-sm font-medium text-[#66836c] hover:text-[#244b36]">Back to the collection</Link>
+      <Link href="/" className="text-sm font-medium text-[#66836c] hover:text-[#244b36]"><HugeiconsIcon icon={ArrowLeft01Icon} size={15} className="mr-1.5 inline" />Back to the collection</Link>
     </header>
     <section className="mx-auto max-w-4xl px-6 pb-24 pt-10 lg:px-10 lg:pt-16">
       <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]">Customer information</p>
@@ -52,7 +54,7 @@ export default async function PoliciesPage() {
       <div className="mt-12 rounded-2xl border border-[#dce5d8] bg-white p-6 sm:p-8">
         <h2 className="font-serif text-2xl text-[#203a2b]">Need clarification?</h2>
         <p className="mt-2 text-sm leading-6 text-[#758078]">Ask the seller to confirm delivery, return or refund terms for your specific order before proceeding.</p>
-        <a href={contactUrl} target="_blank" rel="noreferrer" className="mt-5 inline-flex rounded-full bg-[#244b36] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#183a28]">Contact the seller on WhatsApp ↗</a>
+        <a href={contactUrl} target="_blank" rel="noreferrer" className="mt-5 inline-flex rounded-full bg-[#244b36] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#183a28]"><HugeiconsIcon icon={WhatsappIcon} size={17} className="mr-2 inline" />Contact the seller on WhatsApp <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} className="ml-1 inline" /></a>
       </div>
       <p className="mt-8 text-xs leading-6 text-[#9aa49a]">These customer notes describe the current website flow and are not a substitute for the seller&apos;s final approved legal terms, privacy notice or regulatory disclosures.</p>
     </section>
