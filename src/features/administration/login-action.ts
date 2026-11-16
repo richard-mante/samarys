@@ -21,6 +21,7 @@ export async function loginAdmin(_previous: { error?: string }, formData: FormDa
     return { error: "The email address or password is incorrect." };
   }
 
+  await db.update(admins).set({ lastLoginAt: new Date() }).where(eq(admins.id, admin.id));
   await createAdminSession(admin.id);
   redirect("/admin");
 }

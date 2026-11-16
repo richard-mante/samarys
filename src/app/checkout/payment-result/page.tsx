@@ -21,7 +21,7 @@ export default async function PaymentResultPage({ searchParams }: { searchParams
       <h1 className="mt-3 font-serif text-4xl tracking-tight text-[#203a2b]">{success ? "Payment confirmed." : failed ? "Payment not confirmed." : "Payment is being checked."}</h1>
       <p className="mx-auto mt-4 max-w-md text-sm leading-7 text-[#758078]">{success ? "Your payment has been verified and your order is confirmed. Keep your reference for any follow-up." : failed ? "We could not confirm a successful payment for this reference. If money was deducted, please contact the seller before trying again." : "We have not received final confirmation yet. Please allow a moment, then contact the seller if your payment was deducted."}</p>
       {reference && <p className="mt-6 rounded-xl bg-[#f5f7f3] px-4 py-3 text-sm font-semibold text-[#405447]">Reference: {reference}</p>}
-      <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row"><Link href="/" className="rounded-full bg-[#244b36] px-7 py-3.5 text-sm font-semibold text-white">Return to the collection</Link><Link href="/checkout" className="rounded-full border border-[#dce5d8] px-7 py-3.5 text-sm font-semibold text-[#405447]">Back to checkout</Link></div>
+      <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">{reference && <Link href="/orders/track" className="rounded-full border border-[#dce5d8] px-7 py-3.5 text-sm font-semibold text-[#405447]">Track this order</Link>}<Link href="/" className="rounded-full bg-[#244b36] px-7 py-3.5 text-sm font-semibold text-white">Return to the collection</Link><Link href="/checkout" className="rounded-full border border-[#dce5d8] px-7 py-3.5 text-sm font-semibold text-[#405447]">Back to checkout</Link></div>
     </section>
   </main>;
 }

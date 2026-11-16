@@ -22,6 +22,7 @@ The seller's WhatsApp number is configured as +233559448932 (display: 055 944 89
 - Server-calculated totals and unique order references.
 - Order items and immutable price snapshots.
 - Order confirmation and status display.
+- Customer order lookup using the order reference and matching checkout phone number.
 - WhatsApp-assisted order creation and prefilled seller message.
 
 ### Payments
