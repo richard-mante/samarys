@@ -4,6 +4,7 @@ import { z } from "zod";
 import { db } from "@/db";
 import { orders } from "@/db/schema";
 import { normalizePhoneNumber } from "@/lib/phone";
+import { consumeRateLimit, getClientAddress } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
 
@@ -20,6 +21,16 @@ export async function POST(request: Request) {
       headers: { "Cache-Control": "no-store" },
     });
   }
+  const withinLimit = await consumeRateLimit({
+    action: "ORDER_LOOKUP",
+    clientAddress: getClientAddress(request.headers),
+    limit: 20,
+    windowMs: 15 * 60 * 1000,
+  });
+  if (!withinLimit) return NextResponse.json(
+    { error: "Too many lookup attempts. Please wait 15 minutes before trying again." },
+    { status: 429, headers: { "Cache-Control": "no-store", "Retry-After": "900" } },
+  );
 
   const reference = parsed.data.reference;
   const phone = normalizePhoneNumber(parsed.data.phone);
