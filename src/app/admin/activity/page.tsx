@@ -24,13 +24,13 @@ export default async function AdminActivityPage() {
       {entries.length === 0 ? <div className="px-6 py-16 text-center"><p className="font-serif text-2xl text-[#405447]">No activity recorded yet</p><p className="mt-2 text-sm text-[#758078]">Important seller actions will appear here as the store is managed.</p></div> :
         <div className="divide-y divide-[#edf0ea]">{entries.map((entry) => {
           const metadata = entry.metadata && typeof entry.metadata === "object" ? JSON.stringify(entry.metadata) : "";
-          const target = entry.entityType === "order" && entry.entityId ? "/admin/orders/" + entry.entityId : null;
+          const target = entry.entityType === "order" && entry.entityId ? "/admin/orders/" + entry.entityId : entry.entityType === "product" && entry.entityId ? "/admin/products/" + entry.entityId : null;
           return <article key={entry.id} className="grid gap-3 px-6 py-5 sm:grid-cols-[1fr_auto] sm:items-start">
             <div className="min-w-0">
               <p className="text-sm font-semibold text-[#304236]">{readable(entry.action)}</p>
               <p className="mt-1 text-xs text-[#849087]">{readable(entry.entityType)}{entry.entityId ? " · " + entry.entityId : ""} · {entry.admin?.email ?? "System"}</p>
               {metadata && <p className="mt-3 break-words rounded-lg bg-[#f7f8f5] px-3 py-2 text-xs leading-5 text-[#68766c]">{metadata}</p>}
-              {target && <Link href={target} className="mt-3 inline-flex text-xs font-semibold text-[#41684d] hover:underline">Open related order ↗</Link>}
+              {target && <Link href={target} className="mt-3 inline-flex text-xs font-semibold text-[#41684d] hover:underline">Open related record ↗</Link>}
             </div>
             <time dateTime={entry.createdAt.toISOString()} className="text-[11px] text-[#9aa49a] sm:text-right">{new Intl.DateTimeFormat("en-GH", { dateStyle: "medium", timeStyle: "short" }).format(entry.createdAt)}</time>
           </article>;
