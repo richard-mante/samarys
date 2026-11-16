@@ -7,7 +7,6 @@ import { customers, orderItems, orders } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
 import { formatGhsFromPesewas } from "@/lib/money";
 import { normalizePhoneNumber } from "@/lib/phone";
-import { AppIcon } from "@/components/ui/app-icon";
 
 const statusLabels: Record<string, string> = {
   PENDING_PAYMENT: "Awaiting payment",
@@ -74,7 +73,7 @@ export default async function AdminOrdersPage({ searchParams }: { searchParams: 
       <div><label htmlFor="status" className="mb-2 block text-xs font-semibold text-[#526157]">Fulfilment</label><select id="status" name="status" defaultValue={status} className="w-full rounded-xl border border-[#dfe5dc] bg-white px-3 py-3 text-sm"><option value="">All statuses</option>{validStatuses.map((value) => <option key={value} value={value}>{statusLabels[value]}</option>)}</select></div>
       <div><label htmlFor="payment" className="mb-2 block text-xs font-semibold text-[#526157]">Payment</label><select id="payment" name="payment" defaultValue={payment} className="w-full rounded-xl border border-[#dfe5dc] bg-white px-3 py-3 text-sm"><option value="">All payments</option>{validPayments.map((value) => <option key={value} value={value}>{value.charAt(0) + value.slice(1).toLowerCase()}</option>)}</select></div>
       <div><label htmlFor="channel" className="mb-2 block text-xs font-semibold text-[#526157]">Channel</label><select id="channel" name="channel" defaultValue={channel} className="w-full rounded-xl border border-[#dfe5dc] bg-white px-3 py-3 text-sm"><option value="">All channels</option><option value="PAYSTACK">Paystack</option><option value="WHATSAPP">WhatsApp</option></select></div>
-      <div className="flex gap-2"><button type="submit" className="flex-1 rounded-full bg-[#244b36] px-5 py-3 text-sm font-semibold text-white"><HugeiconsIcon icon={FilterHorizontalIcon} size={16} className="mr-2 inline" /><AppIcon name="filter" size={16} /> Filter</button><Link href="/admin/orders" className="rounded-full border border-[#dfe5dc] px-4 py-3 text-sm font-semibold text-[#526157]">Reset</Link></div>
+      <div className="flex gap-2"><button type="submit" className="flex-1 rounded-full bg-[#244b36] px-5 py-3 text-sm font-semibold text-white"><HugeiconsIcon icon={FilterHorizontalIcon} size={16} className="mr-2 inline" />Filter</button><Link href="/admin/orders" className="rounded-full border border-[#dfe5dc] px-4 py-3 text-sm font-semibold text-[#526157]">Reset</Link></div>
     </form>
 
     <div className="mt-6 overflow-hidden rounded-2xl border border-[#e4e8e1] bg-white">

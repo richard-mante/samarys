@@ -4,7 +4,6 @@ import { Activity01Icon, ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { db } from "@/db";
 import { auditLogs } from "@/db/schema";
 import { requireAdmin } from "@/lib/admin";
-import { AppIcon } from "@/components/ui/app-icon";
 
 function readable(value: string) {
   return value.replaceAll("_", " ").toLowerCase().replace(/\b\w/g, (letter) => letter.toUpperCase());
