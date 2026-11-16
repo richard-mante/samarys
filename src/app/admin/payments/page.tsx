@@ -19,9 +19,9 @@ export default async function AdminPaymentsPage() {
 
   const manualOrderIds = [...new Set(manualPayments.map((payment) => payment.entityId).filter((id): id is string => Boolean(id)))];
   const relatedOrders = manualOrderIds.length
-    ? await db.select({ id: orders.id, reference: orders.reference }).from(orders).where(inArray(orders.id, manualOrderIds))
+    ? await db.select({ id: orders.id, reference: orders.reference, paymentStatus: orders.paymentStatus }).from(orders).where(inArray(orders.id, manualOrderIds))
     : [];
-  const orderReferences = new Map(relatedOrders.map((order) => [order.id, order.reference]));
+  const relatedOrderMap = new Map(relatedOrders.map((order) => [order.id, order]));
 
   const entries = [
     ...onlinePayments.map((payment) => ({
@@ -38,10 +38,10 @@ export default async function AdminPaymentsPage() {
       return {
         id: payment.id,
         createdAt: payment.createdAt,
-        orderReference: payment.entityId ? orderReferences.get(payment.entityId) ?? "Order unavailable" : "Order unavailable",
+        orderReference: payment.entityId ? relatedOrderMap.get(payment.entityId)?.reference ?? "Order unavailable" : "Order unavailable",
         provider: "WhatsApp / " + (metadata?.method?.replaceAll("_", " ") ?? "Manual"),
         reference: metadata?.paymentReference || "Seller-confirmed payment",
-        status: "PAID",
+        status: payment.entityId ? relatedOrderMap.get(payment.entityId)?.paymentStatus ?? "PAID" : "PAID",
         amountMinor: metadata?.amountReceivedMinor ?? 0,
       };
     }),
