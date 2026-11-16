@@ -15,7 +15,7 @@ export function CartIndicator() {
 export function AddToCartButton({ productId, disabled = false }: { productId: string; disabled?: boolean }) {
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
-  return <button type="button" onClick={() => { addItem(productId); setAdded(true); }} className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#244b36] px-8 py-4 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#183a28] sm:w-fit">
-    {added ? "Added to your order" : "Add to my order"} <span aria-hidden="true">{added ? "✓" : "＋"}</span>
+  return <button type="button" disabled={disabled} onClick={() => { addItem(productId); setAdded(true); }} className="inline-flex w-full items-center justify-center gap-3 rounded-full bg-[#244b36] px-8 py-4 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#183a28] disabled:cursor-not-allowed disabled:bg-[#aeb9ad] sm:w-fit">
+    {disabled ? "Currently unavailable" : added ? "Added to your order" : "Add to my order"} <span aria-hidden="true">{disabled ? "—" : added ? "✓" : "＋"}</span>
   </button>;
 }
