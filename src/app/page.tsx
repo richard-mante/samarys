@@ -29,7 +29,7 @@ export default async function HomePage() {
           <a href="#approach" className="transition hover:text-[#244b36]">Our approach</a>
           <a href="#contact" className="transition hover:text-[#244b36]">Contact</a>
         </nav>
-        <div className="flex items-center gap-2"><CartIndicator /><a href={sellerContactUrl} target="_blank" rel="noreferrer" className="hidden rounded-full border border-[#d7ded4] px-4 py-2.5 text-xs font-semibold text-[#244b36] transition hover:bg-white sm:inline-flex sm:px-5 sm:text-sm">Talk to us <span aria-hidden="true" className="ml-1">↗</span></a></div>
+        <div className="flex items-center gap-2">{settings.orderingEnabled && <CartIndicator />}<a href={sellerContactUrl} target="_blank" rel="noreferrer" className="hidden rounded-full border border-[#d7ded4] px-4 py-2.5 text-xs font-semibold text-[#244b36] transition hover:bg-white sm:inline-flex sm:px-5 sm:text-sm">Talk to us <span aria-hidden="true" className="ml-1">↗</span></a></div>
       </header>
 
       <section className="mx-auto grid min-h-[660px] w-full max-w-7xl items-center gap-12 px-6 pb-20 pt-8 lg:min-h-[720px] lg:grid-cols-[1fr_0.94fr] lg:gap-16 lg:px-10 lg:pb-28 lg:pt-12">
