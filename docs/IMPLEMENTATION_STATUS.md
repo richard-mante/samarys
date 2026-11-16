@@ -15,7 +15,8 @@ This document tracks implemented application capabilities. It is not a build or 
 - Seller authentication is required for catalogue administration.
 - Sellers can create products.
 - Sellers can edit product details, price, stock quantity and storefront visibility.
-- Finite product stock is decremented transactionally when a Paystack payment is verified or a WhatsApp payment is manually confirmed, and restored if a paid order is cancelled; untracked stock remains unlimited.
+- Finite product stock is reserved for 30 minutes during pending Paystack checkout, decremented transactionally after verified Paystack or seller-confirmed WhatsApp payment, and restored if a paid order is cancelled; WhatsApp requests do not reserve stock and untracked stock remains unlimited.
+- If a Paystack payment arrives after its reservation expires and stock is no longer available, the order is cancelled, the exception is audit-logged and the seller is prompted to review a refund.
 - Sellers can add and remove product gallery images using public image URLs and accessible alt text.
 - Sellers can upload image files directly to Cloudinary using server-signed uploads; the Cloudinary API secret remains server-side.
 - Public product pages only expose active products and render seller-managed gallery images.
