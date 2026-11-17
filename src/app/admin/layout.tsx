@@ -9,12 +9,11 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div className="min-h-screen bg-[#f5f6f2] lg:grid lg:grid-cols-[248px_1fr]">
       <aside className="border-b border-[#e4e8e1] bg-white px-5 py-5 lg:sticky lg:top-0 lg:flex lg:h-screen lg:flex-col lg:border-b-0 lg:border-r lg:px-6 lg:py-7">
-        <div className="flex items-center justify-between gap-4 lg:block">
+        <div className="lg:block">
           <div>
             <Link href="/" className="font-serif text-[26px] tracking-[-0.04em] text-[#203a2b]">Samary&apos;s<span className="text-[#829a7b]">.</span></Link>
             <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.19em] text-[#9aa49a]">Seller workspace</p>
           </div>
-          <Link href="/" aria-label="View storefront" title="View storefront" className="inline-flex items-center justify-center rounded-full border border-[#e2e8df] p-2.5 text-[#526b56] transition hover:bg-[#f5f7f3] lg:hidden"><HugeiconsIcon icon={Store01Icon} size={17} /></Link>
         </div>
 
         <div className="mt-6 hidden border-t border-[#edf0ea] pt-5 lg:mt-10 lg:block lg:border-0 lg:pt-0">
