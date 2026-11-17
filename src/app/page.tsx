@@ -19,7 +19,6 @@ export default async function HomePage() {
   const settings = await getStoreSettings();
   const catalogue = await db.query.products.findMany({
     where: eq(products.isActive, true),
-    limit: 8,
     with: { images: true },
     orderBy: [asc(products.createdAt)],
   });
