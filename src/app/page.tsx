@@ -7,6 +7,7 @@ import { CartIndicator } from "@/features/cart/cart-controls";
 import { StorefrontFeatureRotation } from "@/features/storefront/feature-rotation";
 import { getStoreSettings } from "@/lib/settings";
 import { AppIcon } from "@/components/ui/app-icon";
+import { StorefrontMobileMenu } from "@/features/storefront/mobile-menu";
 
 export const metadata = {
   title: "Samary's Infection Set",
@@ -46,6 +47,7 @@ export default async function HomePage() {
             <AppIcon name="orders" size={19} />
           </Link>
           {settings.orderingEnabled && <CartIndicator />}
+          <StorefrontMobileMenu />
         </div>
       </header>
 
