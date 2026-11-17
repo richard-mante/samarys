@@ -65,7 +65,7 @@ export const products = pgTable(
     ...timestamps,
   },
   (table) => ({
-    activeIndex: index("products_active_idx").on(table.isActive),
+    activeCreatedAtIndex: index("products_active_created_at_idx").on(table.isActive, table.createdAt),
   }),
 );
 
@@ -82,7 +82,7 @@ export const productImages = pgTable(
     createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => ({
-    productIndex: index("product_images_product_idx").on(table.productId),
+    productSortIndex: index("product_images_product_sort_idx").on(table.productId, table.sortOrder),
   }),
 );
 
@@ -122,9 +122,10 @@ export const orders = pgTable(
     ...timestamps,
   },
   (table) => ({
-    customerIndex: index("orders_customer_idx").on(table.customerId),
-    statusIndex: index("orders_status_idx").on(table.status),
-    paymentStatusIndex: index("orders_payment_status_idx").on(table.paymentStatus),
+    customerCreatedAtIndex: index("orders_customer_created_at_idx").on(table.customerId, table.createdAt),
+    statusCreatedAtIndex: index("orders_status_created_at_idx").on(table.status, table.createdAt),
+    paymentCreatedAtIndex: index("orders_payment_created_at_idx").on(table.paymentStatus, table.createdAt),
+    channelCreatedAtIndex: index("orders_channel_created_at_idx").on(table.channel, table.createdAt),
     createdAtIndex: index("orders_created_at_idx").on(table.createdAt),
   }),
 );
@@ -145,6 +146,7 @@ export const orderItems = pgTable(
   },
   (table) => ({
     orderIndex: index("order_items_order_idx").on(table.orderId),
+    productIndex: index("order_items_product_idx").on(table.productId),
   }),
 );
 
@@ -166,8 +168,7 @@ export const payments = pgTable(
     ...timestamps,
   },
   (table) => ({
-    orderIndex: index("payments_order_idx").on(table.orderId),
-    statusIndex: index("payments_status_idx").on(table.status),
+    orderStatusIndex: index("payments_order_status_idx").on(table.orderId, table.status),
   }),
 );
 
@@ -208,6 +209,12 @@ export const auditLogs = pgTable(
   (table) => ({
     adminIndex: index("audit_logs_admin_idx").on(table.adminId),
     createdAtIndex: index("audit_logs_created_at_idx").on(table.createdAt),
+    rateLimitLookupIndex: index("audit_logs_rate_limit_lookup_idx").on(
+      table.entityType,
+      table.action,
+      table.entityId,
+      table.createdAt,
+    ),
   }),
 );
 
