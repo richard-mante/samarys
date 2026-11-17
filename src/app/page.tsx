@@ -35,7 +35,7 @@ export default async function HomePage() {
         </Link>
         <nav className="animate-fade-in delay-400 hidden items-center gap-7 text-sm font-medium text-[#405849] lg:flex xl:gap-10">
           <Link href="/#about" className="transition hover:text-[#829a7b]">About</Link>
-          <Link href="/#products" className="transition hover:text-[#829a7b]">Product</Link>
+          <Link href="/#products" className="transition hover:text-[#829a7b]">Catalogue</Link>
           <Link href="/help" className="transition hover:text-[#829a7b]">Customer care</Link>
           <Link href="/orders/track" className="transition hover:text-[#829a7b]">Track order</Link>
         </nav>
@@ -116,29 +116,56 @@ export default async function HomePage() {
             </div>
           </section>
 
-          {catalogue.length > 1 && (
-            <section id="products" className="relative z-10 border-t border-[#e6e8df] bg-[#fffefa]">
-              <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-10 lg:py-20">
-                <div className="flex flex-wrap items-end justify-between gap-4">
-                  <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]">The collection</p>
-                    <h2 className="mt-3 font-display text-4xl tracking-[-0.055em] text-[#203a2b] sm:text-5xl">More to explore.</h2>
-                  </div>
-                  <p className="max-w-xs text-sm leading-6 text-[#758078]">Browse the products currently available from Samary's.</p>
+          <section id="products" className="relative z-10 border-t border-[#e3e7dd] bg-[#f5f4ed]">
+            <div className="mx-auto max-w-[1600px] px-5 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-28">
+              <div className="grid gap-8 border-b border-[#dce2d7] pb-9 lg:grid-cols-[1fr_auto] lg:items-end lg:pb-12">
+                <div className="max-w-3xl">
+                  <p className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#789173] sm:text-xs">
+                    <span className="h-px w-7 bg-[#91a58b]" /> The Samary collection
+                  </p>
+                  <h2 className="mt-4 font-display text-[clamp(2.8rem,6vw,6.2rem)] leading-[0.94] tracking-[-0.075em] text-[#203a2b]">
+                    A considered look<br className="hidden sm:block" /> at what we offer<span className="text-[#91a58b]">.</span>
+                  </h2>
                 </div>
-                <div className="mt-9 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {catalogue.slice(1).map((product) => (
-                    <Link key={product.id} href={"/products/" + product.slug} className="group">
-                      <div className="aspect-[4/4.5] overflow-hidden rounded-2xl bg-[#e8ede4]">
-                        {product.images[0] ? <img src={product.images[0].imageUrl} alt={product.images[0].altText} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.035]" /> : <div className="flex h-full items-center justify-center p-6 text-center font-display text-2xl text-[#66836c]">{product.name}</div>}
-                      </div>
-                      <div className="mt-4 flex items-start justify-between gap-4"><h3 className="font-display text-xl">{product.name}</h3><span className="text-sm font-semibold text-[#244b36]">{formatGhsFromPesewas(product.priceMinor)}</span></div>
-                    </Link>
-                  ))}
+                <div className="flex items-end justify-between gap-6 lg:max-w-[330px] lg:flex-col lg:items-start">
+                  <p className="max-w-[300px] text-sm leading-7 text-[#68766c] sm:text-base">
+                    Browse the product information currently published by Samary's. Select an item to see its details and available ordering options.
+                  </p>
+                  <span className="shrink-0 pb-1 font-display text-3xl tracking-[-0.06em] text-[#9aaa95]">{String(catalogue.length).padStart(2, "0")} <span className="font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7b897d]">items</span></span>
                 </div>
               </div>
-            </section>
-          )}
+
+              <div className="mt-9 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:mt-12 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-14">
+                {catalogue.map((product, index) => (
+                  <Link key={product.id} href={"/products/" + product.slug} className="group">
+                    <div className="relative aspect-[4/4.5] overflow-hidden rounded-[1.35rem] bg-[#e7ebe2]">
+                      {product.images[0] ? (
+                        <img src={product.images[0].imageUrl} alt={product.images[0].altText} className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.045]" />
+                      ) : (
+                        <div className="flex h-full items-center justify-center px-8 text-center font-display text-3xl tracking-[-0.05em] text-[#66836c]">{product.name}</div>
+                      )}
+                      <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-[#fffefa]/90 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#405849] backdrop-blur-sm">
+                        Collection · {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <span className="absolute bottom-4 right-4 flex h-11 w-11 translate-y-2 items-center justify-center rounded-full bg-[#203a2b] text-white opacity-0 shadow-lg transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                        <AppIcon name="external" size={19} />
+                      </span>
+                    </div>
+                    <div className="mt-5 flex items-start justify-between gap-4 border-b border-[#dce2d7] pb-4">
+                      <div className="min-w-0">
+                        <h3 className="font-display text-[clamp(1.35rem,2vw,1.8rem)] leading-tight tracking-[-0.05em] text-[#203a2b] transition-colors group-hover:text-[#66836c]">{product.name}</h3>
+                        {product.shortDescription && <p className="mt-2 line-clamp-2 max-w-sm text-xs leading-6 text-[#758078] sm:text-sm">{product.shortDescription}</p>}
+                      </div>
+                      <span className="shrink-0 pt-1 text-sm font-semibold tabular-nums text-[#36543f]">{formatGhsFromPesewas(product.priceMinor)}</span>
+                    </div>
+                    <span className="mt-4 inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.17em] text-[#536b4e]">
+                      View product <AppIcon name="next" size={15} className="transition-transform group-hover:translate-x-1" />
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
         </>
       ) : (
         <section className="relative z-10 mx-auto flex min-h-[68vh] max-w-3xl flex-col items-center justify-center px-5 py-24 text-center">
@@ -149,11 +176,59 @@ export default async function HomePage() {
         </section>
       )}
 
-      <footer className="relative z-10 border-t border-[#e6e8df] bg-[#fffefa]">
-        <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-3 px-5 py-6 text-xs text-[#849087] sm:px-8 lg:px-10">
-          <Link href="/" className="font-display text-xl tracking-[-0.05em] text-[#203a2b]">Samary's<span className="text-[#829a7b]">.</span></Link>
-          <div className="flex flex-wrap gap-5"><Link href="/help" className="hover:text-[#244b36]">Help & FAQs</Link><Link href="/orders/track" className="hover:text-[#244b36]">Track order</Link><Link href="/policies" className="hover:text-[#244b36]">Privacy</Link></div>
-          <span>Product information and ordering options.</span>
+      <footer className="relative z-10 overflow-hidden bg-[#203a2b] text-white">
+        <div aria-hidden="true" className="pointer-events-none absolute -right-28 -top-44 h-[440px] w-[440px] rounded-full border border-white/[0.07] sm:h-[560px] sm:w-[560px]" />
+        <div aria-hidden="true" className="pointer-events-none absolute -right-12 -top-28 h-[310px] w-[310px] rounded-full border border-white/[0.07] sm:h-[420px] sm:w-[420px]" />
+        <div className="relative mx-auto max-w-[1600px] px-5 pb-7 pt-16 sm:px-8 sm:pt-20 lg:px-10 lg:pt-24">
+          <div className="grid gap-12 border-b border-white/15 pb-14 sm:grid-cols-2 lg:grid-cols-[1.5fr_0.8fr_0.8fr_1fr] lg:gap-10 lg:pb-20">
+            <div className="max-w-sm">
+              <Link href="/" className="font-display text-4xl tracking-[-0.075em] sm:text-5xl">Samary's<span className="text-[#a9bd9e]">.</span></Link>
+              <p className="mt-5 max-w-[310px] text-sm leading-7 text-white/60">
+                A clear place to explore product information, review available details and find support when you need it.
+              </p>
+              <Link href="/#products" className="mt-7 inline-flex items-center gap-3 rounded-full border border-white/25 px-5 py-3 text-xs font-medium text-white transition hover:border-white/60 hover:bg-white/10">
+                Explore the catalogue <AppIcon name="next" size={16} />
+              </Link>
+            </div>
+
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#a9bd9e]">Explore</p>
+              <ul className="mt-5 space-y-4 text-sm text-white/70">
+                <li><Link href="/#about" className="transition hover:text-white">About Samary's</Link></li>
+                <li><Link href="/#products" className="transition hover:text-white">Product catalogue</Link></li>
+                <li><Link href="/help" className="transition hover:text-white">Help & FAQs</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#a9bd9e]">Your orders</p>
+              <ul className="mt-5 space-y-4 text-sm text-white/70">
+                <li><Link href="/orders/track" className="transition hover:text-white">Track an order</Link></li>
+                {settings.orderingEnabled && <li><Link href="/checkout" className="transition hover:text-white">Checkout</Link></li>}
+                <li><Link href="/policies" className="transition hover:text-white">Store policies</Link></li>
+              </ul>
+            </div>
+
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#a9bd9e]">We're here to help</p>
+              <p className="mt-5 max-w-[250px] text-sm leading-6 text-white/60">Need more information about a product or an existing order? Get in touch with the seller.</p>
+              <Link href="/help" className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white underline decoration-white/40 underline-offset-4 transition hover:decoration-white">
+                Visit customer care <AppIcon name="external" size={15} />
+              </Link>
+              <a href={`https://wa.me/${settings.sellerWhatsAppNumber}`} target="_blank" rel="noreferrer" className="mt-4 flex items-center gap-2 text-sm text-white/65 transition hover:text-white">
+                <AppIcon name="whatsapp" size={17} /> WhatsApp the seller
+              </a>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4 pt-6 text-[11px] text-white/45 sm:flex-row sm:items-center sm:justify-between">
+            <p>© {new Date().getFullYear()} Samary's. All rights reserved.</p>
+            <div className="flex flex-wrap gap-x-6 gap-y-2">
+              <Link href="/policies" className="transition hover:text-white/80">Privacy & returns</Link>
+              <Link href="/help" className="transition hover:text-white/80">Customer support</Link>
+            </div>
+            <p>Product information and ordering options.</p>
+          </div>
         </div>
       </footer>
     </main>
