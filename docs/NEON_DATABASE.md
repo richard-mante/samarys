@@ -2,20 +2,19 @@
 
 Samary uses Neon PostgreSQL through Drizzle ORM and postgres-js.
 
-## Connection strings
+## Connection string
 
-Configure two Neon connection strings in your local environment:
+Only one environment variable is required:
 
-- DATABASE_URL: the pooled connection string from Neon. Use the hostname containing -pooler for the running Next.js app and Vercel.
-- DATABASE_URL_UNPOOLED: the direct connection string. Use it for Drizzle schema generation, migrations and controlled maintenance.
+- `DATABASE_URL`: your Neon pooled connection string (the hostname includes `-pooler`). Use this same value for the running Next.js app, Vercel, Drizzle schema generation and migrations.
 
-Both are secrets. Keep them server-side, out of browser bundles, and out of source control.
+Keep the connection string server-side, out of browser bundles, and out of source control. Add it to your local `.env.local` and to the appropriate Vercel environment.
 
-## Why two connections?
+## Why the pooled connection works
 
 The application runs on Vercel's serverless infrastructure. The pooled Neon endpoint is designed to handle many short-lived application instances without consuming one database connection per invocation. The runtime postgres-js client disables prepared statements for PgBouncer transaction-pooling compatibility and caps each warm function instance at one connection.
 
-Migrations are administrative operations, not request-time work. The Drizzle configuration therefore prefers DATABASE_URL_UNPOOLED so schema changes run against a direct PostgreSQL connection.
+Drizzle Kit also reads `DATABASE_URL`, so you do not need a separate unpooled connection string for the normal setup. If Neon or a particular schema operation reports a pooling-specific limitation during a migration, handle that operation separately; it is not a second variable required for the app's standard environment.
 
 ## Runtime and schema indexes
 
@@ -33,10 +32,10 @@ These indexes are declared in the Drizzle schema. They do not affect an existing
 ## Apply the schema changes
 
 1. Back up the Neon database before changing a live schema.
-2. Set DATABASE_URL to the pooled URL and DATABASE_URL_UNPOOLED to the direct URL in your local .env.local.
-3. Generate the migration with pnpm db:generate.
+2. Set `DATABASE_URL` in your local `.env.local` to your Neon pooled connection string.
+3. Generate the migration with `npm run db:generate`.
 4. Review the SQL, especially when applying to a database that may already contain manually created tables or indexes.
-5. Apply the reviewed migration with pnpm db:migrate.
+5. Apply the reviewed migration with `npm run db:migrate`.
 6. Keep the generated migration files committed with the application code.
 
 Do not generate or apply migrations automatically at application startup. Do not point production preview deployments at the live database unless that is intentional.
