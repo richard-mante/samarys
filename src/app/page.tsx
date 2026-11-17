@@ -57,10 +57,10 @@ export default async function HomePage() {
                 <AppIcon name="product" size={15} /> Product information · Samary's
               </p>
               <h1 className="font-display text-[clamp(3.1rem,8vw,9.6rem)] font-normal leading-[0.88] tracking-[-0.075em] text-[#203a2b]">
-                <span className="block whitespace-nowrap"><span className="animate-word-reveal delay-300">A</span>{" "}<span className="animate-word-reveal delay-400">closer</span>{" "}<span className="animate-word-reveal delay-500 text-[#203a2b]/45">look</span></span>
-                <span className="block whitespace-nowrap"><span className="animate-word-reveal delay-600 text-[#203a2b]/45">at</span>{" "}<span className="animate-word-reveal delay-700">Samary's</span></span>
-                <span className="block whitespace-nowrap"><span className="animate-word-reveal delay-800">Infection</span></span>
-                <span className="block whitespace-nowrap"><span className="animate-word-reveal delay-900">Set</span><span className="ml-3 inline-block h-[0.68em] w-[0.68em] translate-y-[0.06em] overflow-hidden rounded-full bg-[#dce5d8] align-middle shadow-[0_12px_35px_rgba(32,58,43,0.12)] sm:ml-5">
+                <span className="block whitespace-nowrap"><span className="word-clip"><span className="animate-word-reveal delay-300">A</span></span>{" "}<span className="word-clip"><span className="animate-word-reveal delay-400">closer</span></span>{" "}<span className="animate-word-reveal delay-500 text-[#203a2b]/45">look</span></span>
+                <span className="block whitespace-nowrap"><span className="animate-word-reveal delay-600 text-[#203a2b]/45">at</span>{" "}<span className="word-clip"><span className="animate-word-reveal delay-700">Samary's</span></span></span>
+                <span className="block whitespace-nowrap"><span className="word-clip"><span className="animate-word-reveal delay-800">Infection</span></span></span>
+                <span className="block whitespace-nowrap"><span className="word-clip"><span className="animate-word-reveal delay-900">Set</span></span><span className="ml-3 inline-block h-[0.68em] w-[0.68em] translate-y-[0.06em] overflow-hidden rounded-full bg-[#dce5d8] align-middle shadow-[0_12px_35px_rgba(32,58,43,0.12)] sm:ml-5">
                   {heroImage ? <img src={heroImage.imageUrl} alt="" className="h-full w-full object-cover" /> : <span className="flex h-full w-full items-center justify-center"><AppIcon name="product" size={30} /></span>}
                 </span></span>
               </h1>
