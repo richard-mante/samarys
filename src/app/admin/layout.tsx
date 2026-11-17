@@ -21,8 +21,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           <AdminNavigation />
         </div>
 
-        <div className="mt-auto hidden items-center justify-end gap-2 border-t border-[#edf0ea] pt-5 lg:flex">
-          <Link href="/" aria-label="Open storefront" title="Open storefront" className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[#78847a] transition hover:bg-[#f5f7f3] hover:text-[#244b36]"><HugeiconsIcon icon={Store01Icon} size={18} /></Link>
+        <div className="mt-auto hidden items-center justify-between border-t border-[#edf0ea] pt-5 lg:flex">
+          <Link href="/" title="Open storefront" className="inline-flex items-center gap-2.5 rounded-full px-3 py-2 text-sm font-medium text-[#78847a] transition hover:bg-[#f5f7f3] hover:text-[#244b36]"><HugeiconsIcon icon={Store01Icon} size={18} /><span>Storefront</span></Link>
           <Link href="/admin/logout" aria-label="Sign out" title="Sign out" className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[#9b665d] transition hover:bg-[#fbf2ef] hover:text-[#8c4036]"><HugeiconsIcon icon={Logout01Icon} size={18} /></Link>
         </div>
       </aside>
