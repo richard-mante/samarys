@@ -16,16 +16,20 @@ export function TaskDialog({
   description,
   children,
   contentClassName = "max-w-2xl",
+  open,
+  onOpenChange,
 }: {
   trigger: ReactNode;
   title: string;
   description: string;
   children: ReactNode;
   contentClassName?: string;
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }) {
   return (
-    <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      {open === undefined ? <DialogTrigger asChild>{trigger}</DialogTrigger> : trigger}
       <DialogContent className={`max-h-[88vh] overflow-y-auto ${contentClassName}`}>
         <DialogHeader className="pr-8">
           <DialogTitle>{title}</DialogTitle>
