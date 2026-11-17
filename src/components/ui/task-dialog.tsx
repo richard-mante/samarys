@@ -7,6 +7,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 
 export function TaskDialog({
@@ -28,7 +29,7 @@ export function TaskDialog({
 }) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      {trigger}
+      {open === undefined ? <DialogTrigger asChild>{trigger}</DialogTrigger> : trigger}
       <DialogContent className={`max-h-[88vh] overflow-y-auto ${contentClassName}`}>
         <DialogHeader className="pr-8">
           <DialogTitle>{title}</DialogTitle>
