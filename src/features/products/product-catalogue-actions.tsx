@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { HugeiconsIcon } from "@hugeicons/react";
-import { Add01Icon, Edit01Icon } from "@hugeicons/core-free-icons";
+import { Add01Icon } from "@hugeicons/core-free-icons";
 import { TaskDialog } from "@/components/ui/task-dialog";
 import { NewProductForm } from "@/features/products/new-product-form";
 
