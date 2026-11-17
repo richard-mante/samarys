@@ -4,7 +4,7 @@ A premium, mobile-first product commerce application with a public storefront an
 
 ## Development workflow
 
-Active implementation happens on `development`. Merge completed work into `main` regularly; Vercel production deploys from `main`. Do not run builds or end-to-end tests as part of routine implementation work; the project owner will run and confirm them.
+Samary implementation changes are merged into `main`, which is the Vercel production branch. Do not run builds or end-to-end tests as part of routine implementation work; the project owner will run and confirm them.
 
 ## Stack
 

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getStoreSettings } from "@/lib/settings";
 import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
+import { AppIcon } from "@/components/ui/app-icon";
 
 export const metadata = {
   title: "Help & frequently asked questions",
@@ -60,22 +61,22 @@ export default async function HelpPage() {
   return <main className="min-h-screen bg-[#f8f7f2]">
     <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
       <Link href="/" className="font-serif text-2xl tracking-tight text-[#203a2b]">Samary&apos;s<span className="text-[#829a7b]">.</span></Link>
-      <Link href="/" className="text-sm font-medium text-[#66836c] hover:text-[#244b36]">Back to the collection</Link>
+      <Link href="/" className="text-sm font-medium text-[#66836c] hover:text-[#244b36]"><AppIcon name="back" size={15} /><AppIcon name="back" size={16} /> Back to the collection</Link>
     </header>
     <section className="mx-auto max-w-4xl px-6 pb-24 pt-10 lg:px-10 lg:pt-16">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]">Customer care · Samary&apos;s</p>
+      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]"><span className="inline-flex items-center gap-2"><AppIcon name="support" size={15} />Customer care · Samary&apos;s</span></p>
       <h1 className="mt-4 font-serif text-5xl tracking-[-0.055em] text-[#203a2b] sm:text-6xl">A little help, when you need it.</h1>
       <p className="mt-5 max-w-2xl text-sm leading-7 text-[#758078]">Find practical answers about checkout, payment, delivery and order updates. If something is still unclear, speak directly with the seller.</p>
       <div className="mt-8 flex flex-wrap gap-3">
-        <Link href="/orders/track" className="rounded-full bg-[#244b36] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#183a28]">Track an order</Link>
-        <a href={contactUrl} target="_blank" rel="noreferrer" className="rounded-full border border-[#cbd8c7] bg-white px-6 py-3.5 text-sm font-semibold text-[#41684d] transition hover:bg-[#f8faf6]">Contact the seller ↗</a>
+        <Link href="/orders/track" className="rounded-full bg-[#244b36] px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-[#183a28]"><AppIcon name="orders" size={16} /> Track an order</Link>
+        <a href={contactUrl} target="_blank" rel="noreferrer" className="rounded-full border border-[#cbd8c7] bg-white px-6 py-3.5 text-sm font-semibold text-[#41684d] transition hover:bg-[#f8faf6]"><HugeiconsIcon icon={WhatsappIcon} size={17} className="mr-2 inline" />Contact the seller <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} className="ml-1 inline" /></a>
       </div>
       <div className="mt-12 divide-y divide-[#e3e8df] border-y border-[#e3e8df]">
         {faqs.map((faq, index) => <article key={faq.question} className="py-7">
           <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9aa69a]">0{index + 1}</p>
           <h2 className="mt-2 font-serif text-2xl text-[#203a2b]">{faq.question}</h2>
           <p className="mt-3 max-w-3xl whitespace-pre-line text-sm leading-7 text-[#758078]">{faq.answer}</p>
-          {"link" in faq && faq.link && <Link href="/orders/track" className="mt-3 inline-flex text-sm font-semibold text-[#41684d] hover:underline">Open order tracking ↗</Link>}
+          {"link" in faq && faq.link && <Link href="/orders/track" className="mt-3 inline-flex text-sm font-semibold text-[#41684d] hover:underline">Open order tracking <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} className="ml-1 inline" /></Link>}
         </article>)}
       </div>
       <p className="mt-8 text-xs leading-6 text-[#849087]">For order-specific help, include your order reference when contacting the seller. Do not send payment PINs, passwords or card security codes.</p>

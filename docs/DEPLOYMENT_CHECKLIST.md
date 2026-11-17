@@ -73,24 +73,12 @@ Run test-mode checkout transactions and confirm that successful payments are ver
 
 More detail: [Paystack setup](./PAYSTACK_SETUP.md).
 
-### Product image storage
-
-Create a Cloudinary account for Samary's and add these server-only Production environment variables in Vercel:
-
-| Variable | Value |
-|---|---|
-| `CLOUDINARY_CLOUD_NAME` | Cloudinary cloud name |
-| `CLOUDINARY_API_KEY` | Cloudinary API key |
-| `CLOUDINARY_API_SECRET` | Cloudinary API secret |
-
-The API secret must never be exposed in a `NEXT_PUBLIC_*` variable or committed to Git. The dashboard requests a short-lived signed upload using the server-side secret; image bytes are uploaded directly from the browser to Cloudinary. The app accepts image files up to 8 MB.
-
 ## 6. Finish the app configuration
 
 Sign in to the seller dashboard and complete the following:
 
 - [ ] Add the approved product name, descriptions, price in GHS, stock policy and visibility.
-- [ ] Configure Cloudinary image storage with `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY` and `CLOUDINARY_API_SECRET` in Vercel. The seller can upload product images directly from the dashboard; existing public image URLs remain supported.
+- [ ] Upload approved product images from the seller dashboard. Images are resized and compressed in the browser, then stored as Base64 data in PostgreSQL. No external image-storage credentials are required.
 - [ ] Confirm the seller WhatsApp number is correct: **+233 559 448 932**.
 - [ ] Confirm delivery areas, delivery fees, delivery instructions and customer support arrangements.
 - [ ] Review the storefront on mobile and desktop, including product details, basket, checkout, WhatsApp order handoff, order tracking, help/FAQ and customer policy pages, plus the seller dashboard.

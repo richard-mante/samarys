@@ -4,8 +4,7 @@ This document tracks implemented application capabilities. It is not a build or 
 
 ## Working agreement
 
-- Active implementation happens on `development`.
-- Completed development work is merged into `main` regularly; never leave completed work isolated on a feature branch.
+- Samary implementation work is merged into `main`.
 - End-to-end tests are outside the current implementation scope.
 - Do not run application builds; the project owner will run and confirm builds personally.
 
@@ -17,8 +16,9 @@ This document tracks implemented application capabilities. It is not a build or 
 - Sellers can edit product details, price, stock quantity and storefront visibility.
 - Finite product stock is reserved for 30 minutes during pending Paystack checkout, decremented transactionally after verified Paystack or seller-confirmed WhatsApp payment, and restored if a paid order is cancelled; WhatsApp requests do not reserve stock and untracked stock remains unlimited.
 - If a Paystack payment arrives after its reservation expires and stock is no longer available, the order is cancelled, the exception is audit-logged and the seller is prompted to review a refund.
-- Sellers can add and remove product gallery images using public image URLs and accessible alt text.
-- Sellers can upload image files directly to Cloudinary using server-signed uploads; the Cloudinary API secret remains server-side.
+- Sellers can upload product images while creating or editing a product. Images are resized and compressed in the browser, validated on the server and stored as Base64 data in the existing PostgreSQL product-image text column.
+- Product slugs are generated automatically from product names and are never entered or edited by the seller.
+- Product image uploads do not require Cloudinary or other external storage credentials.
 - Public product pages only expose active products and render seller-managed gallery images.
 - The home page features active catalogue products and their lead images.
 - Product deletion is intentionally not provided because historical order items must retain their product snapshots.
@@ -57,8 +57,8 @@ This document tracks implemented application capabilities. It is not a build or 
 
 ## Storefront experience
 
-- Premium botanical/editorial direction with warm ivory, deep green and sage.
-- Responsive landing page with product discovery, seller contact and clear product-information messaging.
+- Product-first botanical/editorial direction with warm ivory, deep green and sage; generic promotional sections are removed from the storefront.
+- Responsive storefront leads with product name, approved description, image, price and ordering actions.
 - Public help/FAQ and customer policy information pages explain the current order, payment, delivery and privacy flows; seller-specific legal terms still require approval.
 - Product detail pages show seller-managed imagery, price and WhatsApp enquiry.
 - Reduced-motion and visible keyboard-focus preferences are respected.
@@ -70,7 +70,7 @@ This document tracks implemented application capabilities. It is not a build or 
 The core V1 application workflows are implemented. The remaining steps are owner-managed setup and production verification:
 
 - Generate and apply the initial Drizzle migrations. The schema is in the repository, but the initial generated migration files are not committed yet.
-- Configure Neon, Cloudinary, Vercel and Paystack credentials, webhook and domain/DNS.
+- Configure Neon, Vercel and Paystack credentials, webhook and domain/DNS.
 - Create the seller admin account against the production database; the seller changes the initial password after first sign-in.
 - Complete seller-approved product information, price, stock, delivery, privacy/returns policy wording and applicable Ghana FDA/regulatory approvals.
 - After configuration, the project owner should run the build and confirm the manual production smoke checks in the deployment checklist. Builds, typechecks and end-to-end tests have not been run by the assistant, as requested; end-to-end tests remain out of scope.
@@ -80,7 +80,6 @@ The core V1 application workflows are implemented. The remaining steps are owner
 
 - Neon PostgreSQL connection string.
 - Session signing secret.
-- Cloudinary cloud name, API key and API secret for managed image uploads.
 - Paystack test/live credentials and webhook registration.
 - Seller-approved product information, actual product photography and ingredients.
 - Confirmed product price, delivery coverage/fees and applicable Ghana FDA registration/advertising approvals before live sales.
