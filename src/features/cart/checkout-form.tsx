@@ -76,24 +76,24 @@ export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
     </section>;
   }
 
-  return <form ref={formRef} action={action} className="grid gap-8 lg:grid-cols-[1fr_0.82fr]">
+  return <form ref={formRef} action={action} className="grid min-w-0 grid-cols-1 gap-5 sm:gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(18rem,0.82fr)]">
     <div className="space-y-7">
-      <section className="rounded-2xl border border-[#e4e8e1] bg-white p-6 sm:p-8">
+      <section className="min-w-0 rounded-2xl border border-[#e4e8e1] bg-white p-4 sm:p-8">
         <div className="flex items-center justify-between gap-4"><div><p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#789173]">Your selection</p><h2 className="mt-2 font-serif text-2xl text-[#203a2b]">Order summary</h2></div><span className="text-xs text-[#849087]">{cartLines.length} product(s)</span></div>
         <div className="mt-5 divide-y divide-[#edf0ea]">
-          {cartLines.map((line) => <div key={line.productId} className="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0">
-            <div className="min-w-0 flex-1"><p className="truncate text-sm font-semibold text-[#304236]">{line.product?.name}</p><p className="mt-1 text-xs text-[#849087]">{formatGhsFromPesewas(line.product?.priceMinor ?? 0)} each</p><button type="button" onClick={() => removeItem(line.productId)} className="mt-2 text-xs font-medium text-[#9b5148] hover:underline">Remove</button></div>
-            <div className="flex items-center gap-3"><button type="button" aria-label={"Decrease " + line.product?.name + " quantity"} onClick={() => setQuantity(line.productId, line.quantity - 1)} className="flex h-8 w-8 items-center justify-center rounded-full border border-[#dfe5dc] text-[#526b56]">−</button><span className="w-5 text-center text-sm tabular-nums">{line.quantity}</span><button type="button" aria-label={"Increase " + line.product?.name + " quantity"} disabled={line.quantity >= 99 || (line.product?.stockQuantity !== null && line.product?.stockQuantity !== undefined && line.quantity >= line.product.stockQuantity)} onClick={() => setQuantity(line.productId, line.quantity + 1)} className="flex h-8 w-8 items-center justify-center rounded-full border border-[#dfe5dc] text-[#526b56] disabled:opacity-40">+</button></div>
-            <p className="w-24 text-right text-sm font-semibold text-[#304236]">{formatGhsFromPesewas((line.product?.priceMinor ?? 0) * line.quantity)}</p>
+          {cartLines.map((line) => <div key={line.productId} className="grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-3 py-4 first:pt-0 last:pb-0 sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:gap-x-4">
+            <div className="min-w-0"><p className="break-words text-sm font-semibold leading-5 text-[#304236]">{line.product?.name}</p><p className="mt-1 text-xs text-[#849087]">{formatGhsFromPesewas(line.product?.priceMinor ?? 0)} each</p></div>
+            <p className="row-span-2 text-right text-sm font-semibold tabular-nums text-[#304236] sm:row-span-1 sm:col-start-3">{formatGhsFromPesewas((line.product?.priceMinor ?? 0) * line.quantity)}</p>
+            <div className="flex min-w-0 items-center gap-2 sm:col-start-2 sm:row-start-1 sm:row-span-1 sm:gap-3"><button type="button" aria-label={"Decrease " + line.product?.name + " quantity"} onClick={() => setQuantity(line.productId, line.quantity - 1)} className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#dfe5dc] text-[#526b56]">−</button><span className="w-5 text-center text-sm tabular-nums">{line.quantity}</span><button type="button" aria-label={"Increase " + line.product?.name + " quantity"} disabled={line.quantity >= 99 || (line.product?.stockQuantity !== null && line.product?.stockQuantity !== undefined && line.quantity >= line.product.stockQuantity)} onClick={() => setQuantity(line.productId, line.quantity + 1)} className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-[#dfe5dc] text-[#526b56] disabled:opacity-40">+</button><button type="button" onClick={() => removeItem(line.productId)} className="ml-1 text-xs font-medium text-[#9b5148] hover:underline">Remove</button></div>
           </div>)}
         </div>
         {cartLines.length !== items.length && <p className="mt-4 text-xs text-[#9b5148]">Some products are no longer available and have been excluded. Remove them from your basket to continue.</p>}
       </section>
 
-      <section className="rounded-2xl border border-[#e4e8e1] bg-white p-6 sm:p-8">
+      <section className="min-w-0 rounded-2xl border border-[#e4e8e1] bg-white p-4 sm:p-8">
         <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#789173]">02 / Your details</p>
         <h2 className="mt-2 font-serif text-2xl text-[#203a2b]">Where can we reach you?</h2>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        <div className="mt-6 grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2"><label htmlFor="fullName" className="mb-2 block text-sm font-medium text-[#304236]">Full name</label><input id="fullName" name="fullName" autoComplete="name" required minLength={2} maxLength={180} className={fieldClass} placeholder="Your full name"/></div>
           <div><label htmlFor="phone" className="mb-2 block text-sm font-medium text-[#304236]">Phone number</label><input id="phone" name="phone" type="tel" autoComplete="tel" required minLength={7} maxLength={32} className={fieldClass} placeholder="e.g. 055 000 0000"/></div>
           <div><label htmlFor="email" className="mb-2 block text-sm font-medium text-[#304236]">Email <span className="font-normal text-[#9aa49a]">(required for Paystack)</span></label><input id="email" name="email" type="email" autoComplete="email" className={fieldClass} placeholder="you@example.com"/></div>
@@ -105,7 +105,7 @@ export function CheckoutForm({ products }: { products: CheckoutProduct[] }) {
       </section>
     </div>
 
-    <aside className="h-fit rounded-2xl border border-[#dfe5dc] bg-[#f0f4ed] p-6 sm:p-8 lg:sticky lg:top-6">
+    <aside className="h-fit min-w-0 rounded-2xl border border-[#dfe5dc] bg-[#f0f4ed] p-4 sm:p-8 lg:sticky lg:top-6">
       <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#789173]">03 / Review</p>
       <h2 className="mt-2 font-serif text-2xl text-[#203a2b]">Almost there.</h2>
       <div className="mt-6 flex justify-between gap-4 text-sm text-[#68766c]"><span>Items subtotal</span><span className="font-semibold text-[#304236]">{formatGhsFromPesewas(subtotal)}</span></div>
