@@ -35,7 +35,7 @@ export default async function AdminCustomerDetailPage({ params }: { params: Prom
   const verifiedSpend = Number(metrics?.verifiedSpend ?? 0);
 
   return <div className="mx-auto max-w-5xl">
-    <Link href="/admin/customers" className="text-sm text-[#66836c] hover:text-[#244b36]"><HugeiconsIcon icon={ArrowLeft01Icon} size={15} className="mr-1.5 inline" />Back to customers</Link>
+    <Link href="/admin/customers" aria-label="Back to customers" className="inline-flex items-center gap-1.5 text-sm text-[#66836c] hover:text-[#244b36]"><HugeiconsIcon icon={ArrowLeft01Icon} size={17} /><span className="hidden sm:inline">Customers</span></Link>
     <div className="mt-6 flex flex-wrap items-start justify-between gap-5">
       <div><p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#66836c]"><span className="inline-flex items-center gap-2"><HugeiconsIcon icon={UserGroupIcon} size={16} />Customer profile</span></p><h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]">{customer.fullName}</h1><p className="mt-2 text-sm text-[#758078]">Customer since {new Intl.DateTimeFormat("en-GH", { dateStyle: "long" }).format(customer.createdAt)}</p></div>
       <a href={"https://wa.me/" + customer.phone} target="_blank" rel="noreferrer" className="rounded-full bg-[#244b36] px-5 py-3 text-sm font-semibold text-white"><HugeiconsIcon icon={WhatsappIcon} size={17} className="mr-2 inline" />Message customer</a>
