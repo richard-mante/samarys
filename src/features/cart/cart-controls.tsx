@@ -8,8 +8,8 @@ import { ShoppingCart01Icon, CheckmarkCircle02Icon, Add01Icon } from "@hugeicons
 
 export function CartIndicator() {
   const { itemCount, ready } = useCart();
-  return <Link href="/checkout" className="relative inline-flex items-center gap-2 rounded-full border border-[#d7ded4] px-4 py-2.5 text-xs font-semibold text-[#244b36] transition hover:bg-white sm:px-5 sm:text-sm" aria-label={ready ? `Order basket, ${itemCount} items` : "Order basket"}>
-    <HugeiconsIcon icon={ShoppingCart01Icon} size={17} strokeWidth={1.8} /><span>Order</span>
+  return <Link href="/checkout" className="relative inline-flex items-center gap-1.5 rounded-full border border-[#d7ded4] px-3 py-2.5 text-xs font-semibold text-[#244b36] transition hover:bg-white sm:gap-2 sm:px-5 sm:text-sm" aria-label={ready ? `Order basket, ${itemCount} items` : "Order basket"}>
+    <HugeiconsIcon icon={ShoppingCart01Icon} size={18} strokeWidth={1.8} /><span className="hidden sm:inline">Order</span>
     <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-[#244b36] px-1.5 text-[10px] font-semibold text-white">{ready ? itemCount : "–"}</span>
   </Link>;
 }
