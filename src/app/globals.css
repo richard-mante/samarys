@@ -53,3 +53,27 @@ button, a { -webkit-tap-highlight-color: transparent; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+
+/* Keep interactive surfaces readable regardless of utility-class order. */
+:is(a, button, [role="button"])[class~="bg-[#244b36]"],
+:is(a, button, [role="button"])[class~="bg-[#203a2b]"],
+:is(a, button, [role="button"])[class~="bg-[#183a28]"],
+:is(a, button, [role="button"])[class~="bg-[#31563e]"],
+:is(a, button, [role="button"])[class~="bg-green-600"],
+:is(a, button, [role="button"])[class~="bg-green-700"],
+:is(a, button, [role="button"])[class~="bg-green-800"] {
+  color: #ffffff !important;
+}
+
+:is(a, button, [role="button"])[class~="bg-white"],
+:is(a, button, [role="button"])[class~="bg-[#fffefa]"],
+:is(a, button, [role="button"])[class~="bg-[#f5f7f3]"],
+:is(a, button, [role="button"])[class~="bg-[#f8faf6]"] {
+  color: #244b36 !important;
+}
+
+/* The storefront menu is portalled to the document body and covers the viewport. */
+#storefront-mobile-navigation a {
+  color: #ffffff !important;
+}

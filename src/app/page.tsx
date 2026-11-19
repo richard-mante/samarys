@@ -39,13 +39,7 @@ export default async function HomePage() {
           <Link href="/orders/track" className="transition hover:text-[#829a7b]">Track order</Link>
         </nav>
         <div className="animate-slide-right delay-300 flex items-center gap-2 sm:gap-3">
-          <Link href="/help" aria-label="Get help" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#d7ded4] text-[#36543f] transition hover:bg-white">
-            <AppIcon name="support" size={19} />
-          </Link>
-          <Link href="/orders/track" aria-label="Track an order" className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#d7ded4] text-[#36543f] transition hover:bg-white">
-            <AppIcon name="orders" size={19} />
-          </Link>
-          {settings.orderingEnabled && <CartIndicator />}
+          <CartIndicator />
           <StorefrontMobileMenu />
         </div>
       </header>
