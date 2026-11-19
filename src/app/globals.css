@@ -60,9 +60,9 @@ button, a { -webkit-tap-highlight-color: transparent; }
 :is(a, button, [role="button"])[class~="bg-[#203a2b]"],
 :is(a, button, [role="button"])[class~="bg-[#183a28]"],
 :is(a, button, [role="button"])[class~="bg-[#31563e]"],
-:is(a, button, [class~="bg-green-600"]),
-:is(a, button, [class~="bg-green-700"]),
-:is(a, button, [class~="bg-green-800"]) {
+:is(a, button, [role="button"])[class~="bg-green-600"],
+:is(a, button, [role="button"])[class~="bg-green-700"],
+:is(a, button, [role="button"])[class~="bg-green-800"] {
   color: #ffffff !important;
 }
 
