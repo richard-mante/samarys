@@ -57,7 +57,7 @@ export async function createProduct(_previous: ProductActionState, formData: For
     imageAltText: formData.get("imageAltText") ?? "",
   });
   if (!image.success) return { error: image.error.issues[0]?.message ?? "Check the product image." };
-  if (image.data.imageData && image.data.imageAltText.length < 4) return { error: "Add a short description for the product image." };
+  if (image.data.imageData && image.data.imageAltText && image.data.imageAltText.length < 4) return { error: "Add a short description for the product image." };
 
   const data = parsed.data;
   try {
@@ -70,7 +70,11 @@ export async function createProduct(_previous: ProductActionState, formData: For
       }).returning({ id: products.id });
       if (image.data.imageData) {
         await tx.insert(productImages).values({
-          productId: created.id, imageUrl: image.data.imageData, altText: image.data.imageAltText, sortOrder: 0,
+          productId: created.id, 
+          imageUrl: image.data.imageData, 
+          altText: image.data.imageAltText|| "", 
+          sortOrder: 0,
+          createdAt:  new Date()
         });
       }
       await tx.insert(auditLogs).values({
