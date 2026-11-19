@@ -83,3 +83,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
 #storefront-mobile-navigation a {
   color: #ffffff !important;
 }
+
+/* Keep icons and their labels aligned on one line in every interactive action. */
+:is(a, button, [role="button"]):has(> svg),
+:is(a, button, [role="button"]):has(> span > svg) {
+  display: inline-flex !important;
+  align-items: center;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
