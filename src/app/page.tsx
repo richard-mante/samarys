@@ -39,7 +39,7 @@ export default async function HomePage() {
           <Link href="/orders/track" className="transition hover:text-[#829a7b]">Track order</Link>
         </nav>
         <div className="animate-slide-right delay-300 flex items-center gap-2 sm:gap-3">
-          {settings.orderingEnabled && <CartIndicator />}
+          <CartIndicator />
           <StorefrontMobileMenu />
         </div>
       </header>
