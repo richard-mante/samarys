@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
-export function CopyTextButton({ value, className = "" }: { value: string; className?: string }) {
+export function CopyTextButton({ value, children, className = "" }: { value: string; children: ReactNode; className?: string }) {
   const [copied, setCopied] = useState(false);
 
   async function copyValue() {
@@ -20,10 +20,10 @@ export function CopyTextButton({ value, className = "" }: { value: string; class
       type="button"
       onClick={copyValue}
       aria-label={copied ? "Copied tracking reference" : "Copy tracking reference"}
-      title={copied ? "Copied" : "Copy reference"}
-      className={"inline-flex shrink-0 items-center justify-center rounded-lg px-2 py-1 text-xs font-medium text-[#66836c] transition hover:bg-[#edf3eb] hover:text-[#244b36] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#66836c] " + className}
+      title={copied ? "Copied" : "Click to copy"}
+      className={"inline-flex min-w-0 max-w-full cursor-copy items-center rounded-md text-left transition hover:text-[#66836c] hover:underline hover:decoration-dotted focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#66836c] " + className}
     >
-      {copied ? "Copied" : "Copy"}
+      {copied ? "Copied!" : children}
     </button>
   );
 }
