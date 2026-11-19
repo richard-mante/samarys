@@ -102,56 +102,29 @@ export default async function HomePage() {
             </div>
           </section>
 
-          <section id="products" className="relative z-10 border-t border-[#e3e7dd] bg-[#f5f4ed]">
-            <div className="mx-auto max-w-[1600px] px-5 py-16 sm:px-8 sm:py-20 lg:px-10 lg:py-28">
-              <div className="grid gap-8 border-b border-[#dce2d7] pb-9 lg:grid-cols-[1fr_auto] lg:items-end lg:pb-12">
-                <div className="max-w-3xl">
-                  <p className="inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#789173] sm:text-xs">
-                    <span className="h-px w-7 bg-[#91a58b]" /> The Samary collection
-                  </p>
-                  <h2 className="mt-4 font-display text-[clamp(2.8rem,6vw,6.2rem)] leading-[0.94] tracking-[-0.075em] text-[#203a2b]">
-                    A considered look<br className="hidden sm:block" /> at what we offer<span className="text-[#91a58b]">.</span>
-                  </h2>
+          {catalogue.length > 1 && (
+            <section id="products" className="relative z-10 border-t border-[#e6e8df] bg-[#fffefa]">
+              <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-10 lg:py-20">
+                <div className="flex flex-wrap items-end justify-between gap-4">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]">The collection</p>
+                    <h2 className="mt-3 font-display text-4xl tracking-[-0.055em] text-[#203a2b] sm:text-5xl">More to explore.</h2>
+                  </div>
+                  <p className="max-w-xs text-sm leading-6 text-[#758078]">Explore the rest of our collection and find the details for each product.</p>
                 </div>
-                <div className="flex items-end justify-between gap-6 lg:max-w-[330px] lg:flex-col lg:items-start">
-                  <p className="max-w-[300px] text-sm leading-7 text-[#68766c] sm:text-base">
-                    Explore our collection and choose a product to see its details and ordering options.
-                  </p>
-                  <span className="shrink-0 pb-1 font-display text-3xl tracking-[-0.06em] text-[#9aaa95]">{String(catalogue.length).padStart(2, "0")} <span className="font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7b897d]">items</span></span>
-                </div>
-              </div>
-
-              <div className="mt-9 grid gap-x-6 gap-y-10 sm:grid-cols-2 lg:mt-12 lg:grid-cols-3 lg:gap-x-8 lg:gap-y-14">
-                {catalogue.map((product, index) => (
-                  <Link key={product.id} href={"/products/" + product.slug} className="group">
-                    <div className="relative aspect-[4/4.5] overflow-hidden rounded-[1.35rem] bg-[#e7ebe2]">
-                      {product.images[0] ? (
-                        <img src={product.images[0].imageUrl} alt={product.images[0].altText} className="h-full w-full object-cover transition duration-700 ease-out group-hover:scale-[1.045]" />
-                      ) : (
-                        <div className="flex h-full items-center justify-center px-8 text-center font-display text-3xl tracking-[-0.05em] text-[#66836c]">{product.name}</div>
-                      )}
-                      <span className="absolute left-4 top-4 rounded-full border border-white/70 bg-[#fffefa]/90 px-3 py-1.5 text-[9px] font-semibold uppercase tracking-[0.16em] text-[#405849] backdrop-blur-sm">
-                        Collection · {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <span className="absolute bottom-4 right-4 flex h-11 w-11 translate-y-2 items-center justify-center rounded-full bg-[#203a2b] text-white opacity-0 shadow-lg transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                        <AppIcon name="external" size={19} />
-                      </span>
-                    </div>
-                    <div className="mt-5 flex items-start justify-between gap-4 border-b border-[#dce2d7] pb-4">
-                      <div className="min-w-0">
-                        <h3 className="font-display text-[clamp(1.35rem,2vw,1.8rem)] leading-tight tracking-[-0.05em] text-[#203a2b] transition-colors group-hover:text-[#66836c]">{product.name}</h3>
-                        {product.shortDescription && <p className="mt-2 line-clamp-2 max-w-sm text-xs leading-6 text-[#758078] sm:text-sm">{product.shortDescription}</p>}
+                <div className="mt-9 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {catalogue.slice(1).map((product) => (
+                    <Link key={product.id} href={"/products/" + product.slug} className="group">
+                      <div className="aspect-[4/4.5] overflow-hidden rounded-2xl bg-[#e8ede4]">
+                        {product.images[0] ? <img src={product.images[0].imageUrl} alt={product.images[0].altText} className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.035]" /> : <div className="flex h-full items-center justify-center p-6 text-center font-display text-2xl text-[#66836c]">{product.name}</div>}
                       </div>
-                      <span className="shrink-0 pt-1 text-sm font-semibold tabular-nums text-[#36543f]">{formatGhsFromPesewas(product.priceMinor)}</span>
-                    </div>
-                    <span className="mt-4 inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.17em] text-[#536b4e]">
-                      View product <AppIcon name="next" size={15} className="transition-transform group-hover:translate-x-1" />
-                    </span>
-                  </Link>
-                ))}
+                      <div className="mt-4 flex items-start justify-between gap-4"><h3 className="font-display text-xl">{product.name}</h3><span className="text-sm font-semibold text-[#244b36]">{formatGhsFromPesewas(product.priceMinor)}</span></div>
+                    </Link>
+                  ))}
+                </div>
               </div>
-            </div>
-          </section>
+            </section>
+          )}
         </>
       ) : (
         <section className="relative z-10 mx-auto flex min-h-[68vh] max-w-3xl flex-col items-center justify-center px-5 py-24 text-center">
