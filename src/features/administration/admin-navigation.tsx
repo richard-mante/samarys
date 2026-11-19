@@ -6,7 +6,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Home01Icon, Package01Icon, ShoppingBag01Icon, UserGroupIcon,
   CreditCardIcon, Activity01Icon, Settings01Icon, MoreHorizontalIcon,
-  Store01Icon, Logout01Icon,
+  Store01Icon, Logout01Icon, Archive01Icon,
 } from "@hugeicons/core-free-icons";
 
 const links = [
@@ -40,15 +40,15 @@ export function AdminNavigation({ mobileOnly = false }: { mobileOnly?: boolean }
             const active = isActive(pathname, link.href);
             return (
               <Link key={link.href} href={link.href} aria-current={active ? "page" : undefined}
-                className={"flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[9px] font-medium leading-none transition " + (active ? "bg-[#edf3eb] text-[#244b36]" : "text-[#78847a] hover:bg-[#f5f7f3]")}>
+                className={"flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[8px] font-medium leading-none transition " + (active ? "bg-[#edf3eb] text-[#244b36]" : "text-[#78847a] hover:bg-[#f5f7f3]")}>
                 <HugeiconsIcon icon={link.icon} size={20} strokeWidth={1.8} aria-hidden="true" />
                 <span className="truncate">{link.label}</span>
               </Link>
             );
           })}
           <details className="group relative">
-            <summary aria-label="More navigation options" className={"flex h-full min-h-[52px] cursor-pointer list-none flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[9px] font-medium leading-none transition [&::-webkit-details-marker]:hidden " + (moreActive ? "bg-[#edf3eb] text-[#244b36]" : "text-[#78847a] hover:bg-[#f5f7f3]")}>
-              <HugeiconsIcon icon={MoreHorizontalIcon} size={20} strokeWidth={1.8} aria-hidden="true" />
+            <summary aria-label="More navigation options" className={"flex h-full min-h-[52px] cursor-pointer list-none flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[8px] font-medium leading-none transition [&::-webkit-details-marker]:hidden " + (moreActive ? "bg-[#edf3eb] text-[#244b36]" : "text-[#78847a] hover:bg-[#f5f7f3]")}>
+              <HugeiconsIcon icon={Archive01Icon} size={20} strokeWidth={1.8} aria-hidden="true" />
               <span>More</span>
             </summary>
             <div className="absolute bottom-[calc(100%+0.75rem)] right-0 w-56 overflow-hidden rounded-2xl border border-[#e4e8e1] bg-white p-2 shadow-[0_16px_48px_rgba(32,58,43,0.16)]">
