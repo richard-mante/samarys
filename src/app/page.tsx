@@ -75,11 +75,6 @@ export default async function HomePage() {
               )}
             </div>
 
-            {heroImage ? (
-              <div className="animate-scale-in delay-700 pointer-events-none absolute -bottom-[13%] -right-[18%] z-0 hidden w-[min(79vw,1120px)] lg:block xl:-right-[12%]">
-                <img src={heroImage.imageUrl} alt="" className="w-full object-contain drop-shadow-[0_35px_45px_rgba(32,58,43,0.18)]" />
-              </div>
-            ) : null}
           </section>
 
           <section className="relative z-20 grid grid-cols-1 md:grid-cols-[2fr_1.1fr_2fr]">
