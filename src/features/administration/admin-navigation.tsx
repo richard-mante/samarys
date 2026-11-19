@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   Home01Icon, Package01Icon, ShoppingBag01Icon, UserGroupIcon,
-  CreditCardIcon, Activity01Icon, Settings01Icon, MoreHorizontalIcon,
+  CreditCardIcon, Activity01Icon, Settings01Icon,
   Store01Icon, Logout01Icon, Archive01Icon,
 } from "@hugeicons/core-free-icons";
 
