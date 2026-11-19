@@ -59,10 +59,10 @@ export default async function HomePage() {
               </h1>
               <div className="animate-fade-up delay-600 mt-8 flex flex-col gap-5 sm:mt-12 sm:flex-row sm:items-center sm:gap-8 lg:mt-[68px] lg:gap-12">
                 <Link href={"/products/" + featured.slug} className="inline-flex h-14 w-full items-center justify-center gap-5 rounded-md bg-[#203a2b] px-8 text-base font-medium tracking-[-0.03em] text-white transition hover:-translate-y-0.5 hover:bg-[#31563e] sm:h-16 sm:w-[240px] sm:text-lg lg:h-[72px] lg:w-[290px]">
-                  Explore product <AppIcon name="external" size={19} />
+                  Explore our product <AppIcon name="external" size={19} />
                 </Link>
                 <p className="max-w-[310px] text-sm leading-[1.5] tracking-[-0.025em] text-[#68766c] sm:text-base lg:text-lg">
-                  {featured.shortDescription || "Explore the available product details, images and ordering information before you decide."}
+                  {featured.shortDescription || "Take a closer look at our product and find the details you need before ordering."}
                 </p>
               </div>
             </div>
@@ -85,7 +85,7 @@ export default async function HomePage() {
           <section className="relative z-20 grid grid-cols-1 md:grid-cols-[2fr_1.1fr_2fr]">
             <div className="animate-fade-up delay-900 relative flex min-h-[245px] flex-col justify-between overflow-hidden bg-[#e8ece3] px-7 py-8 sm:px-10 sm:py-10 lg:min-h-[285px] lg:px-12">
               <div className="relative z-10 max-w-[360px]">
-                <p className="font-display text-[27px] leading-[1.06] tracking-[-0.055em] text-[#203a2b] sm:text-[32px] lg:text-[38px]">Get to know the product before you choose.</p>
+                <p className="font-display text-[27px] leading-[1.06] tracking-[-0.055em] text-[#203a2b] sm:text-[32px] lg:text-[38px]">Get to know our product before you choose.</p>
                 <Link href={"/products/" + featured.slug} className="mt-7 inline-flex items-center gap-2 text-sm font-medium text-[#36543f] underline decoration-[#9aaa95] underline-offset-4 transition hover:text-[#203a2b] lg:text-base">Product details <AppIcon name="external" size={15} /></Link>
               </div>
               {heroImage && <img src={heroImage.imageUrl} alt="" className="pointer-events-none absolute -bottom-10 -right-8 h-[76%] w-[48%] object-contain opacity-20 mix-blend-multiply" />}
@@ -101,7 +101,7 @@ export default async function HomePage() {
               </div>
               <div>
                 <p className="font-display text-2xl tracking-[-0.05em] sm:text-3xl lg:text-[35px]">Here to help.</p>
-                <p className="mt-2 max-w-[220px] text-sm leading-5 text-white/65 sm:text-base lg:text-lg">Questions about the product or an order? Speak with the seller.</p>
+                <p className="mt-2 max-w-[220px] text-sm leading-5 text-white/65 sm:text-base lg:text-lg">Questions about our product or an order? We’re here to help.</p>
                 <Link href="/help" className="mt-4 inline-flex items-center gap-2 text-xs font-medium text-white underline underline-offset-4 sm:text-sm">Customer care <AppIcon name="external" size={14} /></Link>
               </div>
             </div>
@@ -120,7 +120,7 @@ export default async function HomePage() {
                 </div>
                 <div className="flex items-end justify-between gap-6 lg:max-w-[330px] lg:flex-col lg:items-start">
                   <p className="max-w-[300px] text-sm leading-7 text-[#68766c] sm:text-base">
-                    Browse the product information currently published by Samary's. Select an item to see its details and available ordering options.
+                    Explore our collection and choose a product to see its details and ordering options.
                   </p>
                   <span className="shrink-0 pb-1 font-display text-3xl tracking-[-0.06em] text-[#9aaa95]">{String(catalogue.length).padStart(2, "0")} <span className="font-body text-[10px] font-semibold uppercase tracking-[0.16em] text-[#7b897d]">items</span></span>
                 </div>
@@ -161,9 +161,9 @@ export default async function HomePage() {
       ) : (
         <section className="relative z-10 mx-auto flex min-h-[68vh] max-w-3xl flex-col items-center justify-center px-5 py-24 text-center">
           <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]">Samary's</p>
-          <h1 className="mt-4 font-display text-4xl tracking-[-0.055em] sm:text-6xl">Product information is being prepared.</h1>
-          <p className="mt-4 max-w-md text-sm leading-7 text-[#758078]">The product will appear here once its details and images are ready.</p>
-          <Link href="/help" className="mt-8 inline-flex h-12 items-center gap-3 rounded-md bg-[#203a2b] px-6 text-sm font-medium text-white">Contact the seller <AppIcon name="external" size={16} /></Link>
+          <h1 className="mt-4 font-display text-4xl tracking-[-0.055em] sm:text-6xl">We’re getting things ready.</h1>
+          <p className="mt-4 max-w-md text-sm leading-7 text-[#758078]">Our product details will be available here soon.</p>
+          <Link href="/help" className="mt-8 inline-flex h-12 items-center gap-3 rounded-md bg-[#203a2b] px-6 text-sm font-medium text-white">Contact us <AppIcon name="external" size={16} /></Link>
         </section>
       )}
 
@@ -175,7 +175,7 @@ export default async function HomePage() {
             <div className="max-w-sm">
               <Link href="/" className="font-display text-4xl tracking-[-0.075em] sm:text-5xl">Samary's<span className="text-[#a9bd9e]">.</span></Link>
               <p className="mt-5 max-w-[310px] text-sm leading-7 text-white/60">
-                A clear place to explore product information, review available details and find support when you need it.
+                A place to explore our collection, learn about our products and get help whenever you need it.
               </p>
               <Link href="/#products" className="mt-7 inline-flex items-center gap-3 rounded-full border border-white/25 px-5 py-3 text-xs font-medium text-white transition hover:border-white/60 hover:bg-white/10">
                 Explore the catalogue <AppIcon name="next" size={16} />
@@ -202,12 +202,12 @@ export default async function HomePage() {
 
             <div>
               <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#a9bd9e]">We're here to help</p>
-              <p className="mt-5 max-w-[250px] text-sm leading-6 text-white/60">Need more information about a product or an existing order? Get in touch with the seller.</p>
+              <p className="mt-5 max-w-[250px] text-sm leading-6 text-white/60">Need help with a product or an order? Get in touch with us.</p>
               <Link href="/help" className="mt-5 inline-flex items-center gap-2 text-sm font-medium text-white underline decoration-white/40 underline-offset-4 transition hover:decoration-white">
                 Visit customer care <AppIcon name="external" size={15} />
               </Link>
               <a href={`https://wa.me/${settings.sellerWhatsAppNumber}`} target="_blank" rel="noreferrer" className="mt-4 flex items-center gap-2 text-sm text-white/65 transition hover:text-white">
-                <AppIcon name="whatsapp" size={17} /> WhatsApp the seller
+                <AppIcon name="whatsapp" size={17} /> Chat with us on WhatsApp
               </a>
             </div>
           </div>
@@ -218,7 +218,7 @@ export default async function HomePage() {
               <Link href="/policies" className="transition hover:text-white/80">Privacy & returns</Link>
               <Link href="/help" className="transition hover:text-white/80">Customer support</Link>
             </div>
-            <p>Product information and ordering options.</p>
+            <p>Our products, your orders, and the help you need.</p>
           </div>
         </div>
       </footer>
