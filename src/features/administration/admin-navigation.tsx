@@ -34,20 +34,20 @@ export function AdminNavigation({ mobileOnly = false }: { mobileOnly?: boolean }
 
   if (mobileOnly) {
     return (
-      <nav aria-label="Mobile seller navigation" className="fixed inset-x-0 bottom-0 z-40 border-t border-[#e4e8e1] bg-white/95 px-2 pt-2 shadow-[0_-8px_30px_rgba(32,58,43,0.06)] backdrop-blur-xl pb-[max(0.5rem,env(safe-area-inset-bottom))] lg:hidden">
+      <nav aria-label="Mobile seller navigation" className="mobile-admin-navigation fixed inset-x-0 bottom-0 z-40 border-t border-[#e4e8e1] bg-white/95 px-2 pt-2 shadow-[0_-8px_30px_rgba(32,58,43,0.06)] backdrop-blur-xl pb-[max(0.5rem,env(safe-area-inset-bottom))] lg:hidden">
         <div className="mx-auto grid max-w-lg grid-cols-5 gap-1">
           {links.map((link) => {
             const active = isActive(pathname, link.href);
             return (
               <Link key={link.href} href={link.href} aria-current={active ? "page" : undefined}
-                className={"flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-xs font-medium leading-none transition " + (active ? "bg-[#edf3eb] text-[#244b36]" : "text-[#78847a] hover:bg-[#f5f7f3]")}>
+                className={"flex min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[9px] font-medium leading-none transition " + (active ? "bg-[#edf3eb] text-[#244b36]" : "text-[#78847a] hover:bg-[#f5f7f3]")}>
                 <HugeiconsIcon icon={link.icon} size={20} strokeWidth={1.8} aria-hidden="true" />
                 <span className="truncate">{link.label}</span>
               </Link>
             );
           })}
           <details className="group relative">
-            <summary aria-label="More navigation options" className={"flex h-full min-h-[52px] cursor-pointer list-none flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-xs font-medium leading-none transition [&::-webkit-details-marker]:hidden " + (moreActive ? "bg-[#edf3eb] text-[#244b36]" : "text-[#78847a] hover:bg-[#f5f7f3]")}>
+            <summary aria-label="More navigation options" className={"flex h-full min-h-[52px] cursor-pointer list-none flex-col items-center justify-center gap-1 rounded-xl px-1 py-2 text-[9px] font-medium leading-none transition [&::-webkit-details-marker]:hidden " + (moreActive ? "bg-[#edf3eb] text-[#244b36]" : "text-[#78847a] hover:bg-[#f5f7f3]")}>
               <HugeiconsIcon icon={Archive01Icon} size={20} strokeWidth={1.8} aria-hidden="true" />
               <span>More</span>
             </summary>
