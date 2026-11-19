@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { Add01Icon } from "@hugeicons/core-free-icons";
 import { Button } from "@/components/ui/button";
@@ -10,11 +11,16 @@ import { ProductImagePicker } from "./product-image-picker";
 import { createProduct } from "./actions";
 
 export function NewProductForm({ onSuccess }: { onSuccess?: () => void }) {
+  const router = useRouter();
   const [state, action, pending] = useActionState(createProduct, {});
 
   useEffect(() => {
-    if (state.success) onSuccess?.();
-  }, [state.success, onSuccess]);
+    if (state.success) {
+      onSuccess?.();
+      router.push("/admin/products");
+      router.refresh();
+    }
+  }, [state.success, onSuccess, router]);
 
   return (
     <form action={action} className="space-y-5">
