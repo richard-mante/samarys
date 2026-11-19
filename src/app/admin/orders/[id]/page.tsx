@@ -11,6 +11,7 @@ import { normalizePhoneNumber } from "@/lib/phone";
 import { OrderStatusForm } from "@/features/orders/order-status-form";
 import { RecordRefundForm } from "@/features/orders/record-refund-form";
 import { RecordWhatsAppPaymentForm } from "@/features/orders/record-whatsapp-payment-form";
+import { CopyTextButton } from "@/components/ui/copy-text-button";
 
 const statusLabels: Record<string, string> = {
   PENDING_PAYMENT: "Awaiting payment",
@@ -52,7 +53,7 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
     <div className="mt-6 flex flex-wrap items-start justify-between gap-5">
       <div>
         <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#66836c]"><span className="inline-flex items-center gap-2"><HugeiconsIcon icon={ShoppingBag01Icon} size={16} />Order management</span></p>
-        <h1 className="mt-2 font-serif text-4xl tracking-tight text-[#203a2b]">{order.reference}</h1>
+        <div className="mt-2 flex flex-wrap items-center gap-2"><h1 className="font-serif text-4xl tracking-tight text-[#203a2b]">{order.reference}</h1><CopyTextButton value={order.reference} /></div>
         <p className="mt-2 text-sm text-[#758078]">Placed {new Intl.DateTimeFormat("en-GH", { dateStyle: "long", timeStyle: "short" }).format(order.createdAt)}</p>
       </div>
       <span className="rounded-full bg-[#edf3eb] px-4 py-2 text-xs font-semibold text-[#41684d]">{statusLabels[order.status] ?? order.status}</span>
