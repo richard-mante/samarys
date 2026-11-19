@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getStoreSettings } from "@/lib/settings";
 import { createSellerWhatsAppUrl } from "@/lib/whatsapp";
 import { AppIcon } from "@/components/ui/app-icon";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { ArrowUpRight01Icon, WhatsappIcon } from "@hugeicons/core-free-icons";
 
 export const metadata = {
   title: "Customer information & policies",
