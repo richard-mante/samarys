@@ -92,3 +92,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
   flex-wrap: nowrap;
   white-space: nowrap;
 }
+
+/* Keep mobile admin navigation labels deliberately compact; resist utility overrides. */
+@media (max-width: 1023px) {
+  .mobile-admin-navigation a > span,
+  .mobile-admin-navigation summary > span {
+    font-size: 9px !important;
+    line-height: 1 !important;
+  }
+}
