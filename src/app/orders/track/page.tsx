@@ -12,7 +12,7 @@ export default function TrackOrderPage() {
   return <main className="min-h-screen bg-[#f8f7f2]">
     <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
       <Link href="/" className="font-serif text-2xl tracking-tight text-[#203a2b]">Samary&apos;s<span className="text-[#829a7b]">.</span></Link>
-      <Link href="/" className="inline-flex items-center gap-1.5 text-sm font-medium text-[#66836c] hover:text-[#244b36]"><AppIcon name="back" size={16} /> Back to the collection</Link>
+      <Link href="/" aria-label="Back to home" className="inline-flex items-center gap-1.5 text-sm font-medium text-[#66836c] hover:text-[#244b36]"><AppIcon name="back" size={17} /><span className="hidden sm:inline">Home</span></Link>
     </header>
     <section className="mx-auto max-w-7xl px-6 pb-24 pt-10 lg:px-10 lg:pt-16">
       <div className="mb-10 max-w-2xl">

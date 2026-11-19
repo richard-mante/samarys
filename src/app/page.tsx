@@ -48,9 +48,7 @@ export default async function HomePage() {
         <>
           <section id="about" className="relative z-10 mx-auto flex min-h-[590px] max-w-[1600px] flex-col justify-center px-5 pb-8 pt-8 sm:min-h-[660px] sm:px-8 lg:min-h-[min(760px,78vh)] lg:px-10 lg:pb-20 lg:pt-10">
             <div className="relative z-10 max-w-[850px]">
-              <p className="animate-fade-up delay-300 mb-6 inline-flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.24em] text-[#789173] sm:text-xs">
-                <AppIcon name="product" size={15} /> Product information · Samary's
-              </p>
+
               <h1 className="font-display text-[clamp(3.1rem,8vw,9.6rem)] font-normal leading-[0.88] tracking-[-0.075em] text-[#203a2b]">
                 <span className="block whitespace-nowrap"><span className="word-clip"><span className="animate-word-reveal delay-300">A</span></span>{" "}<span className="word-clip"><span className="animate-word-reveal delay-400">closer</span></span>{" "}<span className="word-clip"><span className="animate-word-reveal delay-500 text-[#203a2b]/45">look</span></span></span>
                 <span className="block whitespace-nowrap"><span className="word-clip"><span className="animate-word-reveal delay-600 text-[#203a2b]/45">at</span></span>{" "}<span className="word-clip"><span className="animate-word-reveal delay-700">Samary's</span></span></span>

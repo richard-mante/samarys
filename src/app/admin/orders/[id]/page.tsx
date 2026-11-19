@@ -48,7 +48,7 @@ export default async function AdminOrderDetailPage({ params }: { params: Promise
   } | null;
 
   return <div className="mx-auto max-w-5xl">
-    <Link href="/admin/orders" className="text-sm text-[#66836c] transition hover:text-[#244b36]"><HugeiconsIcon icon={ArrowLeft01Icon} size={15} className="mr-1.5 inline" />Back to orders</Link>
+    <Link href="/admin/orders" aria-label="Back to orders" className="inline-flex items-center gap-1.5 text-sm text-[#66836c] transition hover:text-[#244b36]"><HugeiconsIcon icon={ArrowLeft01Icon} size={17} /><span className="hidden sm:inline">Orders</span></Link>
     <div className="mt-6 flex flex-wrap items-start justify-between gap-5">
       <div>
         <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#66836c]"><span className="inline-flex items-center gap-2"><HugeiconsIcon icon={ShoppingBag01Icon} size={16} />Order management</span></p>
