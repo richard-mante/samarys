@@ -69,7 +69,13 @@ button, a { -webkit-tap-highlight-color: transparent; }
 :is(a, button, [role="button"])[class~="bg-white"],
 :is(a, button, [role="button"])[class~="bg-[#fffefa]"],
 :is(a, button, [role="button"])[class~="bg-[#f5f7f3]"],
-:is(a, button, [role="button"])[class~="bg-[#f8faf6]"] {
+:is(a, button, [role="button"])[class~="bg-[#f8faf6]"],
+:is(a, button, [role="button"])[class~="bg-[#f8f7f2]"] {
+  color: #244b36 !important;
+}
+
+/* Outlined controls sit on light surfaces and always use the brand green. */
+:is(a, button, [role="button"])[class*="border-[#"] {
   color: #244b36 !important;
 }
 
