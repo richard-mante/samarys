@@ -10,8 +10,9 @@ import { db } from "@/db";
 import { admins, auditLogs } from "@/db/schema";
 import { createAdminSession } from "@/lib/auth";
 import { consumeRateLimit, getClientAddress } from "@/lib/rate-limit";
+import { SettingsActionState } from "./settings-actions";
 
-export async function loginAdmin(_previous: { error?: string }, formData: FormData) {
+export async function loginAdmin(_previous: { error?: string }, formData: FormData): Promise<SettingsActionState> {
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
   const password = String(formData.get("password") ?? "");
 
