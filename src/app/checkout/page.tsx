@@ -30,7 +30,7 @@ export default async function CheckoutPage() {
       {settings.orderingEnabled && <CartIndicator />}
     </header>
     <section className="mx-auto max-w-7xl px-6 pb-24 pt-8 lg:px-10 lg:pt-12">
-      <Link href="/#collection" className="text-sm text-[#66836c] hover:underline"><AppIcon name="back" size={15} />Continue browsing</Link>
+      <Link href="/#products" aria-label="Back to products" className="inline-flex items-center gap-1.5 text-sm text-[#66836c] hover:underline"><AppIcon name="back" size={17} /><span className="hidden sm:inline">Products</span></Link>
       {settings.orderingEnabled ? <>
         <div className="mt-6 mb-10 max-w-2xl">
           <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#789173]"><span className="inline-flex items-center gap-2"><AppIcon name="cart" size={15} />Your order · Samary&apos;s</span></p>
